@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Course;
 use App\Models\Folder;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -14,15 +13,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('folders', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('is_public');
-            $table->foreignIdFor(Course::class);
+            $table->string('storage_path');
+            $table->string('file_size');
+            $table->integer('download_count');
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Folder::class, 'parent_id')->nullable();
+            $table->foreignIdFor(Folder::class);
             $table->timestamps();
-        });        
+        });
     }
 
     /**
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('folders');
+        Schema::dropIfExists('files');
     }
 };

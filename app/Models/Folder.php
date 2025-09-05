@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Folder extends Model
 {
+    protected $guarded  = [];
+
     public function course(){
         return $this->belongsTo(Course::class);
     }
@@ -20,5 +23,13 @@ class Folder extends Model
 
     public function folderRequests(){
         return $this->hasMany(FolderRequests::class);
+    }
+
+    public function files(){
+        return $this->hasMany(File::class);
+    }
+
+    public function children(){
+        return $this->hasMany(Folder::class, 'parent_id');
     }
 }
