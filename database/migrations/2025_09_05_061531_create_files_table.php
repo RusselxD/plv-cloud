@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Course;
 use App\Models\Folder;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->integer('download_count');
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Folder::class);
+            $table->foreignIdFor(Course::class);
             $table->timestamps();
         });
     }

@@ -1,3 +1,7 @@
 <div>
-    {{-- Close your eyes. Count to one. That is how long forever feels. --}}
+    <x-ui.general.breadcrumb :breadcrumbs="[
+        ['Home', '/'],
+        [$course->abbreviation, route('course', ['courseSlug' => $course->slug])],
+        [$folder->name, route('folder', ['courseSlug' => $course->slug, 'folderSlug' => $folder->slug])],
+    ]"/>
 </div>

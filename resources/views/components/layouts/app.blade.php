@@ -14,14 +14,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
+<body class="lg:relative min-h-screen">
 
-    <nav class="w-full h-28 border bg-red-400 justify-center items-center flex">
-        <h1>NAV BAR</h1>
-    </nav>
-    <div class="p-10">
-        {{ $slot }}
+    <div class="hidden lg:flex absolute bg-blue-500 top-0 left-0 bottom-0 w-72 ">
+
     </div>
+    <main class="lg:ml-72">
+        <nav class="w-full h-28 border bg-red-400 justify-center items-center flex">
+            <h1>NAV BAR</h1>
+        </nav>
+        <div class="p-10">
+            {{ $slot }}
+        </div>
+    </main>
+
 
 </body>
 

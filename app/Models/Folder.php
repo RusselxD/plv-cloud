@@ -7,29 +7,50 @@ use Illuminate\Support\Str;
 
 class Folder extends Model
 {
-    protected $guarded  = [];
+    protected $guarded = [];
 
-    public function course(){
+    public function course()
+    {
         return $this->belongsTo(Course::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function folderContributors(){
+    public function folderContributors()
+    {
         return $this->hasMany(FolderContributors::class);
     }
 
-    public function folderRequests(){
+    public function folderRequests()
+    {
         return $this->hasMany(FolderRequests::class);
     }
 
-    public function files(){
+    public function files()
+    {
         return $this->hasMany(File::class);
     }
 
-    public function children(){
+    public function children()
+    {
         return $this->hasMany(Folder::class, 'parent_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($folder) {
+            $folder->slug = Str::slug($folder->name);
+        });
+
+        static::updating(function ($folder) {
+            if ($folder->isDirty('name')) {
+                $folder->slug = Str::slug($folder->name);
+            }
+        });
     }
 }

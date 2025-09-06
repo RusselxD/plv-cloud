@@ -13,4 +13,7 @@
     @error('email')
         <p class="text-red-500">{{ $message }}</p>
     @enderror
+    @if (session()->has('message'))
+        <p class="text-green-500">{{ session('message') }}</p>
+    @endif
 </div>

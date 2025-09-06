@@ -13,4 +13,8 @@ class File extends Model
     public function folder(){
         return $this->belongsTo(Folder::class);
     }
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
 }

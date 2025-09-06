@@ -32,12 +32,13 @@
         </form>
     </div>
 
-    <livewire:component.breadcrumb />
+    <x-ui.general.breadcrumb />
 
     <div>
         @if (empty($searchTerm))
+            <!-- Output is courses -->
             @foreach ($result as $r)
-                <a href="{{ route('course', strtolower($r->abbreviation)) }}">
+                <a href="{{ route('course', ['courseSlug' => $r->slug]) }}">
                     <div>{{ $r->name }}</div>
                 </a>
             @endforeach

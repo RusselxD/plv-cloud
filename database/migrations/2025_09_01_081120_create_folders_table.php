@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('folders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->boolean('is_public');
             $table->foreignIdFor(Course::class);
             $table->foreignIdFor(User::class);
