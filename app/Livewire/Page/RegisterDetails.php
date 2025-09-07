@@ -28,7 +28,7 @@ class RegisterDetails extends Component
     public function rules()
     {
         return [
-            'username' => ['required', 'alpha_dash', 'unique:users,username', 'min:3', 'max:20'],
+            'username' => ['required', 'unique:users,username', 'min:3', 'max:20', 'regex:/^[a-zA-Z0-9._-]+$/'],
             'password' => [
                 'required',
                 Password::min(8)
@@ -39,19 +39,53 @@ class RegisterDetails extends Component
                 'confirmed',
             ],
             'password_confirmation' => ['required'],
-            'studentNumber' => ['required', 'numeric', 'digits:8', 'unique:users,student_number', 'regex:/^\d{2}-\d{4}$/'],
+            'studentNumber' => ['required', 'unique:users,student_number', 'regex:/^\d{2}-\d{4}$/'],
             'firstName' => ['required', 'string', 'min:1', 'max:50'],
             'lastName' => ['required', 'string', 'min:1', 'max:50'],
             'courseId' => ['required', 'exists:courses,id'],
         ];
     }
 
+    protected $messages = [
+        'username.required' => 'Please choose a username.',
+        'username.unique' => 'This username is already taken.',
+        'username.min' => 'Username must be at least 3 characters.',
+        'username.max' => 'Username can\'t be longer than 20 characters.',
+        'username.regex' => 'Usernames may only contain letters, numbers, underscores, dashes, and dots.',
+
+        'password.required' => 'Please enter a password.',
+        'password.min' => 'Password must be at least 8 characters.',
+        'password.mixedCase' => 'Password must include both uppercase and lowercase letters.',
+        'password.letters' => 'Password must include at least one letter.',
+        'password.numbers' => 'Password must include at least one number.',
+        'password.symbols' => 'Password must include at least one symbol.',
+        'password.confirmed' => 'Passwords do not match.',
+
+        'password_confirmation.required' => 'Please confirm your password.',
+
+        'studentNumber.required' => 'Student number is required.',
+        'studentNumber.unique' => 'This student number is already registered.',
+        'studentNumber.regex' => 'Student number must follow the format: 12-3456.',
+
+        'firstName.required' => 'Please enter your first name.',
+        'firstName.min' => 'First name must have at least 1 character.',
+        'firstName.max' => 'First name cannot be longer than 50 characters.',
+
+        'lastName.required' => 'Please enter your last name.',
+        'lastName.min' => 'Last name must have at least 1 character.',
+        'lastName.max' => 'Last name cannot be longer than 50 characters.',
+
+        'courseId.required' => 'Please select your course.',
+        'courseId.exists' => 'Selected course does not exist.',
+    ];
+
+
     public function register()
     {
         $this->validate($this->rules());
 
         $user = User::create([
-            'email' => $this->email,
+            'email' => trim($this->email),
             'username' => $this->username,
             'password' => bcrypt($this->password),
             'student_number' => $this->studentNumber,

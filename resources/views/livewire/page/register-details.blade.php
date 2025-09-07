@@ -45,7 +45,7 @@
         </div>
 
         <select wire:model="courseId">
-            <option value="" disabled selected>Select Course</option>
+            <option value="" selected>Select Course</option>
             @foreach ($courses as $course)
                 <option value="{{ $course->id }}">{{ $course->abbreviation }}</option>
             @endforeach

@@ -2,38 +2,54 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Login extends Component
 {
-    public $userName;
+    public $login;
     public $password;
     public $remember = false;
 
     protected $rules = [
-        'userName' => 'required',
+        'login' => 'required',
         'password' => 'required'
     ];
 
-    public function submit(){
+    protected $messages = [
+        'login.required' => 'Email or username is required.',
+        'password.required' => 'Password is required.',
+    ];
 
-        // dd($this->userName, $this->password, $this->remember);
-
+    public function submit()
+    {
         $this->validate();
 
-        $credentials = [
-            'username' => $this->userName,
-            'password' => $this->password
-        ];
+        $field = filter_var($this->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if (Auth::attempt($credentials, $this->remember)){
-            session()->regenerate();
-            return redirect()->intended('home');
+        $user = User::where($field, $this->login)->first();
+
+        // Check if username or email exists
+        if (!$user) {
+            $this->addError('login', ucfirst($field) . ' not found.');
+            $this->reset(['login', 'password']);
+            return;
         }
-        
-        session()->flash('error', 'Invalid credentials. Try again.');
+
+        // Check if password is correct
+        if (!Hash::check($this->password, $user->password)) {
+            $this->addError('password', 'Incorrect password.');
+            $this->reset(['password']);
+            return;
+        }
+
+        // Login the user
+        Auth::login($user, $this->remember);
+        session()->regenerate();
+        return redirect()->intended('home');
     }
 
     #[Layout('components.layouts.guest')]

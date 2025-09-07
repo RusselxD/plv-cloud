@@ -17,11 +17,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,23 +47,28 @@ class User extends Authenticatable
         return $this->belongsTo(Course::class);
     }
 
-    public function notifications(){
+    public function notifications()
+    {
         return $this->hasMany(Notification::class);
     }
 
-    public function folders(){
+    public function folders()
+    {
         return $this->hasMany(Folder::class);
     }
 
-    public function folderContributors(){
+    public function folderContributors()
+    {
         return $this->hasMany(FolderContributors::class);
     }
 
-    public function folderRequests(){
+    public function folderRequests()
+    {
         return $this->hasMany(FolderRequests::class);
     }
 
-    public function files(){
+    public function files()
+    {
         return $this->hasMany(File::class);
     }
 }
