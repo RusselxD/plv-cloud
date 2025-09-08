@@ -5,9 +5,7 @@
         <p>{{ $email }}</p>
     </div>
 
-    <form wire:submit.prevent="register">
-        @csrf
-
+    <form wire:submit.prevent="register">        
         <div>
             <label for="username">Username</label>
             <input id="username" type="text" wire:model="username" />

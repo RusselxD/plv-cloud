@@ -14,7 +14,9 @@ class Course extends Component
 
     public string $search = '';
 
-    public bool $showCreateFolderModal = false;
+    public bool $isCreateFolderModalOpen = false;
+
+    protected $listeners = ['closeModalInCourse' => 'closeCreateFolderModal'];
 
     public function updatedSearch()
     {
@@ -38,7 +40,12 @@ class Course extends Component
             return redirect()->to(route('login'));
         }
 
-        $this->showCreateFolderModal = true;
+        $this->isCreateFolderModalOpen = true;
+    }
+
+    public function closeCreateFolderModal()
+    {
+        $this->isCreateFolderModalOpen = false;
     }
 
     public function mount($courseSlug)

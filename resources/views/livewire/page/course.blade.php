@@ -1,4 +1,4 @@
-<div class="relative">
+<div class="relative border border-red-800">
     <x-ui.general.breadcrumb :breadcrumbs="[
         ['Home', '/'],
         [$course->abbreviation, route('course', ['courseSlug' => $course->slug])]
@@ -21,11 +21,15 @@
     </div>
     <div>
         @if ($folders->isEmpty() && $search)
-            <!-- Empty result of search -->
-            <p>No folders or files found for "{{ $search }}"</p>
-        @elseif($search && $folders->isEmpty())
-            <!-- No folders found in this course. -->
-            <p>No folders found in this course.</p>
+            <div class="flex flex-col items-center justify-center text-center border border-green-700">
+                <!-- Empty result of search -->
+                <p class="">No folders or files found for "{{ $search }}"</p>
+            </div>
+        @elseif(!$search && $folders->isEmpty())
+            <div class="flex flex-col items-center justify-center text-center border border-green-700 py-48">
+                <!-- No folders found in this course. -->
+                <p>No folders found in this course.</p>
+            </div>
         @else
             <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9">
                 @foreach ($folders as $folder)
@@ -36,13 +40,18 @@
             </div>
         @endif
     </div>
+
+    <!-- Circle plus button to create a new folder -->
     <div wire:click="openCreateFolderModal"
-     class="absolute bottom-16 right-16 w-fit p-3 rounded-full bg-black hover:bg-gray-900 cursor-pointer shadow:lg">
-        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-plus-icon lucide-plus">
+        class="absolute bottom-5 right-5 w-fit p-3 rounded-full bg-black hover:bg-gray-900 cursor-pointer shadow:lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
             <path d="M5 12h14" />
             <path d="M12 5v14" />
         </svg>
     </div>
+
+    @if ($isCreateFolderModalOpen)
+        <livewire:component.create-folder :parentId="$course->id" :parentIsFolder="false" />
+    @endif
 </div>
