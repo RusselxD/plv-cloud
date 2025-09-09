@@ -45,10 +45,14 @@ class VerifyEmail extends Component
 
         $link = route('verify.email', ['token' => $token]);
 
-        Mail::raw("Click here to continue signup: $link", function ($message) {
+        Mail::send('components.emails.verify', ['link' => $link], function ($message) {
             $message->to($this->email)
                 ->subject('Verify your email to sign up');
         });
+        // Mail::raw("Click here to continue signup: $link", function ($message) {
+        //     $message->to($this->email)
+        //         ->subject('Verify your email to sign up');
+        // });
 
         session()->flash('message', 'Check your email for the verification link!');
     }
