@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->boolean('is_public');
-            $table->foreignIdFor(Course::class);
+            $table->foreignIdFor(Course::class)->nullable();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Folder::class, 'parent_id')->nullable();
             $table->timestamps();

@@ -49,7 +49,7 @@ class Login extends Component
         // Login the user
         Auth::login($user, $this->remember);
         session()->regenerate();
-        return redirect()->intended('home');
+        return redirect()->route('home');
     }
 
     #[Layout('components.layouts.guest')]

@@ -32,7 +32,7 @@
         </form>
     </div>
 
-    <x-ui.general.breadcrumb />
+    <livewire:component.breadcrumb/>
 
     <div>
         @if (empty($searchTerm))

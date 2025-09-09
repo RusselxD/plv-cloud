@@ -31,8 +31,8 @@ class Course extends Component
     public function goToFolder($folderSlug)
     {
         return redirect()
-            ->to(route('folder', ['courseSlug' => $this->course->slug, 'folderSlug' => $folderSlug]));
-    }    
+            ->to(route('folder', ['courseSlug' => $this->course->slug, 'path' => $folderSlug]));
+    }
 
     public function openCreateFolderModal()
     {

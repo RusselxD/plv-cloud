@@ -13,12 +13,20 @@ class CreateFolder extends Component
 
     public $folderName = '';
 
-    public function closeModalFromCourse(){        
-        $this->dispatch('closeModalInCourse');
+    public function closeModal()
+    {
+        if ($this->parentIsFolder) {
+            $this->dispatch('closeModalInFolder');
+        } else {
+            $this->dispatch('closeModalInCourse');
+        }
+
     }
 
-    public function createFolder(){
+    public function createFolder()
+    {
         // dd('hey');
+        // dd($this->parentIsFolder, $this->parentId);
 
         $this->validate([
             'folderName' => 'required|string|min:3|max:255',
@@ -33,11 +41,11 @@ class CreateFolder extends Component
         ]);
 
         session()->flash('success', 'Folder successfully created');
-        
     }
 
-    public function mount($parentId, $parentIsFolder)
+    public function mount($parentId, $parentIsFolder)    
     {
+        // dd($parentId, $parentIsFolder);
         $this->parentIsFolder = $parentIsFolder;
         $this->parentId = $parentId;
     }

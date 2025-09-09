@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/10 flex justify-center items-center" wire:click.self="closeModalFromCourse">
+<div class="fixed inset-0 bg-black/10 flex justify-center items-center" wire:click.self="closeModal">
     <div class="w-96 h-44 border-2 bg-white rounded p-4">
         <h1 class="text-xl mb-3">New Folder</h1>
         <form wire:submit.prevent="createFolder">

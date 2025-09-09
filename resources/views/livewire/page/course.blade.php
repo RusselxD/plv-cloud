@@ -1,8 +1,7 @@
 <div class="relative border border-red-800">
-    <x-ui.general.breadcrumb :breadcrumbs="[
-        ['Home', '/'],
-        [$course->abbreviation, route('course', ['courseSlug' => $course->slug])]
-    ]" />
+    
+    <livewire:component.breadcrumb :courseSlug="$this->course->slug"/>
+
     <div class="flex justify-between items-center text-wrap mb-5">
         <h1 class="text-2xl font-bold">{{ $course->name }}</h1>
         <form wire:submit.prevent="clickSearch"
