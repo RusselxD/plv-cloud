@@ -5,6 +5,7 @@ namespace App\Livewire\Page;
 use App\Models\Course;
 use \App\Models\Folder as FolderModel;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Folder extends Component
@@ -12,13 +13,19 @@ class Folder extends Component
     public $folder;
     public $course;
 
-    public $search;    
+    public $search;
 
     public $isCreateFolderModalOpen = false;
 
     public $path;
 
     protected $listeners = ['closeModalInFolder' => 'closeCreateFolderModal'];
+
+    #[On('folder-created')]
+    public function refreshFolders()
+    {
+        $this->render();
+    }
 
     public function updatedSearch()
     {
@@ -42,29 +49,24 @@ class Folder extends Component
             return redirect()->to(route('login'));
         }
 
-        $this->isCreateFolderModalOpen = true;
+        $this->isCreateFolderModalOpen = true;        
     }
 
     public function closeCreateFolderModal()
     {
         $this->isCreateFolderModalOpen = false;
-    }    
-
-    // bac/foldera
-    // path = foldera
-    // foldera
+    }
 
     public function mount($courseSlug, $path)
-    {        
+    {
         $this->course = Course::where('slug', $courseSlug)->firstOrFail();
 
         // the string path: /course/folder1/folder2
         $this->path = $path;
 
-        // $folderSlug = end(explode('/', $path));
         $slugs = explode('/', $path);
         $folderSlug = $slugs[array_key_last($slugs)];
-        $this->folder = FolderModel::where('slug', $folderSlug)->firstOrFail();        
+        $this->folder = FolderModel::where('slug', $folderSlug)->firstOrFail();
     }
 
     public function render()

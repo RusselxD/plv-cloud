@@ -14,11 +14,10 @@
         @livewireStyles
     </head>
     <body>
-        <div>
+        <div class="border border-red-600">
             <h1 class="text-xl text-red-700">Guest layout</h1>
         </div>
         {{ $slot }}
-
         @livewireScripts
     </body>
 </html>

@@ -3,12 +3,12 @@
         <h1 class="text-xl mb-3">New Folder</h1>
         <form wire:submit.prevent="createFolder">
             <input type="text" wire:model="folderName" placeholder="Folder Name"
-                class="border border-gray-300 rounded p-2 w-full" />
+                class="border border-gray-300 rounded p-2 w-full" id="folderInput" x-init="$el.focus()" />
             <div class="flex items-center justify-end">
-                <button type="button" class="mr-2" wire:click="closeModalFromCourse">Cancel</button>
+                <button type="button" class="mr-2" wire:click="closeModal">Cancel</button>
                 <button type="submit">Create</button>
             </div>
-
         </form>
+        @error('folderName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
     </div>
 </div>

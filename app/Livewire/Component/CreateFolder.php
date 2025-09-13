@@ -4,7 +4,7 @@ namespace App\Livewire\Component;
 
 use App\Models\Folder;
 use Livewire\Component;
-use Symfony\Component\CssSelector\Node\FunctionNode;
+use Illuminate\Validation\Rule;
 
 class CreateFolder extends Component
 {
@@ -20,17 +20,32 @@ class CreateFolder extends Component
         } else {
             $this->dispatch('closeModalInCourse');
         }
+    }    
 
+    public function rules()
+    {
+        return [
+            'folderName' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                Rule::unique('folders', 'name')->where(function ($query) {
+                    return $query->where('parent_id', $this->parentId)
+                        ->orWhere('course_id', $this->parentId);
+                }),
+            ],
+        ];
     }
+
+
+    protected $messages = [
+        'folderName.unique' => 'A folder with this name already exists here.',
+    ];
 
     public function createFolder()
     {
-        // dd('hey');
-        // dd($this->parentIsFolder, $this->parentId);
-
-        $this->validate([
-            'folderName' => 'required|string|min:3|max:255',
-        ]);
+        $this->validate();
 
         Folder::create([
             'name' => $this->folderName,
@@ -40,14 +55,15 @@ class CreateFolder extends Component
             'parent_id' => $this->parentIsFolder ? $this->parentId : null
         ]);
 
-        session()->flash('success', 'Folder successfully created');
+        $this->closeModal();
+        
+        $this->dispatch('flash', message: 'Folder successfully created');
     }
 
-    public function mount($parentId, $parentIsFolder)    
-    {
-        // dd($parentId, $parentIsFolder);
+    public function mount($parentId, $parentIsFolder)
+    {        
         $this->parentIsFolder = $parentIsFolder;
-        $this->parentId = $parentId;
+        $this->parentId = $parentId;    
     }
 
     public function render()

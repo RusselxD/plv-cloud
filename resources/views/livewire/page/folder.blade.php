@@ -1,5 +1,5 @@
 <div class="relative border border-green-700">
-    <livewire:component.breadcrumb :courseSlug="$this->course->slug" :path="$this->path"/>
+    <livewire:component.breadcrumb :courseSlug="$this->course->slug" :path="$this->path" />
 
     <div class="flex justify-between items-center text-wrap mb-5">
         <h1 class="text-2xl font-bold">{{ $folder->name }}</h1>
@@ -32,9 +32,10 @@
         @else
             <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9">
                 @foreach ($folders as $folder)
-                    <div wire:click="goToFolder('{{ $folder->slug }}')">
-                        <x-ui.course.folder-card :folder="$folder" />
-                    </div>
+                    <!-- <div wire:click="goToFolder('{{ $folder->slug }}')"> -->
+                    <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug" :path="$path"
+                        wire:key="folder-subfolder-{{ $folder->id }}" />
+                    <!-- </div> -->
                 @endforeach
             </div>
         @endif
@@ -51,6 +52,7 @@
     </div>
 
     @if ($isCreateFolderModalOpen)
-        <livewire:component.create-folder :parentId="$folder->id" :parentIsFolder="true" />
+        <livewire:component.create-folder :parentId="$this->folder->id" :parentIsFolder="true"
+            wire:key="create-folder-modal-folder-{{ $this->folder->id }}" />
     @endif
 </div>

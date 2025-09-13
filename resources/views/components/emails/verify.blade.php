@@ -71,8 +71,7 @@
                <div
                     style="background: #fef9e7; border: 1px solid #fbbf24; border-radius: 6px; padding: 15px; margin: 35px 0 10px 0;">
                     <p style="font-size: 13px; color: #92400e; margin: 0;">
-                         <strong>🔒 Security:</strong> If you didn't sign up for PLV Cloud, you can safely ignore this
-                         email.
+                         If you didn't sign up for PLV Cloud, you can safely ignore this email.
                     </p>
                </div>
           </div>

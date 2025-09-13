@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Page;
+namespace App\Livewire\Auth;
 
 use App\Models\Course;
 use App\Models\EmailVerification;
@@ -79,7 +79,6 @@ class RegisterDetails extends Component
         'courseId.exists' => 'Selected course does not exist.',
     ];
 
-
     public function register()
     {
         $this->validate($this->rules());
@@ -112,6 +111,6 @@ class RegisterDetails extends Component
     #[Layout('components.layouts.guest')]
     public function render()
     {
-        return view('livewire.page.register-details');
+        return view('livewire.auth.register-details');
     }
 }

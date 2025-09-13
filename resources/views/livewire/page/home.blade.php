@@ -14,12 +14,11 @@
                 fill="#3B3EDB" />
         </svg>
 
-
-        </svg>
         <p>Give me some unique tagline here</p>
         <form wire:submit.prevent="submitSearch"
             class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96">
-            <input wire:model="searchTerm" type="text" placeholder="Search for courses, subjects or files..."
+            <input wire:model.live.debounce.300ms="search" type="text"
+                placeholder="Start typing to search."
                 class="py-2 px-4 flex-1 focus:outline-none focus:ring-0 border-none italic" />
             <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -32,16 +31,18 @@
         </form>
     </div>
 
-    <livewire:component.breadcrumb/>
+    <livewire:component.breadcrumb />
 
     <div>
-        @if (empty($searchTerm))
-            <!-- Output is courses -->
+        @if (empty($search))
+            <!-- Default list (courses) -->
             @foreach ($result as $r)
                 <a href="{{ route('course', ['courseSlug' => $r->slug]) }}">
                     <div>{{ $r->name }}</div>
                 </a>
             @endforeach
+        @else
+            <div>hey</div>
         @endif
     </div>
 </div>

@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\SignupVerifyController;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\RegisterDetails;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Page\Course;
 use App\Livewire\Page\Folder;
 use App\Livewire\Page\Home;
-use App\Livewire\Page\RegisterDetails;
+
+
+// use App\Livewire\Auth\RegisterDetails;
 use App\Livewire\Page\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +26,7 @@ Route::get('/register', VerifyEmail::class)
     ->middleware('guest')
     ->name('register');
 
+    
 Route::get('/register/{token}', RegisterDetails::class)
     ->middleware('guest')
     ->name('register.complete');
