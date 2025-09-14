@@ -14,11 +14,7 @@
           style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.08);">
 
           <!-- Header -->
-          <div style="background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 30px; text-align: center;">
-               <div>
-                    Logo
-               </div>
-
+          <div style="background: #4f46e5; padding: 30px; text-align: center;">               
                <h1 style="color: #ffffff; font-size: 30px; font-weight: 600; margin: 0 0 8px;">
                     Welcome to PLV Cloud!
                </h1>

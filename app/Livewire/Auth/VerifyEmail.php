@@ -14,13 +14,11 @@ class VerifyEmail extends Component
 {
     public $email;
 
-    protected $rules = [
+    protected $listeners = ['resendEmail' => 'sendAnotherEmail'];
 
-    ];
-
-    public function submit()
+    protected function rules()
     {
-        $this->validate([
+        return [
             'email' => [
                 'required',
                 'email',
@@ -31,8 +29,30 @@ class VerifyEmail extends Component
                 // },
                 'unique:users,email'
             ],
-        ]);
+        ];
+    }
 
+    protected $messages = [
+        'email.required' => 'Please enter your PLV email.',
+        'email.email' => 'Please enter a valid email address.',
+        'email.unique' => 'This email is already taken.',
+    ];
+
+    public function submit()
+    {
+        $this->validate();
+
+        session(['user_email' => $this->email]);
+
+        $this->sendEmail();
+
+        session()->flash('verification_sent', $this->email);
+
+        return $this->redirect(route('register'), navigate: true);
+    }
+
+    public function sendEmail()
+    {
         $token = Str::random(64);
 
         EmailVerification::updateOrCreate(
@@ -49,12 +69,13 @@ class VerifyEmail extends Component
             $message->to($this->email)
                 ->subject('Verify your email to sign up');
         });
-        // Mail::raw("Click here to continue signup: $link", function ($message) {
-        //     $message->to($this->email)
-        //         ->subject('Verify your email to sign up');
-        // });
+    }
 
-        session()->flash('message', 'Check your email for the verification link!');
+    public function sendAnotherEmail()
+    {        
+        $this->email = session('user_email');
+        $this->sendEmail();
+        $this->dispatch('flash', message: 'New verification link sent.');
     }
 
     #[Layout('components.layouts.guest')]
