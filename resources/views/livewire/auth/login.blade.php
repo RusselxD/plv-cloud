@@ -15,7 +15,7 @@
                 class="px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
             @error('login')
                 <p
-                    class="flex items-center gap-2 text-sm text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-2 mt-2">
+                    class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
                     {{ $message }}
                 </p>
             @enderror
@@ -43,7 +43,7 @@
                 </button>
             </div>
             @error('password') <p
-                class="flex items-center gap-2 text-sm text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-2 mt-2">
+                class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
                 {{ $message }}
             </p> @enderror
         </div>

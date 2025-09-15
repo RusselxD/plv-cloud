@@ -103,8 +103,17 @@ class RegisterDetails extends Component
 
     public function mount($token)
     {
-        $this->verificationRecord = EmailVerification::where('token', $token)->firstOrFail();
-        $this->email = $this->verificationRecord->email;
+        $record = EmailVerification::where('token', $token)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$record) {
+            return redirect()->route('register')->with('error_flash', 'Link expired or invalid.');
+        }
+
+        $this->verificationRecord = $record;
+        
+        $this->email = $record->email;
         $this->courses = Course::all();
     }
 
