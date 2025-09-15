@@ -1,9 +1,9 @@
-<div class=" h-full flex flex-col items-center justify-center">
+<div class=" h-full flex flex-col items-center justify-start py-8 min-h-full">
 
-    <img src="{{ asset('/assets/logo.svg') }}" class=" h-32" />
+    <img src="{{ asset('/assets/logo.svg') }}" class="h-32 flex-shrink-0" />
 
     <form wire:submit.prevent="submit"
-        class="relative overflow-hidden bg-white w-[80%] shadow-[0_0_20px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg">
+        class="relative overflow-hidden bg-white w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center flex-shrink-0 p-8 mt-4 rounded-lg">
 
         <!-- Mail Icon -->
         <div class="p-3 rounded-full bg-primary mb-3">
@@ -23,7 +23,6 @@
                     class="flex items-center gap-2 text-sm text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-2 mt-2">
                     {{ $message }}
                 </p>
-
             @enderror
         </div>
 
@@ -44,12 +43,25 @@
         </div>
     </form>
 
-    <div class="mt-10">
+    <div class="mt-10 pb-5">
         <x-ui.general.copyright-footer />
     </div>
 
-
     @if (session()->has('error'))
         <p class="text-red-500">{{ session('error') }}</p>
+    @endif
+
+    @if (session()->has('error_flash'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('error_flash', {
+                        detail: {
+                            message: @js(session('error_flash'))
+                        }
+                    }));
+                }, 100);
+            });
+        </script>
     @endif
 </div>

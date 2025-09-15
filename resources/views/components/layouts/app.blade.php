@@ -24,7 +24,7 @@
         <div class="pt-10 px-10 pb-24 relative">
             {{ $slot }}
 
-            <x-ui.general.flash />
+            <x-ui.flashes.success-flash/>
 
         </div>
 

@@ -16,13 +16,13 @@
 
 </head>
 
-<body class="lg:grid lg:grid-cols-[1fr_0.7fr] min-h-[100dvh] relative">
-    <div class="pl-5 py-5">
-        <div class="w-full h-full bg-gray-500 rounded-4xl">
+<body class="lg:grid lg:grid-cols-[1fr_0.7fr] h-[100dvh] relative">
+    <div class="border border-red-600 h-full max-h-screen relative">
+        <div class="bg-gray-500 rounded-4xl absolute inset-5">
 
         </div>
     </div>
-    <div>
+    <div class="overflow-y-auto scrollbar-hide">
         {{ $slot }}
     </div>
 
@@ -32,7 +32,8 @@
     @endif
 
     <!-- For flash messages -->
-    <x-ui.general.flash />
+    <x-ui.flashes.success-flash />
+    <x-ui.flashes.error-flash />
 
     @livewireScripts
 </body>

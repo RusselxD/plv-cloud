@@ -57,7 +57,7 @@ class CreateFolder extends Component
 
         $this->closeModal();
         
-        $this->dispatch('flash', message: 'Folder successfully created');
+        $this->dispatch('success_flash', message: 'Folder successfully created');
     }
 
     public function mount($parentId, $parentIsFolder)

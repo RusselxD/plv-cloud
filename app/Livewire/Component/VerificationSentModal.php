@@ -14,7 +14,7 @@ class VerificationSentModal extends Component
     }
 
     public function mount($email)
-    {
+    {        
         $this->email = $email;
     }
 

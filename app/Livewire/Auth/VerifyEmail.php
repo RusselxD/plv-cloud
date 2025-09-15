@@ -14,8 +14,6 @@ class VerifyEmail extends Component
 {
     public $email;
 
-    protected $listeners = ['resendEmail' => 'sendAnotherEmail'];
-
     protected function rules()
     {
         return [
@@ -42,17 +40,6 @@ class VerifyEmail extends Component
     {
         $this->validate();
 
-        session(['user_email' => $this->email]);
-
-        $this->sendEmail();
-
-        session()->flash('verification_sent', $this->email);
-
-        return $this->redirect(route('register'), navigate: true);
-    }
-
-    public function sendEmail()
-    {
         $token = Str::random(64);
 
         EmailVerification::updateOrCreate(
@@ -69,13 +56,15 @@ class VerifyEmail extends Component
             $message->to($this->email)
                 ->subject('Verify your email to sign up');
         });
+
+        session()->flash('verification_sent', $this->email);
+        
+        return $this->redirect(route('register'), navigate: true);
     }
 
-    public function sendAnotherEmail()
-    {        
-        $this->email = session('user_email');
-        $this->sendEmail();
-        $this->dispatch('flash', message: 'New verification link sent.');
+    public function mount()
+    {
+        // Error flash is now handled in the blade template
     }
 
     #[Layout('components.layouts.guest')]

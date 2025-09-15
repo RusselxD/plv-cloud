@@ -16,7 +16,7 @@ class SignupVerifyController extends Controller
             ->first();
 
         if (!$record) {
-            return redirect()->route('register')->with('error', 'Link expired or invalid.');
+            return redirect()->route('register')->with('error_flash', 'Link expired or invalid.');
         }
 
         return redirect()->route('register.complete', ['token' => $token]);

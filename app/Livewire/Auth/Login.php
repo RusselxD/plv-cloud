@@ -20,8 +20,8 @@ class Login extends Component
     ];
 
     protected $messages = [
-        'login.required' => 'Email or username is required.',
-        'password.required' => 'Password is required.',
+        'login.required' => 'Please enter your username.',
+        'password.required' => 'Please enter your password.',
     ];
 
     public function submit()
@@ -45,7 +45,7 @@ class Login extends Component
             $this->reset(['password']);
             return;
         }
-
+    
         // Login the user
         Auth::login($user, $this->remember);
         session()->regenerate();
