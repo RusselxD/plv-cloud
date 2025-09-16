@@ -1,8 +1,16 @@
-<div x-data="{ show: false, message: '' }" x-on:error_flash.window="
+<div x-data="{ show: false, message: '' }" x-init="
+        @if(session()->has('error'))
+            message = @js(session('error'));
+            $nextTick(() => {
+                show = true;
+                setTimeout(() => show = false, 4000);
+            });
+        @endif
+     " x-on:error_flash.window="
         show = true; 
         message = $event.detail.message; 
         setTimeout(() => show = false, 4000)
-    " x-show="show" x-transition:enter="transform transition ease-out duration-300"
+     " x-show="show" x-transition:enter="transform transition ease-out duration-300"
     x-transition:enter-start="translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
     x-transition:leave="transform transition ease-in duration-300" x-transition:leave-start="translate-x-0 opacity-100"
     x-transition:leave-end="translate-x-full opacity-0"

@@ -4,6 +4,7 @@ namespace App\Livewire\Page;
 
 use App\Models\Course;
 use \App\Models\Folder as FolderModel;
+use App\Models\FolderContributors;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -18,6 +19,9 @@ class Folder extends Component
     public $isCreateFolderModalOpen = false;
 
     public $path;
+
+    public $currentUserIsOwner = false;
+    public $currentUserIsEligibleToUpload = false;
 
     protected $listeners = ['closeModalInFolder' => 'closeCreateFolderModal'];
 
@@ -49,12 +53,16 @@ class Folder extends Component
             return redirect()->to(route('login'));
         }
 
-        $this->isCreateFolderModalOpen = true;        
+        $this->isCreateFolderModalOpen = true;
     }
 
     public function closeCreateFolderModal()
     {
         $this->isCreateFolderModalOpen = false;
+    }
+
+    public function determineUserIsEligible()
+    {
     }
 
     public function mount($courseSlug, $path)
@@ -64,9 +72,29 @@ class Folder extends Component
         // the string path: /course/folder1/folder2
         $this->path = $path;
 
+        // assign folder based on last slug in path
         $slugs = explode('/', $path);
         $folderSlug = $slugs[array_key_last($slugs)];
-        $this->folder = FolderModel::where('slug', $folderSlug)->firstOrFail();
+        $folder = FolderModel::where('slug', $folderSlug)->firstOrFail();
+        $this->folder = $folder;
+
+        // determine if the current user is the owner of the folder
+        $currentUser = Auth::user();
+        if ($currentUser) {
+            $this->currentUserIsOwner = $currentUser->id == $folder->user_id;
+            $this->currentUserIsEligibleToUpload = $this->currentUserIsOwner;
+
+        }
+
+        // if the current user is signed in and is not the owner,
+        // determine if the current user if eligible to upload (contributor / folder is public)     
+        if ($currentUser && !$this->currentUserIsOwner) {
+            $isAContributor = FolderContributors::where('folder_id', $this->folder->id)
+                ->where('user_id', $currentUser->id)
+                ->exists();
+            $this->currentUserIsEligibleToUpload =
+                $folder->is_public || $isAContributor;
+        }
     }
 
     public function render()

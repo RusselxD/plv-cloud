@@ -2,6 +2,7 @@
     @auth
 
         <div class="bg-white w-full h-20" wire:click="goToProfile">
+            {{ $user->username }}
         </div>
 
         <button wire:click="logout">log out</button>

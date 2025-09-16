@@ -18,15 +18,15 @@
 
     <livewire:component.sidebar />
     <main class="lg:ml-72 relative">
-        <!-- <nav class="w-full h-28 border bg-red-400 justify-center items-center flex">
-            <h1>NAV BAR</h1>
-        </nav> -->
-        <div class="pt-10 px-10 pb-24 relative">
+
+        <div class="pt-10 px-10 pb-24 relative min-h-screen">
             {{ $slot }}
 
             <x-ui.flashes.success-flash/>
 
         </div>
+
+        
 
     </main>
 </body>

@@ -1,6 +1,6 @@
 <div class="h-full flex flex-col items-center justify-start py-8 min-h-full">
 
-    <x-ui.general.auth-logo/>
+    <x-ui.general.auth-logo />
 
     <form wire:submit.prevent="submit"
         class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
@@ -51,7 +51,7 @@
         <div class="flex justify-between items-center w-full my-5">
             <label class="flex items-center text-sm text-primary cursor-pointer">
                 <input type="checkbox" wire:model="remember"
-                    class="mr-2 rounded border-primary text-primary focus:ring-primary">
+                    class="mr-2 rounded border-primary text-primary focus:ring-primary cursor-pointer">
                 Remember Me
             </label>
             <p class="text-sm text-primary hover:underline cursor-pointer">
@@ -59,17 +59,23 @@
             </p>
         </div>
 
-        <button type="submit" class="px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium 
+        <button type="submit" class="px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium
            border-2 border-primary text-primary bg-white
            hover:bg-primary hover:text-white cursor-pointer
-           active:bg-primary active:text-white
-           transition-colors duration-200">Login</button>
+           active:bg-primary active:text-white 
+           transition-colors duration-200">
+            Login
+
+        </button>
 
         <span class="mt-10 text-sm">
             Don't have an account?
             <a class="font-bold text-primary" href="{{ route('register') }}">Sign up</a>
         </span>
 
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="submit">
+            <x-ui.general.spinner />
+        </div>
     </form>
 
     <div class="mt-10 pb-5">

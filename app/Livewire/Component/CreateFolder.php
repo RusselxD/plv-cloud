@@ -47,7 +47,7 @@ class CreateFolder extends Component
         $this->validate();
 
         Folder::create([
-            'name' => $this->folderName,
+            'name' => trim($this->folderName),
             'is_public' => false,
             'course_id' => $this->parentIsFolder ? null : $this->parentId,
             'user_id' => auth()->id(),

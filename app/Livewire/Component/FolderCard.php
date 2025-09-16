@@ -12,6 +12,11 @@ class FolderCard extends Component
     public $folder;
     public $totalContents = 0;
 
+    public $openKebabMenu = false;
+    public $openRenameModalIsOpen = false;
+
+    protected $listeners = ['closeRenameModal' => 'closeRenameModal'];
+
     public function goToFolder()
     {
         // If path is empty (meaning this folder card is in the course), just go to the folder
@@ -25,6 +30,18 @@ class FolderCard extends Component
     public function goToProfile()
     {
         redirect()->to(route('user', ['username' => $this->folder->user->username]));
+    }
+
+    public function clickKebab(){
+        $this->openKebabMenu = !$this->openKebabMenu;
+    }
+
+    public function closeRenameModal(){
+        $this->openRenameModalIsOpen = false;
+    }
+
+    public function openRenameModal(){
+        $this->openRenameModalIsOpen = true;
     }
 
     public function mount($folder, $courseSlug, $path = '')

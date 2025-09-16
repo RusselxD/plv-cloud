@@ -45,10 +45,12 @@ class Login extends Component
             $this->reset(['password']);
             return;
         }
-    
+
         // Login the user
         Auth::login($user, $this->remember);
         session()->regenerate();
+
+        session()->flash('success', 'Login successful! Welcome back.');
         return redirect()->route('home');
     }
 
