@@ -4,15 +4,20 @@ namespace App\Livewire\Auth;
 
 use App\Models\EmailVerification;
 use App\Models\User;
+use Exception;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class VerifyEmail extends Component
 {
     public $email;
+
+    protected $listeners = ['resendEmail' => 'sendAnotherEmail'];
 
     protected function rules()
     {
@@ -40,6 +45,24 @@ class VerifyEmail extends Component
     {
         $this->validate();
 
+        session(['user_email' => $this->email]);
+
+        $sendEmail = $this->sendEmail();
+
+        if ($sendEmail == 0) {
+            session()->flash('verification_sent', $this->email);
+            return $this->redirect(route('register'), navigate: true);
+        } else {
+            $this->errorSendingMail($sendEmail);
+        }
+    }
+
+    // 0 = success
+    // 1 = Internet / network connectivity issues
+    // 2 = Specific network connection failures
+    // 3 = General errors
+    public function sendEmail()
+    {
         $token = Str::random(64);
 
         EmailVerification::updateOrCreate(
@@ -52,19 +75,46 @@ class VerifyEmail extends Component
 
         $link = route('verify.email', ['token' => $token]);
 
-        Mail::send('components.emails.verify', ['link' => $link], function ($message) {
-            $message->to($this->email)
-                ->subject('Verify your email to sign up');
-        });
+        try {
+            $e = Mail::send('components.emails.verify', ['link' => $link], function ($message) {
+                $message->to($this->email)
+                    ->subject('Verify your email to sign up');
+            });
 
-        session()->flash('verification_sent', $this->email);
-        
-        return $this->redirect(route('register'), navigate: true);
+            return 0;
+
+        } catch (TransportException $e) { 
+            return 1;            
+        } catch (ConnectException $e) { 
+            return 2;            
+        } catch (Exception $e) {    
+            return 3;            
+        }
     }
 
-    public function mount()
+    public function sendAnotherEmail()
     {
-        // Error flash is now handled in the blade template
+        $this->email = session('user_email');
+        $resendEmail = $this->sendEmail();
+        if ($resendEmail == 0){
+            $this->dispatch('success_flash', message: 'New verification link sent.');
+        } else {
+            $this->errorSendingMail($resendEmail);
+        }        
+    }
+
+    public function errorSendingMail($code){
+        switch($code){
+            case 1:
+                $this->dispatch('error_flash', message: 'No internet connection. Please check your connection and try again.');
+                break;
+            case 2:
+                $this->dispatch('error_flash', message: 'Connection failed. Please check your internet and try again.');
+                break;
+            case 3:
+                $this->dispatch('error_flash', message: 'Something went wrong. Please try again.');
+                break;
+        }
     }
 
     #[Layout('components.layouts.guest')]

@@ -1,11 +1,11 @@
 <div class="h-full flex flex-col items-center justify-start py-8 min-h-full">
 
-    <img src="{{ asset('/assets/logo.svg') }}" class="h-32 flex-shrink-0" />
+    <x-ui.general.auth-logo/>
 
     <form wire:submit.prevent="submit"
-        class="relative overflow-hidden bg-white w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
+        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
 
-        <h1 class="text-2xl text-primary font-bold w-full text-center">
+        <h1 class="text-2xl text-primary font-bold w-full text-center border-b-2 border-primary pb-3">
             Log In
         </h1>
 
@@ -59,9 +59,10 @@
             </p>
         </div>
 
-        <button type="submit" class="px-16 py-3 rounded-full font-medium 
+        <button type="submit" class="px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium 
            border-2 border-primary text-primary bg-white
            hover:bg-primary hover:text-white cursor-pointer
+           active:bg-primary active:text-white
            transition-colors duration-200">Login</button>
 
         <span class="mt-10 text-sm">

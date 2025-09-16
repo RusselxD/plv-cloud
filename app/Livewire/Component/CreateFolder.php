@@ -20,7 +20,7 @@ class CreateFolder extends Component
         } else {
             $this->dispatch('closeModalInCourse');
         }
-    }    
+    }
 
     public function rules()
     {
@@ -37,7 +37,6 @@ class CreateFolder extends Component
             ],
         ];
     }
-
 
     protected $messages = [
         'folderName.unique' => 'A folder with this name already exists here.',
@@ -56,14 +55,14 @@ class CreateFolder extends Component
         ]);
 
         $this->closeModal();
-        
+
         $this->dispatch('success_flash', message: 'Folder successfully created');
     }
 
     public function mount($parentId, $parentIsFolder)
-    {        
+    {
         $this->parentIsFolder = $parentIsFolder;
-        $this->parentId = $parentId;    
+        $this->parentId = $parentId;
     }
 
     public function render()

@@ -16,14 +16,22 @@
 
 </head>
 
-<body class="lg:grid lg:grid-cols-[1fr_0.7fr] h-[100dvh] relative">
-    <div class="border border-red-600 h-full max-h-screen relative">
-        <div class="bg-gray-500 rounded-4xl absolute inset-5">
+<body class="h-[100dvh] relative">
 
+
+    <div class="lg:grid lg:grid-cols-[1fr_0.7fr] h-full">
+        <div class="hidden lg:block h-full max-h-screen relative">
+            <div class="bg-gray-500 rounded-4xl absolute inset-5">
+
+            </div>
         </div>
-    </div>
-    <div class="overflow-y-auto scrollbar-hide">
-        {{ $slot }}
+        <div class="overflow-y-auto scrollbar-hide">
+            {{ $slot }}
+
+            <!-- For flash messages -->
+            <x-ui.flashes.success-flash />
+            <x-ui.flashes.error-flash />
+        </div>
     </div>
 
     <!-- Verification Sent Modal -->
@@ -31,9 +39,7 @@
         <livewire:component.verification-sent-modal :email="session('verification_sent')" />
     @endif
 
-    <!-- For flash messages -->
-    <x-ui.flashes.success-flash />
-    <x-ui.flashes.error-flash />
+
 
     @livewireScripts
 </body>

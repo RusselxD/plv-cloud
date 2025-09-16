@@ -1,9 +1,9 @@
 <div class=" h-full flex flex-col items-center justify-start py-8 min-h-full">
 
-    <img src="{{ asset('/assets/logo.svg') }}" class="h-32 flex-shrink-0" />
+    <x-ui.general.auth-logo/>
 
     <form wire:submit.prevent="submit"
-        class="relative overflow-hidden bg-white w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center flex-shrink-0 p-8 mt-4 rounded-lg">
+        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center flex-shrink-0 p-8 mt-4 rounded-lg">
 
         <!-- Mail Icon -->
         <div class="p-3 rounded-full bg-primary mb-3">
@@ -16,7 +16,7 @@
 
         <div class="w-full my-10 flex flex-col items-stretch ">
             <label for="email" class="mb-1 text-sm text-primary">Email</label>
-            <input id="email" type="text" wire:model="email" placeholder="Enter your @plv.edu.ph email"
+            <input autofocus id="email" type="text" wire:model="email" placeholder="Enter your @plv.edu.ph email"
                 class="px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
             @error('email')
                 <p
@@ -29,6 +29,7 @@
         <button type="submit" class="px-8 py-3 rounded-full font-medium 
            border-2 border-primary text-primary bg-white
            hover:bg-primary hover:text-white cursor-pointer
+           active:bg-primary active:text-white
            transition-colors duration-200">
             Send Verification Link
         </button>
