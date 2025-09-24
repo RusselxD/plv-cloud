@@ -1,13 +1,11 @@
-<div class=" border border-green-700">
-    <livewire:component.breadcrumb :courseSlug="$this->course->slug" :path="$this->path" />
+<div class="space-y-3 flex-1 flex flex-col">
 
-    <div class="flex justify-between items-center text-wrap mb-5">
-        <h1 class="text-2xl font-bold">{{ $folder->name }}</h1>
+    <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center p-2 h-20">
         <form wire:submit.prevent="clickSearch"
-            class="border border-gray-600 rounded-md flex justify-center bg-white overflow-hidden w-fit items-stretch">
+            class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
             <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
-                class="text-sm px-3 flex-1 focus:outline-none focus:ring-0 border-none" />
-            <button class="p-2 h-full cursor-pointer hover:bg-gray-200" type="submit">
+                class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
+            <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-search-icon lucide-search">
@@ -16,42 +14,57 @@
                 </svg>
             </button>
         </form>
+
+        <livewire:component.profile-with-notif />
     </div>
 
-    <div>
-        @if ($folders->isEmpty() && $search)
-            <div class="flex flex-col items-center justify-center text-center border border-green-700">
+    <div class="bg-slate-50/85 rounded-lg p-5 flex-1">
+        <livewire:component.breadcrumb :courseSlug="$this->course->slug" :path="$this->path" />
+
+        <div class="flex items-center justify-between mb-5 border-b border-slate-500 pb-3">
+            <h1 class="text-2xl font-bold">{{ $folder->name }}</h1>
+            @if ($currentUserIsEligibleToUpload)
+                <livewire:component.add-new-button :parentIsAFolder="true" :parentId="$folder->id" />
+            @endif
+        </div>
+
+        @if ($search && $folders->isEmpty() && $files->isEmpty())
+            <div class="flex items-center justify-center border border-green-700">
                 <!-- Empty result of search -->
                 <p class="">No folders or files found for "{{ $search }}"</p>
             </div>
-        @elseif(!$search && $folders->isEmpty())
-            <div class="flex flex-col items-center justify-center text-center border border-green-700 py-48">
-                <!-- No folders found in this course. -->
+        @elseif(!$search && $folders->isEmpty() && $files->isEmpty())
+            <div class="flex items-center justify-center border border-green-700">
+                <!-- No folders or files found in this folder. -->
                 <p>No folders or files found.</p>
             </div>
         @else
-            <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9">
-                @foreach ($folders as $folder)
-                    <!-- <div wire:click="goToFolder('{{ $folder->slug }}')"> -->
-                    <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug" :path="$path"
-                        wire:key="folder-subfolder-{{ $folder->id }}" />
-                    <!-- </div> -->
-                @endforeach
-            </div>
+
+            @if(!$folders->isEmpty()) <!-- Show folders if there are any -->
+                <p class="mb-2">Folders</p>
+                <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9 mb-5">
+                    @foreach ($folders as $folder)
+                        <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug"
+                            wire:key="course-folder-{{ $folder->id }}" />
+                    @endforeach
+                </div>
+            @endif
+
+            @if (!$files->isEmpty()) <!-- Show files if there are any -->
+                <p class="mb-2">Files</p>
+                <div class="grid grid-cols-3 gap-5">
+                    @foreach ($files as $file)                    
+                        <livewire:component.file-card :file="$file" wire:key="file-{{ $file->id }}" />
+                    @endforeach
+                </div>
+            @endif
+
         @endif
+
+
+
     </div>
 
-    <!-- Circle plus button to create a new folder -->
-    @if($currentUserIsEligibleToUpload)
-        <div wire:click="openCreateFolderModal"
-            class="absolute bottom-12 right-12 w-fit p-3 rounded-full bg-black hover:bg-gray-900 cursor-pointer shadow:lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
-            </svg>
-        </div>
-    @endif
 
 
     @if ($isCreateFolderModalOpen)

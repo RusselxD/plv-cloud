@@ -1,4 +1,4 @@
-<div class="border border-red-700 my-5 flex items-center w-[75%]  flex-wrap">
+<div class=" flex items-center w-[75%] mb-5 flex-wrap ">
 
      @foreach ($breadcrumbs as $breadcrumb)
           @if ($loop->last)

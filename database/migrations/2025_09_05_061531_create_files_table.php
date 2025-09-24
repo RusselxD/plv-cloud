@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('storage_path');
             $table->string('file_size');
-            $table->integer('download_count');
+            $table->string('mime_type');
+            $table->integer('download_count')->default(0);
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Folder::class);
-            $table->foreignIdFor(Course::class);
+            $table->foreignIdFor(Folder::class)->nullable();
+            $table->foreignIdFor(Course::class)->nullable();
             $table->timestamps();
         });
     }

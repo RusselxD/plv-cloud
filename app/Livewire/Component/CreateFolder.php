@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Component;
 
+use App\Models\Course;
 use App\Models\Folder;
+use App\Models\UserActivity;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -15,11 +17,7 @@ class CreateFolder extends Component
 
     public function closeModal()
     {
-        if ($this->parentIsFolder) {
-            $this->dispatch('closeModalInFolder');
-        } else {
-            $this->dispatch('closeModalInCourse');
-        }
+        $this->dispatch('close-folder-create-modal');
     }
 
     public function rules()
@@ -31,16 +29,38 @@ class CreateFolder extends Component
                 'min:3',
                 'max:255',
                 Rule::unique('folders', 'name')->where(function ($query) {
-                    return $query->where('parent_id', $this->parentId)
-                        ->orWhere('course_id', $this->parentId);
+                    if ($this->parentIsFolder) {
+                        return $query->where('parent_id', $this->parentId);
+                    } else {
+                        return $query->where('course_id', $this->parentId);
+                    }
                 }),
             ],
         ];
     }
 
     protected $messages = [
+        'folderName.required' => 'Please enter a name.',
+        'folderName.string' => 'The name must be text.',
+        'folderName.min' => 'The name must be at least 3 characters long.',
+        'folderName.max' => 'The name may not be longer than 255 characters.',
         'folderName.unique' => 'A folder with this name already exists here.',
     ];
+
+    public function logActivity()
+    {
+        $parentName = $this->parentIsFolder ?
+            Folder::where('id', $this->parentId)->first()->name :
+            Course::where('id', $this->parentId)->first()->abbreviation;
+
+        // Created folder "name" inside folder/course "parent"
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => 'Created folder "' . trim($this->folderName) . '" inside ' .
+                ($this->parentIsFolder ? 'folder "' : 'course "') .
+                $parentName . '"',
+        ]);
+    }
 
     public function createFolder()
     {
@@ -54,9 +74,10 @@ class CreateFolder extends Component
             'parent_id' => $this->parentIsFolder ? $this->parentId : null
         ]);
 
-        $this->closeModal();
-
+        $this->dispatch('folder-created');
         $this->dispatch('success_flash', message: 'Folder successfully created');
+
+        $this->logActivity();
     }
 
     public function mount($parentId, $parentIsFolder)

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Component;
 
+use App\Models\Folder;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -41,12 +42,19 @@ class RenameModal extends Component
     {
         $this->validate();
         
-        // naka determine if folder ba or file
+        if ($this->isAFolder){
+            Folder::where('id', $this->id)->update(['name' => trim($this->name)]);
+        } else {
+            // for file
+        }
+        
+        $this->closeModal();
+        $this->dispatch('success_flash', message: 'Renamed successfully');
     }
 
     public function closeModal(){
         // caught by FolderCard
-        $this->dispatch('closeRenameModal');
+        $this->dispatch('close-rename-modal');
     }
 
     public function mount($isAFolder = true, $id){

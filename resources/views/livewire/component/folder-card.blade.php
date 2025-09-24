@@ -1,6 +1,6 @@
 <div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative" wire:click="goToFolder">
     <div class="grid grid-cols-[0.5fr_2fr]">
-        <!-- Folder Icon at the left -->
+        <!-- Folder Icon -->
         <div class="flex items-center justify-center aspect-square h-full border-r border-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="gray"
                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
@@ -8,7 +8,8 @@
                     d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
             </svg>
         </div>
-        <!-- Container of folder name, contents, and kebab -->
+
+        <!-- Folder name + kebab -->
         <div class="flex items-start justify-between p-3 overflow-hidden">
             <div class="max-w-[80%]">
                 <p class="font-bold truncate w-full overflow-ellipsis">{{ $folder->name }}</p>
@@ -19,7 +20,8 @@
             </button>
         </div>
     </div>
-    <!-- Bottom container -->
+
+    <!-- Bottom -->
     <div class="flex items-center justify-between pr-2 border-t border-gray-600 text-sm">
         <div class="flex items-center justify-start gap-2 group py-[0.40rem] px-2 relative group"
             wire:click.stop="goToProfile">
@@ -28,7 +30,7 @@
             </div>
             <p class="max-w-22 truncate group-hover:underline">{{ $folder->user->username }}</p>
 
-            <!-- User Profile Preview Card -->
+            <!-- Profile Preview -->
             <div class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
                 <x-ui.general.profile-preview-card :user="$user" />
             </div>
@@ -36,20 +38,33 @@
         <p class="text-slate-600 text-xs">Created {{ $folder->created_at->diffForHumans() }}</p>
     </div>
 
-
-    @if($openKebabMenu)
-        <div class="absolute w-52 h-fit bg-white rounded-sm border top-3 right-12 overflow-hidden">
+    <!-- Kebab Menu -->
+    <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-3 right-12">
+        <div x-show="open" x-collapse @click.away="$wire.closeKebabMenu()"
+            class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
             <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
-                <img src="{{ asset('assets/edit.svg') }}" class="w-5" />
+                <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
                 <p>Rename</p>
             </div>
+            <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3"
+                wire:click.stop="openConfirmDeleteModal">
+                <img src="{{ asset('assets/delete.svg') }}" class="w-4" />
+                <p>Delete</p>
+            </div>
+        </div>
+    </div>
 
+    <!-- Rename Modal -->
+    @if($renameModalIsOpen)
+        <div wire:click.stop="closeKebabMenu">
+            <livewire:component.rename-modal :id="$folder->id" :isAFolder="true" />
         </div>
     @endif
 
-    @if($openRenameModalIsOpen)
+    <!-- Confirm Delete Modal -->
+    @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.rename-modal :id="$folder->id" :isAFolder="true"/>
+            <livewire:component.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />
         </div>
     @endif
 </div>

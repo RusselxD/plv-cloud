@@ -17,16 +17,11 @@
 <body class="lg:relative min-h-screen">
 
     <livewire:component.sidebar />
-    <main class="lg:ml-72 relative">
+    <main class="lg:ml-64 relative py-3 pr-3 min-h-screen flex">
 
-        <div class="pt-10 px-10 pb-24 relative min-h-screen">
-            {{ $slot }}
+        {{ $slot }}
 
-            <x-ui.flashes.success-flash/>
-
-        </div>
-
-        
+        <x-ui.flashes.success-flash />
 
     </main>
 </body>

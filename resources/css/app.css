@@ -49,3 +49,10 @@
 .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
 }
+
+.banner {
+    background-image: url("/public/assets/banner.png"); /* image path */
+    background-size: cover; /* make it cover the whole div */
+    background-position: center; /* center the image */
+    background-repeat: no-repeat; /* prevent tiling */
+}

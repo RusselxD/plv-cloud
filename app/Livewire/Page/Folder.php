@@ -3,6 +3,7 @@
 namespace App\Livewire\Page;
 
 use App\Models\Course;
+use App\Models\File;
 use \App\Models\Folder as FolderModel;
 use App\Models\FolderContributors;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,13 @@ class Folder extends Component
     public $path;
 
     public $currentUserIsOwner = false;
-    public $currentUserIsEligibleToUpload = false;
+    public $currentUserIsEligibleToUpload = false;    
 
-    protected $listeners = ['closeModalInFolder' => 'closeCreateFolderModal'];
-
-    #[On('folder-created')]
-    public function refreshFolders()
+    #[On('folder-created')] // from CreateFolder
+    #[On('file-created')] // from AddNewButton
+    #[On('folder-deleted')] // from ConfirmDeleteModal
+    // #[On('file-deleted')] // from ConfirmDeleteModal
+    public function refresh()
     {
         $this->render();
     }
@@ -59,10 +61,6 @@ class Folder extends Component
     public function closeCreateFolderModal()
     {
         $this->isCreateFolderModalOpen = false;
-    }
-
-    public function determineUserIsEligible()
-    {
     }
 
     public function mount($courseSlug, $path)
@@ -117,6 +115,16 @@ class Folder extends Component
             ->where('parent_id', $this->folder->id)
             ->get();
 
-        return view('livewire.page.folder', ['folders' => $folders]);
+        $files = File::with('user')
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+                // WHERE NAME LIKE %search%
+            })
+            ->where('folder_id', $this->folder->id)
+            ->get();
+
+        // dump($files);
+
+        return view('livewire.page.folder', ['folders' => $folders, 'files' => $files]);
     }
 }

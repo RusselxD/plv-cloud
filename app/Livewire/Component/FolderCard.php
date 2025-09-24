@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Component;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class FolderCard extends Component
@@ -13,9 +14,22 @@ class FolderCard extends Component
     public $totalContents = 0;
 
     public $openKebabMenu = false;
-    public $openRenameModalIsOpen = false;
+    public $renameModalIsOpen = false;
+    public $confirmDeleteModalIsOpen = false;
 
-    protected $listeners = ['closeRenameModal' => 'closeRenameModal'];
+    // dispatched from RenameModal
+    #[On('close-rename-modal')]
+    public function closeRenameModal()
+    {
+        $this->renameModalIsOpen = false;
+    }
+
+    // dispatched from ConfirmDeleteModal
+    #[On('close-delete-modal')]
+    public function closeConfirmDeleteModal()
+    {
+        $this->confirmDeleteModalIsOpen = false;
+    }
 
     public function goToFolder()
     {
@@ -32,16 +46,24 @@ class FolderCard extends Component
         redirect()->to(route('user', ['username' => $this->folder->user->username]));
     }
 
-    public function clickKebab(){
+    public function clickKebab()
+    {
         $this->openKebabMenu = !$this->openKebabMenu;
     }
 
-    public function closeRenameModal(){
-        $this->openRenameModalIsOpen = false;
+    public function closeKebabMenu()
+    {
+        $this->openKebabMenu = false;
     }
 
-    public function openRenameModal(){
-        $this->openRenameModalIsOpen = true;
+    public function openRenameModal()
+    {
+        $this->renameModalIsOpen = true;
+    }
+
+    public function openConfirmDeleteModal()
+    {
+        $this->confirmDeleteModalIsOpen = true;
     }
 
     public function mount($folder, $courseSlug, $path = '')

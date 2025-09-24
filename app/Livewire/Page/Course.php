@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Page;
 
+use App\Models\File;
 use App\Models\Folder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
@@ -17,11 +18,13 @@ class Course extends Component
 
     public bool $isCreateFolderModalOpen = false;
 
-    protected $listeners = ['closeModalInCourse' => 'closeCreateFolderModal'];
-
-    #[On('folder-created')]
-    public function refreshFolders()
-    {
+    #[On('folder-created')] // from CreateFolder
+    #[On('file-created')] // from AddNewButton
+    #[On('folder-deleted')] // from ConfirmDeleteModal
+    #[On('file-deleted')] // from ConfirmDeleteModal    
+    public function refresh()
+    {        
+        dump("hey");
         $this->render();
     }
 
@@ -39,20 +42,6 @@ class Course extends Component
     {
         return redirect()
             ->to(route('folder', ['courseSlug' => $this->course->slug, 'path' => $folderSlug]));
-    }
-
-    public function openCreateFolderModal()
-    {
-        if (!Auth::check()) {
-            return redirect()->to(route('login'));
-        }
-
-        $this->isCreateFolderModalOpen = true;
-    }
-
-    public function closeCreateFolderModal()
-    {
-        $this->isCreateFolderModalOpen = false;
     }
 
     public function mount($courseSlug)
@@ -78,8 +67,16 @@ class Course extends Component
             })
             ->withCount(['files', 'children'])
             ->where('course_id', $this->course->id)
-            ->get();        
+            ->get();
 
-        return view('livewire.page.course', ['folders' => $folders]);
+        $files = File::with('user')
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+                // WHERE NAME LIKE %search%
+            })
+            ->where('course_id', $this->course->id)
+            ->get();
+
+        return view('livewire.page.course', ['folders' => $folders, 'files' => $files]);
     }
 }
