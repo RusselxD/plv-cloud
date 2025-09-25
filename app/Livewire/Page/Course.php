@@ -23,8 +23,7 @@ class Course extends Component
     #[On('folder-deleted')] // from ConfirmDeleteModal
     #[On('file-deleted')] // from ConfirmDeleteModal    
     public function refresh()
-    {        
-        dump("hey");
+    {                
         $this->render();
     }
 

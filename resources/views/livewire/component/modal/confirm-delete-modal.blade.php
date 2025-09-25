@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/10 flex justify-center items-center z-150 cursor-auto" wire:click.self="closeModal">
+<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-150 cursor-auto" wire:click.self="closeModal">
     <div class="w-96 h-fit bg-white rounded-lg p-4 flex flex-col items-center relative">
         <img src="{{ asset('/assets/x.svg') }}" wire:click=closeModal
             class="absolute right-3 top-3 cursor-pointer hover:bg-gray-200 rounded-full p-2 w-9 transition-colors duration-100 ease-in-out" />

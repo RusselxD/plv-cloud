@@ -16,16 +16,15 @@ class FolderCard extends Component
     public $openKebabMenu = false;
     public $renameModalIsOpen = false;
     public $confirmDeleteModalIsOpen = false;
-
-    // dispatched from RenameModal
-    #[On('close-rename-modal')]
+    
+    #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
     {
         $this->renameModalIsOpen = false;
+        $this->openKebabMenu = false;
     }
 
-    // dispatched from ConfirmDeleteModal
-    #[On('close-delete-modal')]
+    #[On('close-delete-modal')] // from ConfirmDeleteModal
     public function closeConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = false;

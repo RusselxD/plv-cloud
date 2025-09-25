@@ -14,10 +14,17 @@ class FileCard extends Component
 
     public $optionsAreOpen = false;
 
+    public $renameModalIsOpen = false;
     public $confirmDeleteModalIsOpen = false;
 
-    // dispatched from ConfirmDeleteModal
-    #[On('close-delete-modal')]
+    #[On('close-rename-modal')] // from RenameModal
+    public function closeRenameModal()
+    {
+        $this->renameModalIsOpen = false;
+        $this->optionsAreOpen = false;
+    }
+
+    #[On('close-delete-modal')] // from ConfirmDeleteModal
     public function closeConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = false;
@@ -43,6 +50,11 @@ class FileCard extends Component
         $this->optionsAreOpen = false;
     }
 
+    public function openRenameModal()
+    {
+        $this->renameModalIsOpen = true;
+    }
+
     public function openConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = true;
@@ -52,6 +64,16 @@ class FileCard extends Component
     {
         $extension = pathinfo($this->file->name, PATHINFO_EXTENSION);
         return match (true) {
+
+            // Archives
+            str_contains($extension, 'zip'),
+            str_contains($extension, 'rar'),
+            str_contains($extension, '7z') => 'assets/file-icons/zip.svg',
+
+            // str_contains($mime, 'zip'), str_contains($mime, 'rar'),
+            // str_contains($mime, '7z'), str_contains($mime, 'tar'),
+            // str_contains($mime, 'gz') => '/assets/file-icons/zip.svg',
+
             // Documents
             str_contains($mime, 'pdf') => '/assets/file-icons/pdf.svg',
             str_contains($mime, 'word') => '/assets/file-icons/docs.svg',
@@ -71,11 +93,6 @@ class FileCard extends Component
 
             // Video
             str_contains($mime, 'video') => '/assets/file-icons/play.svg',
-
-            // Archives
-            str_contains($mime, 'zip'), str_contains($mime, 'rar'),
-            str_contains($mime, '7z'), str_contains($mime, 'tar'),
-            str_contains($mime, 'gz') => '/assets/file-icons/zip.svg',
 
             // Code
             str_contains($mime, 'javascript'), str_contains($extension, 'js') => 'assets/file-icons/code.svg',

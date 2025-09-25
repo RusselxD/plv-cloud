@@ -57,14 +57,14 @@
     <!-- Rename Modal -->
     @if($renameModalIsOpen)
         <div wire:click.stop="closeKebabMenu">
-            <livewire:component.rename-modal :id="$folder->id" :isAFolder="true" />
+            <livewire:component.modal.rename-modal :targetId="$folder->id" :isAFolder="true" :oldName="$folder->name"/>
         </div>
     @endif
 
     <!-- Confirm Delete Modal -->
     @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />
+            <livewire:component.modal.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />            
         </div>
     @endif
 </div>

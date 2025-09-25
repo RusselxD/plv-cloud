@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Livewire\Component;
+namespace App\Livewire\Component\Modal;
 
+use App\Models\File;
 use App\Models\Folder;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
@@ -11,7 +12,7 @@ class RenameModal extends Component
 
     public $name;
 
-    public $id;
+    public $targetId;
     public $isAFolder;
 
     public function rules()
@@ -38,32 +39,49 @@ class RenameModal extends Component
         'name.unique' => 'Name already exists here',
     ];
 
+    public function getExtension($fileName)
+    {
+        $res = "";
+        for ($i = strlen($fileName) - 1; $i >= 0; $i--) {
+            $char = $fileName[$i];
+            $res = $res . $char;
+            if ($char == ".") {
+                break;
+            }
+        }
+        return strrev($res);
+    }
+
     public function submitRename()
     {
         $this->validate();
-        
-        if ($this->isAFolder){
-            Folder::where('id', $this->id)->update(['name' => trim($this->name)]);
+
+        if ($this->isAFolder) {
+            Folder::where('id', $this->targetId)->update(['name' => trim($this->name)]);
         } else {
-            // for file
+            $file = File::where('id', $this->targetId)->firstOrFail();
+            $file->update(['name' => $this->name . $this->getExtension($file->name)]);            
         }
-        
+
         $this->closeModal();
         $this->dispatch('success_flash', message: 'Renamed successfully');
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
         // caught by FolderCard
         $this->dispatch('close-rename-modal');
     }
 
-    public function mount($isAFolder = true, $id){
+    public function mount($isAFolder = true, $targetId, $oldName)
+    {
         $this->isAFolder = $isAFolder;
-        $this->id = $id;
+        $this->targetId = $targetId;        
+        $this->name = $isAFolder ? $oldName : str_replace($this->getExtension($oldName), '', $oldName);
     }
 
     public function render()
     {
-        return view('livewire.component.rename-modal');
+        return view('livewire.component.modal.rename-modal');
     }
 }

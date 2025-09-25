@@ -25,7 +25,7 @@ class AddNewButton extends Component
     // from CreateFolder
     #[On('folder-created')]
     #[On('close-folder-create-modal')]
-    public function closeModal() 
+    public function closeModal()
     {
         $this->openCreateFolderModal = false;
     }
@@ -78,6 +78,10 @@ class AddNewButton extends Component
     // automatically runs when user insert file/s
     public function updatedUploads()
     {
+        // $this->validate([
+        //     'uploads.*' => 'required|file|mimes:zip',
+        // ]);
+
         foreach ($this->uploads as $file) {
             $path = $file->store('uploads', 'public');
             $mime = $file->getMimeType();
@@ -89,7 +93,7 @@ class AddNewButton extends Component
                 'user_id' => auth()->id(),
                 'folder_id' => $this->parentIsAFolder ? $this->parentId : null,
                 'course_id' => $this->parentIsAFolder ? null : $this->parentId
-            ]);            
+            ]);
         }
 
         $this->dispatch('file-created'); // caught by Course and Folder

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Component;
+namespace App\Livewire\Component\Modal;
 
 use App\Models\File;
 use App\Models\Folder;
@@ -38,6 +38,6 @@ class ConfirmDeleteModal extends Component
 
     public function render()
     {
-        return view('livewire.component.confirm-delete-modal');
+        return view('livewire.component.modal.confirm-delete-modal');
     }
 }

@@ -35,7 +35,8 @@
                 <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
                 <p>Report</p>
             </div>
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+            wire:click="openRenameModal">
                 <img src="{{ asset('/assets/edit.svg') }}" class="w-4" />
                 <p>Rename</p>
             </div>
@@ -47,10 +48,17 @@
         </div>
     </div>
 
+    <!-- Rename Modal -->
+    @if ($renameModalIsOpen)
+        <div wire:click.stop>
+            <livewire:component.modal.rename-modal :targetId="$file->id" :isAFolder="false" :oldName="$file->name"/>
+        </div>
+    @endif
+
     <!-- Confirm Delete Modal -->
     @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.confirm-delete-modal :targetId="$file->id" :isAFolder="false" />
+            <livewire:component.modal.confirm-delete-modal :targetId="$file->id" :isAFolder="false" />
         </div>
     @endif
 </div>
