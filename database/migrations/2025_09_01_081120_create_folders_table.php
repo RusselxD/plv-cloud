@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->boolean('is_public');
-            $table->foreignIdFor(Course::class)->nullable();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Folder::class, 'parent_id')->nullable();
+            $table->foreignIdFor(Course::class)->nullable();            
+            $table->foreignIdFor(Folder::class, 'parent_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });        
     }

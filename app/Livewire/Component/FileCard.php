@@ -28,6 +28,7 @@ class FileCard extends Component
     public function closeConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = false;
+        $this->optionsAreOpen = false;
     }
 
     public function downloadFile()

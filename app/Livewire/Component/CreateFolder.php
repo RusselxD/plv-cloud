@@ -64,7 +64,7 @@ class CreateFolder extends Component
 
     public function createFolder()
     {
-        $this->validate();
+        $this->validate();        
 
         Folder::create([
             'name' => trim($this->folderName),

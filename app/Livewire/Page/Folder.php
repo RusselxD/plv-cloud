@@ -64,7 +64,7 @@ class Folder extends Component
     }
 
     public function mount($courseSlug, $path)
-    {
+    {        
         $this->course = Course::where('slug', $courseSlug)->firstOrFail();
 
         // the string path: /course/folder1/folder2

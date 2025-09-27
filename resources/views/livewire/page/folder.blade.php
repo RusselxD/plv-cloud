@@ -44,7 +44,7 @@
                 <p class="mb-2">Folders</p>
                 <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9 mb-5">
                     @foreach ($folders as $folder)
-                        <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug"
+                        <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug" :path="$this->path"
                             wire:key="course-folder-{{ $folder->id }}" />
                     @endforeach
                 </div>

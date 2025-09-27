@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('folder_contributors', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Folder::class);
+            $table->foreignIdFor(Folder::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

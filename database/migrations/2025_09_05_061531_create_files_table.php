@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('mime_type');
             $table->integer('download_count')->default(0);
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Folder::class)->nullable();
+            $table->foreignIdFor(Folder::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Course::class)->nullable();
             $table->timestamps();
         });

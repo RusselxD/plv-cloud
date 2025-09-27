@@ -17,13 +17,17 @@ class ConfirmDeleteModal extends Component
         $this->dispatch('close-delete-modal');
     }
 
+    public function logAction()
+    {
+    }
+
     public function confirmDeletion()
     {
         if ($this->isAFolder) {
-            Folder::where('id', $this->targetId)->delete();            
+            Folder::where('id', $this->targetId)->delete();
             $this->dispatch('folder-deleted');
         } else {
-            File::where('id', $this->targetId)->delete();            
+            File::where('id', $this->targetId)->delete();
             $this->dispatch('file-deleted');
         }
 

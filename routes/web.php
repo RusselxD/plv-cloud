@@ -35,12 +35,9 @@ Route::get('/c/{courseSlug}', Course::class)
     ->name('course');
 
 
-
 Route::get('/c/{courseSlug}/{path?}', Folder::class)
     ->where('path', '.*')
     ->name('folder');
-
-
 
 
 Route::get('/u/{username}', User::class)

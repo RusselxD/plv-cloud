@@ -4,6 +4,7 @@ namespace App\Livewire\Component\Modal;
 
 use App\Models\File;
 use App\Models\Folder;
+use App\Models\UserActivity;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 
@@ -13,6 +14,7 @@ class RenameModal extends Component
     public $name;
 
     public $targetId;
+
     public $isAFolder;
 
     public function rules()
@@ -52,17 +54,37 @@ class RenameModal extends Component
         return strrev($res);
     }
 
+    public function logAction($oldName)
+    {
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => 'Renamed ' . ($this->isAFolder ? 'folder "' : 'file "')
+                . $oldName . '" to "' . ($this->isAFolder ? $this->name : $this->name . $this->getExtension($oldName)) . '". ID: ' . $this->targetId,
+            // Renamed folder "OldName" to "NewName". ID: 1
+            // Renamed file "OldName.txt" to "NewName.txt". ID: 1
+        ]);
+    }
+
     public function submitRename()
     {
         $this->validate();
 
-        if ($this->isAFolder) {
-            Folder::where('id', $this->targetId)->update(['name' => trim($this->name)]);
-        } else {
-            $file = File::where('id', $this->targetId)->firstOrFail();
-            $file->update(['name' => $this->name . $this->getExtension($file->name)]);            
+        $oldName = '';
+
+        $item = $this->isAFolder ? Folder::where('id', $this->targetId)->firstOrFail() :
+            File::where('id', $this->targetId)->firstOrFail();
+
+        $oldName = $item->name;
+
+        // if name is same as old name, close modal and return
+        if ($oldName == trim($this->name) || (!$this->isAFolder && $oldName == $this->name . $this->getExtension($oldName))) {
+            $this->closeModal();
+            return;
         }
 
+        $item->update(['name' => $this->isAFolder ? trim($this->name) : trim($this->name) . $this->getExtension($oldName)]);
+
+        $this->logAction($oldName);
         $this->closeModal();
         $this->dispatch('success_flash', message: 'Renamed successfully');
     }
@@ -76,7 +98,7 @@ class RenameModal extends Component
     public function mount($isAFolder = true, $targetId, $oldName)
     {
         $this->isAFolder = $isAFolder;
-        $this->targetId = $targetId;        
+        $this->targetId = $targetId;
         $this->name = $isAFolder ? $oldName : str_replace($this->getExtension($oldName), '', $oldName);
     }
 
