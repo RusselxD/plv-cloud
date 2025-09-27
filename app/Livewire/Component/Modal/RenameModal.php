@@ -6,7 +6,6 @@ use App\Models\File;
 use App\Models\Folder;
 use App\Models\UserActivity;
 use Livewire\Component;
-use Illuminate\Validation\Rule;
 
 class RenameModal extends Component
 {

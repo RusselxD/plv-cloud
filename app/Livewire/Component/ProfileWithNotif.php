@@ -3,7 +3,6 @@
 namespace App\Livewire\Component;
 
 use App\Models\Notification;
-use App\Models\User;
 use Livewire\Component;
 
 class ProfileWithNotif extends Component

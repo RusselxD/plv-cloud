@@ -121,9 +121,7 @@ class Folder extends Component
                 // WHERE NAME LIKE %search%
             })
             ->where('folder_id', $this->folder->id)
-            ->get();
-
-        // dump($files);
+            ->get();        
 
         return view('livewire.page.folder', ['folders' => $folders, 'files' => $files]);
     }

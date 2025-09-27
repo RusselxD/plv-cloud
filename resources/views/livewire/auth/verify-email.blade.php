@@ -7,7 +7,7 @@
 
         <!-- Mail Icon -->
         <div class="p-3 rounded-full bg-primary mb-3">
-            <img src="{{ asset('/assets/mail.svg') }}" class="w-8 h-8" />
+            <img src="{{ asset('/assets/auth/mail.svg') }}" class="w-8 h-8" />
         </div>
 
         <h1 class="text-2xl text-primary font-bold border-b-2 border-primary pb-3 w-full text-center">

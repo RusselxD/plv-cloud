@@ -44,7 +44,6 @@ class Breadcrumb extends Component
 
     public function mount($courseSlug = null, $path = null)
     {
-        // dump($courseSlug, $path);
         if ($courseSlug !== null && $path !== null) {
             $this->addFolderCrumbs($courseSlug, $path);
         }
@@ -52,10 +51,6 @@ class Breadcrumb extends Component
         if ($courseSlug !== null) {
             $this->addCourseUrl($courseSlug);
         }
-
-        // $this->addHomeUrl();
-
-        // dd($this->breadcrumbs);
     }
 
     public function render()

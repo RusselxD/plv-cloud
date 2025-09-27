@@ -7,11 +7,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
+
     public function up(): void
     {
         Schema::create('folders', function (Blueprint $table) {
@@ -20,15 +17,12 @@ return new class extends Migration
             $table->string('slug');
             $table->boolean('is_public');
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Course::class)->nullable();            
+            $table->foreignIdFor(Course::class)->nullable();
             $table->foreignIdFor(Folder::class, 'parent_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
-        });        
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('folders');

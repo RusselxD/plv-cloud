@@ -83,12 +83,12 @@ class VerifyEmail extends Component
 
             return 0;
 
-        } catch (TransportException $e) { 
-            return 1;            
-        } catch (ConnectException $e) { 
-            return 2;            
-        } catch (Exception $e) {    
-            return 3;            
+        } catch (TransportException $e) {
+            return 1;
+        } catch (ConnectException $e) {
+            return 2;
+        } catch (Exception $e) {
+            return 3;
         }
     }
 
@@ -96,15 +96,16 @@ class VerifyEmail extends Component
     {
         $this->email = session('user_email');
         $resendEmail = $this->sendEmail();
-        if ($resendEmail == 0){
+        if ($resendEmail == 0) {
             $this->dispatch('success_flash', message: 'New verification link sent.');
         } else {
             $this->errorSendingMail($resendEmail);
-        }        
+        }
     }
 
-    public function errorSendingMail($code){
-        switch($code){
+    public function errorSendingMail($code)
+    {
+        switch ($code) {
             case 1:
                 $this->dispatch('error_flash', message: 'No internet connection. Please check your connection and try again.');
                 break;

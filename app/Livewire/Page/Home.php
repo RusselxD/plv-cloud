@@ -45,12 +45,6 @@ class Home extends Component
             ->get(['username', 'student_number', 'first_name', 'last_name', 'profile_picture']);
     }
 
-    public function mount(){
-        // if(session()->has('login_success')){
-        //     $this->dispatch('success_flash', message: session('login_success'));
-        // }
-    }
-
     public function render()
     {
         if (empty($this->search)) {
@@ -60,8 +54,6 @@ class Home extends Component
             return view('livewire.page.home', ['result' => $defaultCourses]);
 
         } else {
-
-
 
             $courses = Course::where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('abbreviation', 'like', '%' . $this->search . '%')

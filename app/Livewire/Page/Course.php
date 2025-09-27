@@ -4,11 +4,9 @@ namespace App\Livewire\Page;
 
 use App\Models\File;
 use App\Models\Folder;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Course as CourseModel;
-use function PHPUnit\Framework\isEmpty;
 
 class Course extends Component
 {
@@ -23,7 +21,7 @@ class Course extends Component
     #[On('folder-deleted')] // from ConfirmDeleteModal
     #[On('file-deleted')] // from ConfirmDeleteModal    
     public function refresh()
-    {                
+    {
         $this->render();
     }
 

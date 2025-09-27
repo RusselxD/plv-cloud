@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Component;
+namespace App\Livewire\Component\Modal;
 
 use Livewire\Component;
 
@@ -10,16 +10,16 @@ class VerificationSentModal extends Component
 
     public function resend()
     {
-        $this->dispatch('resendEmail');        
+        $this->dispatch('resendEmail');
     }
 
     public function mount($email)
-    {        
+    {
         $this->email = $email;
     }
 
     public function render()
     {
-        return view('livewire.component.verification-sent-modal');
+        return view('livewire.component.modal.verification-sent-modal');
     }
 }

@@ -122,12 +122,6 @@ class FileCard extends Component
 
     public function render()
     {
-        // Check if the file still exists in the database before rendering
-        if (!File::where('id', $this->file->id)->exists()) {
-            // File has been deleted, return empty view to avoid errors
-            return '<div style="display: none;"></div>';
-        }
-
         return view('livewire.component.file-card');
     }
 }

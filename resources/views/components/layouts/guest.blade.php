@@ -18,7 +18,6 @@
 
 <body class="h-[100dvh] relative">
 
-
     <div class="lg:grid lg:grid-cols-[1fr_0.7fr] h-full">
         <div class="hidden lg:block h-full max-h-screen relative">
             <div class="banner rounded-4xl absolute inset-5">
@@ -36,10 +35,8 @@
 
     <!-- Verification Sent Modal -->
     @if (session()->has('verification_sent'))
-        <livewire:component.verification-sent-modal :email="session('verification_sent')" />
+        <livewire:component.modal.verification-sent-modal :email="session('verification_sent')" />
     @endif
-
-
 
     @livewireScripts
 </body>

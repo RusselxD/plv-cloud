@@ -16,7 +16,7 @@ class FolderCard extends Component
     public $openKebabMenu = false;
     public $renameModalIsOpen = false;
     public $confirmDeleteModalIsOpen = false;
-    
+
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
     {
@@ -32,7 +32,7 @@ class FolderCard extends Component
     }
 
     public function goToFolder()
-    {        
+    {
         // If path is empty (meaning this folder card is in the course), just go to the folder
         // Otherwise, append the folder slug to the existing path
         $urlPath = $this->path === '' ? $this->folder->slug : $this->path . '/' . $this->folder->slug;
@@ -67,8 +67,7 @@ class FolderCard extends Component
     }
 
     public function mount($folder, $courseSlug, $path = '')
-    {        
-        // dump($folder, $courseSlug, $path);
+    {
         $this->folder = $folder;
         $this->totalContents = $folder->files_count + $folder->children_count;
 

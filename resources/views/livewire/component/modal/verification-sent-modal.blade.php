@@ -3,7 +3,7 @@
     <div
         class="w-[90%] lg:w-[40rem] bg-white border-2 border-primary p-5 flex flex-col items-center text-center justify-center text-primary gap-5 rounded-3xl">
 
-        <img src="{{ asset('/assets/mail-sent.svg') }}" class="w-16 h-16    " />
+        <img src="{{ asset('/assets/auth/mail-sent.svg') }}" class="w-16 h-16    " />
         <h1 class="font-bold text-3xl">Verification Link Sent!</h1>
         <p>A verification link has been sent to <strong>{{ $email }}</strong></p>
 
@@ -11,7 +11,7 @@
 
         <a href="https://outlook.office.com/mail/" target="_blank" class="flex items-center justify-center border-2 border-primary text-primary rounded-full px-8 py-2 gap-3 font-medium cursor-pointer 
           transition-colors duration-200 hover:bg-primary hover:text-white active:bg-primary active:text-white">
-            <img src="{{ asset('/assets/outlook.svg') }}" class="w-7 h-7" />
+            <img src="{{ asset('/assets/auth/outlook.svg') }}" class="w-7 h-7" />
             Check Your Email
         </a>
 
