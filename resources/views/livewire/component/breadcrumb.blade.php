@@ -20,7 +20,7 @@ if ($shouldTruncate) {
 }
 ?>
 
-<div class="flex items-center border w-[75%] mb-5 flex-wrap" x-data="{ open: false }" @click.away="open = false">
+<div class="flex items-center w-[75%] flex-wrap" x-data="{ open: false }" @click.away="open = false">
      <a href="{{ route('home') }}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-7">
                <path fill-rule="evenodd"

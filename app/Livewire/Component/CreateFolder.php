@@ -27,7 +27,7 @@ class CreateFolder extends Component
                 'required',
                 'string',
                 'min:3',
-                'max:255',
+                'max:50',
                 Rule::unique('folders', 'name')->where(function ($query) {
                     if ($this->parentIsFolder) {
                         return $query->where('parent_id', $this->parentId);
@@ -43,7 +43,7 @@ class CreateFolder extends Component
         'folderName.required' => 'Please enter a name.',
         'folderName.string' => 'The name must be text.',
         'folderName.min' => 'The name must be at least 3 characters long.',
-        'folderName.max' => 'The name may not be longer than 255 characters.',
+        'folderName.max' => 'The name may not be longer than 50 characters.',
         'folderName.unique' => 'A folder with this name already exists here.',
     ];
 
@@ -56,7 +56,7 @@ class CreateFolder extends Component
         // Created folder "name" inside folder/course "parent"
         UserActivity::create([
             'user_id' => auth()->id(),
-            'details' => 'Created folder "' . trim($this->folderName) . '" inside ' .
+            'details' => 'Created folder "' . trim($this->folderName) . '" in ' .
                 ($this->parentIsFolder ? 'folder "' : 'course "') .
                 $parentName . '"',
         ]);

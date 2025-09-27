@@ -1,27 +1,31 @@
 <div class="space-y-3 flex-1 flex flex-col">
 
-    <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center p-2 h-20">
-        <form wire:submit.prevent="clickSearch"
-            class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
-            <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
-                class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
-            <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-search-icon lucide-search">
-                    <path d="m21 21-4.34-4.34" />
-                    <circle cx="11" cy="11" r="8" />
-                </svg>
-            </button>
-        </form>
+    <div class="fixed right-3 left-64 top-0 pt-3 pb-2 z-100 bg-white">
+        <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center p-2">
+            <form wire:submit.prevent="clickSearch"
+                class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
+                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
+                    class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
+                <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-search-icon lucide-search">
+                        <path d="m21 21-4.34-4.34" />
+                        <circle cx="11" cy="11" r="8" />
+                    </svg>
+                </button>
+            </form>
 
-        <livewire:component.profile-with-notif />
+            <livewire:component.profile-with-notif />
+        </div>
     </div>
 
-    <div class="bg-slate-50/85 rounded-lg p-5 flex-1">
+    <div class="bg-slate-50/85 rounded-lg p-5 flex-1 mt-24">
+
         <livewire:component.breadcrumb :courseSlug="$this->course->slug" />
+
         <div>
-            <div class="flex items-center justify-between mb-5 border-b border-slate-500 pb-3">
+            <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">
                 <h1 class="text-2xl font-bold">{{ $course->name }}</h1>
                 @if (auth()->check())
                     <livewire:component.add-new-button :parentIsAFolder="false" :parentId="$course->id" />

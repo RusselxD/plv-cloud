@@ -1,6 +1,6 @@
 <div class="relative" x-data="{ openOptions: @entangle('openOptions') }">
     <div @click="openOptions = !openOptions"
-        class="text-sm rounded-lg flex items-center justify-center gap-2 bg-blue-600 text-white py-2 pl-3 pr-4 cursor-pointer hover:bg-blue-700 transition-colors duration-100 ease-in-out">
+        class="text-sm rounded-lg flex items-center justify-center gap-2 whitespace-nowrap flex-1 bg-blue-600 text-white py-2 pl-3 pr-4 cursor-pointer hover:bg-blue-700 transition-colors duration-100 ease-in-out">
         <img src="{{ asset('/assets/plus.svg') }}" />
         Add New
     </div>

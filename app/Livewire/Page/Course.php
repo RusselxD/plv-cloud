@@ -18,8 +18,7 @@ class Course extends Component
 
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
-    #[On('folder-deleted')] // from ConfirmDeleteModal
-    #[On('file-deleted')] // from ConfirmDeleteModal    
+    #[On('deleted')] // from ConfirmDeleteModal    
     public function refresh()
     {
         $this->render();

@@ -24,10 +24,11 @@ class Folder extends Component
     public $currentUserIsOwner = false;
     public $currentUserIsEligibleToUpload = false;    
 
+    public $detailPanelIsOpen = false;
+
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
-    #[On('folder-deleted')] // from ConfirmDeleteModal
-    #[On('file-deleted')] // from ConfirmDeleteModal
+    #[On('deleted')] // from ConfirmDeleteModal
     public function refresh()
     {
         $this->render();
@@ -61,6 +62,10 @@ class Folder extends Component
     public function closeCreateFolderModal()
     {
         $this->isCreateFolderModalOpen = false;
+    }
+
+    public function clickInfoIcon(){        
+        $this->detailPanelIsOpen = !$this->detailPanelIsOpen;
     }
 
     public function mount($courseSlug, $path)

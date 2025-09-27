@@ -12,7 +12,7 @@
         <!-- Folder name + kebab -->
         <div class="flex items-start justify-between p-3 overflow-hidden">
             <div class="max-w-[80%]">
-                <p class="font-bold truncate w-full overflow-ellipsis">{{ $folder->name }}</p>
+                <p class="font-semibold truncate w-full overflow-ellipsis">{{ $folder->name }}</p>
                 <p class="text-slate-600 text-sm mt-1">{{ $totalContents }} contents</p>
             </div>
             <button class="p-2 cursor-pointer hover:bg-gray-200 rounded-full" wire:click.stop="clickKebab">
@@ -22,20 +22,20 @@
     </div>
 
     <!-- Bottom -->
-    <div class="flex items-center justify-between pr-2 border-t border-gray-600 text-sm">
+    <div class="flex items-center justify-between pr-2 border-t border-gray-600">
         <div class="flex items-center justify-start gap-2 group py-[0.40rem] px-2 relative group"
-            wire:click.stop="goToProfile">
+            wire:click.stop.self="goToProfile">
             <div class="w-5 h-5 bg-gray-500 rounded-full">
                 <!-- Profile Picture -->
             </div>
-            <p class="max-w-22 truncate group-hover:underline">{{ $folder->user->username }}</p>
+            <p class="max-w-22 text-xs truncate group-hover:underline">{{ $folder->user->username }}</p>
 
             <!-- Profile Preview -->
-            <div class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
+            <div wire:click.stop class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
                 <x-ui.general.profile-preview-card :user="$user" />
             </div>
         </div>
-        <p class="text-slate-600 text-xs">Created {{ $folder->created_at->diffForHumans() }}</p>
+        <!-- <p class="text-slate-600 text-xs">Created {{ $folder->created_at->diffForHumans() }}</p> -->
     </div>
 
     <!-- Kebab Menu -->
