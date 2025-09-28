@@ -43,6 +43,11 @@ class Folder extends Model
         return $this->hasMany(Folder::class, 'parent_id');
     }
 
+    public function folderLogs()
+    {
+        return $this->hasMany(FolderLog::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

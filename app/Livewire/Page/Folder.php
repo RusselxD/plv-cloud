@@ -24,7 +24,7 @@ class Folder extends Component
     public $currentUserIsOwner = false;
     public $currentUserIsEligibleToUpload = false;    
 
-    public $detailPanelIsOpen = false;
+    public $detailPanelIsOpen = true;
 
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
@@ -68,6 +68,11 @@ class Folder extends Component
         $this->detailPanelIsOpen = !$this->detailPanelIsOpen;
     }
 
+    #[On('close-details-pane')] // from FolderDetailsPane
+    public function closeDetailsPane(){
+        $this->detailPanelIsOpen = false;
+    }
+
     public function mount($courseSlug, $path)
     {        
         $this->course = Course::where('slug', $courseSlug)->firstOrFail();
@@ -86,7 +91,6 @@ class Folder extends Component
         if ($currentUser) {
             $this->currentUserIsOwner = $currentUser->id == $folder->user_id;
             $this->currentUserIsEligibleToUpload = $this->currentUserIsOwner;
-
         }
 
         // if the current user is signed in and is not the owner,
@@ -97,11 +101,12 @@ class Folder extends Component
                 ->exists();
             $this->currentUserIsEligibleToUpload =
                 $folder->is_public || $isAContributor;
-        }
+        }        
     }
 
     public function render()
     {
+        
         $folders = FolderModel::with('user')
             ->when($this->search, function ($query) {
 

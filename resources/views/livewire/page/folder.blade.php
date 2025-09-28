@@ -1,7 +1,7 @@
 <div class="space-y-3 flex-1 flex flex-col">
 
-    <div class="fixed right-3 left-64 top-0 pt-3 pb-2 z-100 bg-white">
-        <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center p-2">
+    <div class="fixed right-3 left-64 top-0 py-2 z-100 bg-white  ">
+        <div class="bg-slate-100 w-full rounded-lg flex justify-between items-center py-2 px-4">
             <form wire:submit.prevent="clickSearch"
                 class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
@@ -21,12 +21,12 @@
     </div>
 
     <!-- Parent Container of contents and details pane -->
-    <div class="flex flex-1 mt-24">
+    <div class="flex flex-1 mt-[5.25rem] rounded-lg overflow-hidden">
 
         <!-- Contents Pane -->
         <div @class([
-            'bg-slate-50/85 rounded-lg p-5 flex-1 transition-all duration-150 ease-in-out',
-            'mr-[19rem]' => $detailPanelIsOpen,
+            'bg-slate-100 rounded-lg p-5 flex-1 transition-all duration-300 ease-in-out',
+            'mr-[18.5rem]' => $detailPanelIsOpen,
             'mr-0' => !$detailPanelIsOpen,
         ])>
             <div class="flex justify-between items-center">
@@ -80,13 +80,14 @@
 
         </div>
 
+        <!-- Details Pane -->
         <div @class([
-            'fixed right-3 top-[6.8rem] bottom-3 bg-slate-50/85 rounded-lg transition-all duration-150 ease-in-out',
-            'w-72' => $detailPanelIsOpen,
+            'bg-slate-100 fixed right-3 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide',
+            'w-72 ' => $detailPanelIsOpen,
             'w-0' => !$detailPanelIsOpen,
         ])>
+            <livewire:component.folder-details-pane :folder="$this->folder" />
         </div>
-
 
     </div>
 

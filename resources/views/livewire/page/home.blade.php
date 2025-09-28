@@ -1,6 +1,6 @@
 <div class="space-y-3 flex-1">
 
-    <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center p-2 h-20">
+    <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center py-2 px-4">
         <form wire:submit.prevent="submitSearch"
             class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
             <input wire:model.live.debounce.300ms="search" type="text" placeholder="Start typing to search."
@@ -15,19 +15,19 @@
             </button>
         </form>
 
-        <livewire:component.profile-with-notif/>
+        <livewire:component.profile-with-notif />
     </div>
 
     <div class="bg-slate-50/85 rounded-lg p-5">
 
-        @if (empty($search))            
+        @if (empty($search))
             <div class="gap-5 xl:gap-6 grid xl:grid-cols-2">
                 <!-- Default list (courses) -->
                 @foreach ($result as $r)
                     <a href="{{ route('course', ['courseSlug' => $r->slug]) }}" class="relative overflow-hidden p-6 rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.20)]
-                                         hover:shadow-[0_0_15px_rgba(0,0,0,0.15)] hover:scale-101 bg-white
-                                         flex items-center justify-start
-                                         transition-all duration-100 ease-in-out">
+                                                 hover:shadow-[0_0_15px_rgba(0,0,0,0.15)] hover:scale-101 bg-white
+                                                 flex items-center justify-start
+                                                 transition-all duration-100 ease-in-out">
                         <div class="font-bold">{{ $r->name }}</div>
                         <div class="absolute left-1 top-[0.40rem] bottom-[0.40rem] rounded-full w-2 bg-primary"></div>
                     </a>

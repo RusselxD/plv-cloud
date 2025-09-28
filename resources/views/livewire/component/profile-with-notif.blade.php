@@ -1,4 +1,4 @@
-<div class="flex items-center gap-3 h-full">
+<div class="flex items-center gap-3 h-16">
 
     @auth
         <div class="w-10 h-10 p-2 bg-white rounded-full relative">
