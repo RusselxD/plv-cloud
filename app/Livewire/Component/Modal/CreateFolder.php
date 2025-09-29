@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Component;
+namespace App\Livewire\Component\Modal;
 
 use App\Models\Course;
 use App\Models\Folder;
@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 class CreateFolder extends Component
 {
     public $parentIsFolder = false;
+    
     public $parentId;
 
     public $folderName = '';
@@ -105,6 +106,6 @@ class CreateFolder extends Component
 
     public function render()
     {
-        return view('livewire.component.create-folder');
+        return view('livewire.component.modal.create-folder');
     }
 }

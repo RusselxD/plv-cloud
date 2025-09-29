@@ -2,7 +2,11 @@
 
 namespace App\Livewire\Component;
 
+use App\Models\Course;
 use App\Models\File;
+use App\Models\Folder;
+use App\Models\FolderLog;
+use App\Models\UserActivity;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -75,6 +79,28 @@ class AddNewButton extends Component
         return number_format($value, $decimals) . ' ' . $units[$factor];
     }
 
+    public function logFileUpload($name)
+    {
+        $parentName = $this->parentIsAFolder ?
+            Folder::where('id', $this->parentId)->first()->name :
+            Course::where('id', $this->parentId)->first()->abbreviation;
+
+        // Log the file upload activity in UserActivity
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => 'Uploaded file "' . $name . '" in ' .
+                ($this->parentIsAFolder ? 'folder "' : 'course "') . $parentName . '"',
+        ]);
+
+        if($this->parentIsAFolder){
+            FolderLog::create([
+                'folder_id' => $this->parentId,
+                'user_id' => auth()->id(),
+                'details' => "uploaded file \"{$name}\""
+            ]);
+        }
+    }
+
     // automatically runs when user insert file/s
     public function updatedUploads()
     {
@@ -85,8 +111,9 @@ class AddNewButton extends Component
         foreach ($this->uploads as $file) {
             $path = $file->store('uploads', 'public');
             $mime = $file->getMimeType();
+            $name = $file->getClientOriginalName();
             File::create([
-                'name' => $file->getClientOriginalName(),
+                'name' => $name,
                 'storage_path' => $path,
                 'file_size' => $this->humanizeFileSize($file->getSize()),
                 'mime_type' => $mime,
@@ -94,6 +121,7 @@ class AddNewButton extends Component
                 'folder_id' => $this->parentIsAFolder ? $this->parentId : null,
                 'course_id' => $this->parentIsAFolder ? null : $this->parentId
             ]);
+            $this->logFileUpload($name);
         }
 
         $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane

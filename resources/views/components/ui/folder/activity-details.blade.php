@@ -10,7 +10,6 @@
                     @else
                          {{ $log->user->username }}
                     @endif
-
                </span>
                <span>{{ $log->details }}</span>
           </p>

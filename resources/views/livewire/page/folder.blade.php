@@ -30,7 +30,8 @@
             'mr-0' => !$detailPanelIsOpen,
         ])>
             <div class="flex justify-between items-center">
-                <livewire:component.breadcrumb :courseSlug="$courseSlug" :path="$this->path" />
+                <livewire:component.breadcrumb :uuid="$folder->uuid" />
+                
                 <img src="{{ asset('/assets/details.svg') }}" wire:click="clickInfoIcon" @class([
                     'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
                     'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
@@ -39,7 +40,8 @@
             </div>
 
             <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">
-                <h1 class="text-2xl font-bold truncate max-w-[38rem]">{{ $folder->name }}</h1>
+                <h1 class="text-2xl font-bold truncate max-w-[38rem] hover:bg-gray-200 rounded-md -ml-2 py-1 px-2 cursor-pointer"
+                    wire:click="openRenameModal">{{ $folder->name }}</h1>
                 @if ($currentUserIsEligibleToUpload)
                     <livewire:component.add-new-button :parentIsAFolder="true" :parentId="$folder->id" />
                 @endif
@@ -61,8 +63,7 @@
                     <p class="mb-2">Folders</p>
                     <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9 mb-5">
                         @foreach ($folders as $folder)
-                            <livewire:component.folder-card :folder="$folder" :path="$this->path" :courseSlug="$courseSlug"
-                                wire:key="folder-{{ $folder->id }}" />
+                            <livewire:component.folder-card :folder="$folder" wire:key="{{ $folder->uuid }}" />
                         @endforeach
                     </div>
                 @endif
@@ -91,8 +92,15 @@
 
     </div>
 
+    <!-- Create Folder Modal -->
     @if ($isCreateFolderModalOpen)
-        <livewire:component.create-folder :parentId="$this->folder->id" :parentIsFolder="true"
+        <livewire:component.modal.create-folder :parentId="$this->folder->id" :parentIsFolder="true"
             wire:key="create-folder-modal-folder-{{ $this->folder->id }}" />
+    @endif
+
+    <!-- Rename Modal -->
+    @if($renameModalIsOpen)
+        <livewire:component.modal.rename-modal :targetId="$this->folder->id" :isAFolder="true"
+            :oldName="$this->folder->name" />
     @endif
 </div>

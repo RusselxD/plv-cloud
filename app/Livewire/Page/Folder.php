@@ -13,15 +13,15 @@ use Livewire\Component;
 class Folder extends Component
 {
     public $folder;
-    public $course;
 
     public $search;
 
     public $isCreateFolderModalOpen = false;
 
-    public $path;
+    public $renameModalIsOpen = false;
 
     public $currentUserIsOwner = false;
+
     public $currentUserIsEligibleToUpload = false;    
 
     public $detailPanelIsOpen = true;
@@ -44,12 +44,6 @@ class Folder extends Component
         $this->render();
     }
 
-    public function goToFolder($folderSlug)
-    {
-        return redirect()
-            ->to(route('folder', ['courseSlug' => $this->course->slug, 'path' => $this->path . '/' . $folderSlug]));
-    }
-
     public function openCreateFolderModal()
     {
         if (!Auth::check()) {
@@ -64,6 +58,17 @@ class Folder extends Component
         $this->isCreateFolderModalOpen = false;
     }
 
+    #[On('close-rename-modal')] // from RenameModal
+    public function closeRenameModal()
+    {
+        $this->renameModalIsOpen = false;        
+    }
+
+    public function openRenameModal()
+    {
+        $this->renameModalIsOpen = true;
+    }
+
     public function clickInfoIcon(){        
         $this->detailPanelIsOpen = !$this->detailPanelIsOpen;
     }
@@ -71,27 +76,16 @@ class Folder extends Component
     #[On('close-details-pane')] // from FolderDetailsPane
     public function closeDetailsPane(){
         $this->detailPanelIsOpen = false;
-    }
+    }    
 
-    public $courseSlug = '';
-
-    public function mount($courseSlug, $path)
+    public function mount($uuid)
     {
-        $this->courseSlug = $courseSlug;
-
-        // the string path: /course/folder1/folder2
-        $this->path = $path;
-
-        // assign folder based on last slug in path
-        $slugs = explode('/', $path);
-        $folderSlug = $slugs[array_key_last($slugs)];
-        $folder = FolderModel::where('slug', $folderSlug)->firstOrFail();
-        $this->folder = $folder;
+        $this->folder = FolderModel::where('uuid', $uuid)->firstOrFail();
 
         // determine if the current user is the owner of the folder
         $currentUser = Auth::user();
         if ($currentUser) {
-            $this->currentUserIsOwner = $currentUser->id == $folder->user_id;
+            $this->currentUserIsOwner = $currentUser->id == $this->folder->user_id;
             $this->currentUserIsEligibleToUpload = $this->currentUserIsOwner;
         }
 
@@ -102,7 +96,7 @@ class Folder extends Component
                 ->where('user_id', $currentUser->id)
                 ->exists();
             $this->currentUserIsEligibleToUpload =
-                $folder->is_public || $isAContributor;
+                $this->folder->is_public || $isAContributor;
         }        
     }
 

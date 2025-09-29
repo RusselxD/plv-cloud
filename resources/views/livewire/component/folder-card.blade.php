@@ -13,7 +13,7 @@
         <div class="flex items-start justify-between p-3 overflow-hidden">
             <div class="max-w-[80%]">
                 <p class="font-semibold truncate w-full overflow-ellipsis">{{ $folder->name }}</p>
-                <p class="text-slate-600 text-sm mt-1">{{ $totalContents }} contents</p>
+                <p class="text-slate-600 text-xs mt-1">{{ $totalContents }} contents</p>
             </div>
             <button class="p-2 cursor-pointer hover:bg-gray-200 rounded-full" wire:click.stop="clickKebab">
                 <img src="{{ asset('/assets/kebab.svg') }}" class="w-4" />
@@ -35,7 +35,6 @@
                 <x-ui.general.profile-preview-card :user="$user" />
             </div>
         </div>
-        <!-- <p class="text-slate-600 text-xs">Created {{ $folder->created_at->diffForHumans() }}</p> -->
     </div>
 
     <!-- Kebab Menu -->
@@ -57,14 +56,14 @@
     <!-- Rename Modal -->
     @if($renameModalIsOpen)
         <div wire:click.stop="closeKebabMenu">
-            <livewire:component.modal.rename-modal :targetId="$folder->id" :isAFolder="true" :oldName="$folder->name"/>
+            <livewire:component.modal.rename-modal :targetId="$folder->id" :isAFolder="true" :oldName="$folder->name" />
         </div>
     @endif
 
     <!-- Confirm Delete Modal -->
     @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.modal.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />            
+            <livewire:component.modal.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />
         </div>
     @endif
 </div>

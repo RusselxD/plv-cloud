@@ -13,8 +13,8 @@ return new class extends Migration {
     {
         Schema::create('folders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
+            $table->uuid('uuid')->unique();
+            $table->string('name');            
             $table->boolean('is_public');
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Course::class)->nullable();

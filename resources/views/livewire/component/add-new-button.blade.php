@@ -26,6 +26,6 @@
     </div>
 
     @if ($openCreateFolderModal)
-        <livewire:component.create-folder :parentIsFolder="$parentIsAFolder" :parentId="$parentId" />
+        <livewire:component.modal.create-folder :parentIsFolder="$parentIsAFolder" :parentId="$parentId" />
     @endif
 </div>

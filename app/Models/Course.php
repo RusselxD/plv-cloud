@@ -10,23 +10,25 @@ class Course extends Model
     public $timestamps = false;
     protected $fillable = ['name', 'abbreviation', 'slug'];
 
-    public function users(){
+    public function users()
+    {
         return $this->hasMany(User::class);
     }
 
-    public function folders(){
+    public function folders()
+    {
         return $this->hasMany(Folder::class);
     }
 
-    public function files(){
+    public function files()
+    {
         return $this->hasMany(File::class);
     }
-
-    // automatically generate slug from abbreviation
+    
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($course) {
             $course->slug = Str::slug($course->abbreviation);
         });

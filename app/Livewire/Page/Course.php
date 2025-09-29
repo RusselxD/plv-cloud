@@ -47,7 +47,7 @@ class Course extends Component
 
     public function render()
     {
-        $folders = Folder::select('id', 'name', 'slug', 'user_id', 'created_at')
+        $folders = Folder::select('id', 'name', 'uuid', 'user_id')
             ->with('user:id,username,profile_picture')
             ->when($this->search, function ($query) {
 

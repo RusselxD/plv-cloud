@@ -26,7 +26,6 @@ Route::get('/register', VerifyEmail::class)
     ->middleware('guest')
     ->name('register');
 
-    
 Route::get('/register/{token}', RegisterDetails::class)
     ->middleware('guest')
     ->name('register.complete');
@@ -34,11 +33,8 @@ Route::get('/register/{token}', RegisterDetails::class)
 Route::get('/c/{courseSlug}', Course::class)
     ->name('course');
 
-
-Route::get('/c/{courseSlug}/{path?}', Folder::class)
-    ->where('path', '.*')
+Route::get('/folder/{uuid}', Folder::class)
     ->name('folder');
-
 
 Route::get('/u/{username}', User::class)
     ->name('user');

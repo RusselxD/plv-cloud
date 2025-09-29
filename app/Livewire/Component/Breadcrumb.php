@@ -10,46 +10,33 @@ class Breadcrumb extends Component
 {
     public $breadcrumbs = [];
 
-    public function addHomeUrl()
-    {
-        array_unshift($this->breadcrumbs, ['name' => 'Home', 'url' => '/']);
-    }
-
     public function addCourseUrl($courseSlug)
     {
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         array_unshift($this->breadcrumbs, ['name' => $course->abbreviation, 'url' => route('course', ['courseSlug' => $course->slug])]);
     }
 
-    public function addFolderCrumbs($courseSlug, $path)
+    // build up the crumbs from folder to parent folder to course
+    public function addFolderCrumbs($uuid)
     {
-        // [folder1, folder2, folderN]
-        $paths = explode('/', $path);
+        $folder = Folder::with('folder')->where('uuid', $uuid)->firstOrFail();
 
-        $prevPath = '';
-        foreach ($paths as $pathSlug) {
-
-            $folder = Folder::where('slug', $pathSlug)->firstOrFail();
-
-            $currentPath = $prevPath . $pathSlug . '/';
-
-            array_push($this->breadcrumbs, [
-                'name' => $folder->name,
-                'url' => route('folder', ['courseSlug' => $courseSlug, 'path' => $currentPath])
-            ]);
-
-            $prevPath = $currentPath;
+        while ($folder->folder) {
+            array_unshift($this->breadcrumbs, ['name' => $folder->name, 'url' => route('folder', ['uuid' => $folder->uuid])]);
+            $folder = $folder->folder;
         }
+        array_unshift($this->breadcrumbs, ['name' => $folder->name, 'url' => route('folder', ['uuid' => $folder->uuid])]);
+        $this->addCourseUrl($folder->course->slug);
     }
 
-    public function mount($courseSlug = null, $path = null)
+    public function mount($courseSlug = null, $uuid = null)
     {
-        if ($courseSlug !== null && $path !== null) {
-            $this->addFolderCrumbs($courseSlug, $path);
-        }
-
         if ($courseSlug !== null) {
+            // this came from course page
             $this->addCourseUrl($courseSlug);
+        } else {
+            // this came from folder page
+            $this->addFolderCrumbs($uuid);
         }
     }
 

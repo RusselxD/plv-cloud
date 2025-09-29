@@ -59,14 +59,8 @@ class Folder extends Model
     {
         parent::boot();
 
-        static::creating(function ($folder) {
-            $folder->slug = Str::slug($folder->name);
-        });
-
-        static::updating(function ($folder) {
-            if ($folder->isDirty('name')) {
-                $folder->slug = Str::slug($folder->name);
-            }
+        static::creating(function ($folder) {        
+            $folder->uuid = (string) Str::uuid();
         });
     }
 }

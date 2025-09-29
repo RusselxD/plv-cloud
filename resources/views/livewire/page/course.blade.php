@@ -46,7 +46,7 @@
                     <p class="mb-2">Folders</p>
                     <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9 mb-5">
                         @foreach ($folders as $folder)
-                            <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug" wire:key="folder-{{ $folder->id }}" />
+                            <livewire:component.folder-card :folder="$folder" wire:key="{{ $folder->uuid }}" />
                         @endforeach
                     </div>
                 @endif
@@ -63,9 +63,10 @@
             @endif
         </div>
     </div>
-
+    
+    <!-- Create Folder Modal -->
     @if ($isCreateFolderModalOpen)
-        <livewire:component.create-folder :parentId="$course->id" :parentIsFolder="false"
+        <livewire:component.modal.create-folder :parentId="$course->id" :parentIsFolder="false"
             wire:key="create-folder-modal-course-{{ $course->id }}" />
     @endif
 </div>

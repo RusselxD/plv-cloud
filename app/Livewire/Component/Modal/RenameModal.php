@@ -4,13 +4,16 @@ namespace App\Livewire\Component\Modal;
 
 use App\Models\File;
 use App\Models\Folder;
+use App\Models\FolderLog;
 use App\Models\UserActivity;
 use Livewire\Component;
 
 class RenameModal extends Component
 {
     public $name;
+
     public $targetId;
+
     public $isAFolder;
 
     protected $messages = [
@@ -55,7 +58,28 @@ class RenameModal extends Component
             'details' => 'Renamed ' . ($this->isAFolder ? 'folder "' : 'file "')
                 . $oldName . '" to "' . ($this->isAFolder ? $this->name : $this->name . $this->getExtension($oldName))
                 . '" in ' . $parentType . ' ' . $parent,
+            // Renamed folder "Old Name" to "New Name" in folder/course "Parent Name"
         ]);
+
+        // Log the action in the item's own log if it's a folder
+        if ($this->isAFolder) {
+            FolderLog::create([
+                'folder_id' => $this->targetId,
+                'user_id' => auth()->id(),
+                'details' => "renamed this folder from \"{$oldName}\" to \"{$this->name}\""
+            ]);
+        }
+
+        // Log the activity in the parent folder's logs if applicable
+        if ($item->folder != null) {
+            FolderLog::create([
+                'folder_id' => $item->folder->id,
+                'user_id' => auth()->id(),
+                'details' => 'renamed ' . ($this->isAFolder ? 'folder "' : 'file "')
+                    . $oldName . '" to "' . ($this->isAFolder ? $this->name : $this->name . $this->getExtension($oldName)) . '"',
+                // renamed folder "Old Name" to "New Name"
+            ]);
+        }
     }
 
     public function submitRename()
@@ -138,7 +162,7 @@ class RenameModal extends Component
 
     public function closeModal()
     {
-        $this->dispatch('close-rename-modal');
+        $this->dispatch('close-rename-modal'); // to FolderCard, FileCard, and Folder
     }
 
     public function mount($isAFolder = true, $targetId, $oldName)

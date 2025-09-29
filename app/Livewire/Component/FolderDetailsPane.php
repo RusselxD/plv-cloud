@@ -26,6 +26,7 @@ class FolderDetailsPane extends Component
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
     #[On('deleted')] // from ConfirmDeleteModal
+    #[On('close-rename-modal')] // from RenameModal
     public function refresh()
     {
         $this->folder = Folder::with(
