@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('message');
             $table->boolean('is_read');
             $table->string('url');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

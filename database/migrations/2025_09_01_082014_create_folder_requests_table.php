@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Folder::class);
             $table->foreignIdFor(User::class);
-            $table->enum('status', ['pending', 'approved', 'declined']);
-            $table->timestamps();
+            $table->enum('status', ['pending', 'approved']);
+            $table->timestamp('created_at');
         });
     }
 

@@ -47,7 +47,8 @@ class Course extends Component
 
     public function render()
     {
-        $folders = Folder::with('user')
+        $folders = Folder::select('id', 'name', 'slug', 'user_id', 'created_at')
+            ->with('user:id,username,profile_picture')
             ->when($this->search, function ($query) {
 
                 $query->where(function ($q) {
@@ -59,7 +60,6 @@ class Course extends Component
                             // WHERE USERNAME LIKE %search%
                         });
                 });
-
             })
             ->withCount(['files', 'children'])
             ->where('course_id', $this->course->id)

@@ -9,11 +9,11 @@
         <p class="mt-3 text-sm">Contents</p>
         <div class="grid grid-cols-2 gap-2 mt-1">
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">100</p>
+                <p class="font-bold text-lg">{{ $folder->children()->count() }}</p>
                 <p class="text-sm text-gray-700">Folders</p>
             </div>
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">100</p>
+                <p class="font-bold text-lg">{{ $folder->files()->count() }}</p>
                 <p class="text-sm text-gray-700">Files</p>
             </div>
         </div>
@@ -21,9 +21,9 @@
         @if (!$this->userIsAContributor)
             <p class="mt-3 mb-2 text-sm">Contributors</p>
             <div class="space-y-2">
-                <x-ui.cards.folder-contributor :username="$folder->user->username" role="Owner" />
+                <x-ui.folder.folder-contributor :username="$folder->user->username" role="Owner" />
                 @foreach ($folder->folderContributors as $contributor)
-                    <x-ui.cards.folder-contributor :username="$contributor->user->username" role="Contributor" />
+                    <x-ui.folder.folder-contributor :username="$contributor->user->username" role="Contributor" />
                 @endforeach
             </div>
         @endif
@@ -56,13 +56,23 @@
             @if ($contributorsTabIsActive)
                 <!-- Contributors Tab -->
                 <div class="space-y-2">
-                    <x-ui.cards.folder-contributor :username="$folder->user->username" role="Owner" />
+                    <x-ui.folder.folder-contributor :username="$folder->user->username" role="Owner" />
                     @foreach ($folder->folderContributors as $contributor)
-                        <x-ui.cards.folder-contributor :username="$contributor->user->username" role="Contributor" />
+                        <x-ui.folder.folder-contributor :username="$contributor->user->username" role="Contributor" />
                     @endforeach
                 </div>
 
             @else
+
+                <div class="">
+                    @foreach ($folder->folderLogs->reverse() as $log)
+                        <div @class([
+                            'border-b border-gray-300' => !$loop->last,
+                        ])>
+                            <x-ui.folder.activity-details :log="$log" />
+                        </div>
+                    @endforeach
+                </div>
             @endif
         </div>
     @endif

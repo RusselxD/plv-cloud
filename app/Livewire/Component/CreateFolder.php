@@ -4,6 +4,7 @@ namespace App\Livewire\Component;
 
 use App\Models\Course;
 use App\Models\Folder;
+use App\Models\FolderLog;
 use App\Models\UserActivity;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
@@ -47,7 +48,7 @@ class CreateFolder extends Component
         'folderName.unique' => 'A folder with this name already exists here.',
     ];
 
-    public function logActivity()
+    public function logActivity($folderId)
     {
         $parentName = $this->parentIsFolder ?
             Folder::where('id', $this->parentId)->first()->name :
@@ -60,13 +61,29 @@ class CreateFolder extends Component
                 ($this->parentIsFolder ? 'folder "' : 'course "') .
                 $parentName . '"',
         ]);
+
+        // Log the activity in the new folder's logs
+        FolderLog::create([
+            'folder_id' => $folderId,
+            'user_id' => auth()->id(),
+            'details' => 'created this folder.'
+        ]);
+
+        // Log the activity in the parent folder's logs if applicable
+        if ($this->parentIsFolder) {
+            FolderLog::create([
+                'folder_id' => $this->parentId,
+                'user_id' => auth()->id(),
+                'details' => 'created folder "' . trim($this->folderName) . '"'
+            ]);
+        }
     }
 
     public function createFolder()
     {
-        $this->validate();        
+        $this->validate();
 
-        Folder::create([
+        $newFolder = Folder::create([
             'name' => trim($this->folderName),
             'is_public' => false,
             'course_id' => $this->parentIsFolder ? null : $this->parentId,
@@ -74,10 +91,10 @@ class CreateFolder extends Component
             'parent_id' => $this->parentIsFolder ? $this->parentId : null
         ]);
 
-        $this->dispatch('folder-created');
+        $this->dispatch('folder-created'); // caught by Course or Folder and FolderDetailsPane
         $this->dispatch('success_flash', message: 'Folder successfully created');
 
-        $this->logActivity();
+        $this->logActivity($newFolder->id);
     }
 
     public function mount($parentId, $parentIsFolder)

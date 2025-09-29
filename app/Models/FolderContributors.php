@@ -6,11 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class FolderContributors extends Model
 {
-    public function folder(){
+    public $timestamps = false; 
+
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
+    public function folder()
+    {
         return $this->belongsTo(Folder::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

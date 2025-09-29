@@ -35,7 +35,7 @@ class FolderCard extends Component
     {
         // If path is empty (meaning this folder card is in the course), just go to the folder
         // Otherwise, append the folder slug to the existing path
-        $urlPath = $this->path === '' ? $this->folder->slug : $this->path . '/' . $this->folder->slug;
+        $urlPath = $this->path === '' ? $this->folder->slug : $this->path . '/' . $this->folder->slug;        
 
         return redirect()
             ->to(route('folder', ['courseSlug' => $this->courseSlug, 'path' => $urlPath]));
@@ -66,12 +66,11 @@ class FolderCard extends Component
         $this->confirmDeleteModalIsOpen = true;
     }
 
-    public function mount($folder, $courseSlug, $path = '')
+    public function mount($folder, $path = '', $courseSlug = '')
     {
-        $this->folder = $folder;
+        $this->folder = $folder;        
         $this->totalContents = $folder->files_count + $folder->children_count;
-
-        $this->courseSlug = $courseSlug;
+        
         $this->path = $path;
 
         $this->user = $folder->user;

@@ -7,6 +7,12 @@ use Illuminate\Support\Str;
 
 class Folder extends Model
 {
+    public $timestamps = false; 
+
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     protected $guarded = [];
 
     public function course()
@@ -34,7 +40,8 @@ class Folder extends Model
         return $this->hasMany(File::class);
     }
 
-    public function folder(){
+    public function folder()
+    {
         return $this->belongsTo(Folder::class, 'parent_id');
     }
 

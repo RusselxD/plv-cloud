@@ -96,7 +96,7 @@ class AddNewButton extends Component
             ]);
         }
 
-        $this->dispatch('file-created'); // caught by Course and Folder
+        $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane
     }
 
     public function mount($parentIsAFolder, $parentId)

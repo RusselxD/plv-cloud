@@ -30,7 +30,7 @@
             'mr-0' => !$detailPanelIsOpen,
         ])>
             <div class="flex justify-between items-center">
-                <livewire:component.breadcrumb :courseSlug="$this->course->slug" :path="$this->path" />
+                <livewire:component.breadcrumb :courseSlug="$courseSlug" :path="$this->path" />
                 <img src="{{ asset('/assets/details.svg') }}" wire:click="clickInfoIcon" @class([
                     'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
                     'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
@@ -61,8 +61,8 @@
                     <p class="mb-2">Folders</p>
                     <div class="grid md:grid-cols-2 xl:grid-cols-3 md:gap-5 lg:gap-9 xl:gap-9 mb-5">
                         @foreach ($folders as $folder)
-                            <livewire:component.folder-card :folder="$folder" :courseSlug="$course->slug" :path="$this->path"
-                                wire:key="course-folder-{{ $folder->id }}" />
+                            <livewire:component.folder-card :folder="$folder" :path="$this->path" :courseSlug="$courseSlug"
+                                wire:key="folder-{{ $folder->id }}" />
                         @endforeach
                     </div>
                 @endif

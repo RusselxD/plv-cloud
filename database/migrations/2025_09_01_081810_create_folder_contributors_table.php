@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Folder::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

@@ -73,9 +73,11 @@ class Folder extends Component
         $this->detailPanelIsOpen = false;
     }
 
+    public $courseSlug = '';
+
     public function mount($courseSlug, $path)
-    {        
-        $this->course = Course::where('slug', $courseSlug)->firstOrFail();
+    {
+        $this->courseSlug = $courseSlug;
 
         // the string path: /course/folder1/folder2
         $this->path = $path;
@@ -106,8 +108,7 @@ class Folder extends Component
 
     public function render()
     {
-        
-        $folders = FolderModel::with('user')
+        $folders = FolderModel::with('user:id,username,profile_picture')
             ->when($this->search, function ($query) {
 
                 $query->where(function ($q) {
@@ -119,13 +120,12 @@ class Folder extends Component
                             // WHERE USERNAME LIKE %search%
                         });
                 });
-
             })
             ->withCount(['files', 'children'])
             ->where('parent_id', $this->folder->id)
             ->get();
 
-        $files = File::with('user')
+        $files = File::with('user:id,username,profile_picture')
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
                 // WHERE NAME LIKE %search%

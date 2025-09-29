@@ -11,17 +11,17 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('email')->unique()->nullable();
-            $table->string('password')->nullable();
-            $table->string('student_number')->nullable();
-            $table->foreignIdFor(Course::class)->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('username')->unique();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('student_number');
+            $table->foreignIdFor(Course::class);            
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('profile_picture')->nullable();
-            $table->boolean('is_private')->default(false);
+            $table->boolean('is_public')->default(true);
             $table->rememberToken();
+            $table->timestamp('email_verified_at');
             $table->timestamps();
         });
 
