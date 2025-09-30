@@ -9,11 +9,11 @@
         <p class="mt-3 text-sm">Contents</p>
         <div class="grid grid-cols-2 gap-2 mt-1">
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">{{ $folder->children()->count() }}</p>
+                <p class="font-bold text-lg">{{ $children_count }}</p>
                 <p class="text-sm text-gray-700">Folders</p>
             </div>
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">{{ $folder->files()->count() }}</p>
+                <p class="font-bold text-lg">{{ $files_count}}</p>
                 <p class="text-sm text-gray-700">Files</p>
             </div>
         </div>
@@ -63,13 +63,13 @@
                 </div>
 
             @else
-
-                <div class="">
-                    @foreach ($folder->folderLogs->reverse() as $log)
+                <div>
+                    @foreach ($folder->folderLogs as $log)
                         <div @class([
                             'border-b border-gray-300' => !$loop->last,
                         ])>
-                            <x-ui.folder.activity-details :log="$log" />
+                            <x-ui.folder.activity-details :details="$log->details" :username="$log->user->username"
+                                :created_at="$log->created_at->diffForHumans()" />
                         </div>
                     @endforeach
                 </div>

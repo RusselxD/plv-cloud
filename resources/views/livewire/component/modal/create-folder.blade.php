@@ -1,5 +1,5 @@
 <div class="fixed inset-0 bg-black/10 flex justify-center items-center z-150" wire:click.self="closeModal">
-    <div class="w-96 h-fit border-2 bg-white rounded p-4">
+    <div class="w-96 h-fit border-2 bg-white rounded p-4 relative">
         <div class="flex justify-between items-center text-xl mb-3">
             <h1>New Folder</h1>
             <img src="{{ asset('/assets/x.svg') }}" class="w-9 p-2 cursor-pointer hover:bg-gray-200 rounded-full"
@@ -18,5 +18,8 @@
             </div>
         </form>
 
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="createFolder">
+            <x-ui.general.spinner />
+        </div>
     </div>
 </div>

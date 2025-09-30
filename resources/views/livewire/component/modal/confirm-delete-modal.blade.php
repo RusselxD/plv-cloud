@@ -19,5 +19,9 @@
             <button wire:click="confirmDeletion"
                 class="transition-colors duration-100 ease-in-out hover:bg-red-500 cursor-pointer border text-white border-red-600 bg-red-600 w-full rounded-md py-2">Delete</button>
         </div>
+
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="confirmDeletion">
+            <x-ui.general.spinner />
+        </div>
     </div>
 </div>

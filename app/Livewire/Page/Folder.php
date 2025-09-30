@@ -16,15 +16,15 @@ class Folder extends Component
 
     public $search;
 
-    public $isCreateFolderModalOpen = false;
+    public $createFolderModalIsOpen = false;
 
     public $renameModalIsOpen = false;
 
     public $currentUserIsOwner = false;
 
-    public $currentUserIsEligibleToUpload = false;    
+    public $currentUserIsEligibleToUpload = false;
 
-    public $detailPanelIsOpen = true;
+    public $detailPanelIsOpen = false;
 
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
@@ -50,18 +50,18 @@ class Folder extends Component
             return redirect()->to(route('login'));
         }
 
-        $this->isCreateFolderModalOpen = true;
+        $this->createFolderModalIsOpen = true;
     }
 
     public function closeCreateFolderModal()
     {
-        $this->isCreateFolderModalOpen = false;
+        $this->createFolderModalIsOpen = false;
     }
 
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
     {
-        $this->renameModalIsOpen = false;        
+        $this->renameModalIsOpen = false;
     }
 
     public function openRenameModal()
@@ -69,14 +69,16 @@ class Folder extends Component
         $this->renameModalIsOpen = true;
     }
 
-    public function clickInfoIcon(){        
+    public function clickInfoIcon()
+    {
         $this->detailPanelIsOpen = !$this->detailPanelIsOpen;
     }
 
     #[On('close-details-pane')] // from FolderDetailsPane
-    public function closeDetailsPane(){
+    public function closeDetailsPane()
+    {
         $this->detailPanelIsOpen = false;
-    }    
+    }
 
     public function mount($uuid)
     {
@@ -97,7 +99,7 @@ class Folder extends Component
                 ->exists();
             $this->currentUserIsEligibleToUpload =
                 $this->folder->is_public || $isAContributor;
-        }        
+        }
     }
 
     public function render()
@@ -119,13 +121,12 @@ class Folder extends Component
             ->where('parent_id', $this->folder->id)
             ->get();
 
-        $files = File::with('user:id,username,profile_picture')
-            ->when($this->search, function ($query) {
+        $files = File::when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
                 // WHERE NAME LIKE %search%
             })
             ->where('folder_id', $this->folder->id)
-            ->get();        
+            ->get();
 
         return view('livewire.page.folder', ['folders' => $folders, 'files' => $files]);
     }

@@ -31,7 +31,7 @@
         ])>
             <div class="flex justify-between items-center">
                 <livewire:component.breadcrumb :uuid="$folder->uuid" />
-                
+
                 <img src="{{ asset('/assets/details.svg') }}" wire:click="clickInfoIcon" @class([
                     'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
                     'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
@@ -40,7 +40,7 @@
             </div>
 
             <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">
-                <h1 class="text-2xl font-bold truncate max-w-[38rem] hover:bg-gray-200 rounded-md -ml-2 py-1 px-2 cursor-pointer"
+                <h1 class="text-2xl font-bold truncate max-w-[38rem] hover:bg-gray-200 rounded-md -ml-2 py-1 pl-2 pr-3 cursor-pointer"
                     wire:click="openRenameModal">{{ $folder->name }}</h1>
                 @if ($currentUserIsEligibleToUpload)
                     <livewire:component.add-new-button :parentIsAFolder="true" :parentId="$folder->id" />
@@ -87,13 +87,13 @@
             'w-72 ' => $detailPanelIsOpen,
             'w-0' => !$detailPanelIsOpen,
         ])>
-            <livewire:component.folder-details-pane :folder="$this->folder" />
+            <livewire:component.folder-details-pane :uuid="$this->folder->uuid" />
         </div>
 
     </div>
 
     <!-- Create Folder Modal -->
-    @if ($isCreateFolderModalOpen)
+    @if ($createFolderModalIsOpen)
         <livewire:component.modal.create-folder :parentId="$this->folder->id" :parentIsFolder="true"
             wire:key="create-folder-modal-folder-{{ $this->folder->id }}" />
     @endif

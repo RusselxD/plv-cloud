@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 class CreateFolder extends Component
 {
     public $parentIsFolder = false;
-    
+
     public $parentId;
 
     public $folderName = '';
@@ -93,9 +93,10 @@ class CreateFolder extends Component
         ]);
 
         $this->dispatch('folder-created'); // caught by Course or Folder and FolderDetailsPane
-        $this->dispatch('success_flash', message: 'Folder successfully created');
 
         $this->logActivity($newFolder->id);
+                
+        $this->dispatch('success_flash', message: 'Folder successfully created');
     }
 
     public function mount($parentId, $parentIsFolder)

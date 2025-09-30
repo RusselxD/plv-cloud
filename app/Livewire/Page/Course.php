@@ -14,7 +14,7 @@ class Course extends Component
 
     public string $search = '';
 
-    public bool $isCreateFolderModalOpen = false;
+    public bool $createFolderModalIsOpen = false;
 
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton

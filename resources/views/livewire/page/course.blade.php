@@ -65,7 +65,7 @@
     </div>
     
     <!-- Create Folder Modal -->
-    @if ($isCreateFolderModalOpen)
+    @if ($createFolderModalIsOpen)
         <livewire:component.modal.create-folder :parentId="$course->id" :parentIsFolder="false"
             wire:key="create-folder-modal-course-{{ $course->id }}" />
     @endif

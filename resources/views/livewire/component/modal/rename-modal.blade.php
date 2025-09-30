@@ -1,6 +1,6 @@
 <div class="fixed inset-0 bg-black/20 flex justify-center items-center z-150" wire:click.self="closeModal"
     wire:keydown.enter="submitRename" wire:keydown.escape="closeModal" tabindex="0" x-data x-init="$el.focus()">
-    <div class="w-96 h-fit border-2 bg-white rounded p-4">
+    <div class="w-96 h-fit border-2 bg-white rounded p-4 absolute">
         <div class="flex justify-between items-center text-xl mb-3">
             <span>
                 <span>Rename</span>
@@ -26,5 +26,8 @@
             </div>
         </form>
 
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="submitRename">
+            <x-ui.general.spinner />
+        </div>
     </div>
 </div>

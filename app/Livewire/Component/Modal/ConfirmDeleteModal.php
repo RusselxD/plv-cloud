@@ -66,6 +66,7 @@ class ConfirmDeleteModal extends Component
 
         $this->dispatch('deleted'); // caught by Course or Folder and FolderDetailsPane
         $this->dispatch('success_flash', message: 'Deleted successfully');
+        
     }
 
     public function mount($targetId, $isAFolder)
