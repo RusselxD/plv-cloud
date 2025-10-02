@@ -13,9 +13,8 @@ return new class extends Migration {
         Schema::create('folder_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Folder::class);
-            $table->foreignIdFor(User::class);
-            $table->enum('status', ['pending', 'approved']);
-            $table->timestamp('created_at');
+            $table->foreignIdFor(User::class);            
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

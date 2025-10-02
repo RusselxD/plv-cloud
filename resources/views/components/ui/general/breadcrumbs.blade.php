@@ -1,3 +1,5 @@
+@props(['breadcrumbs' => []])
+
 <?php
 // Calculate if truncation is needed
 $totalBreadcrumbs = count($breadcrumbs);

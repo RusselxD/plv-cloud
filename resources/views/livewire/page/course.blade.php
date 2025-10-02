@@ -21,8 +21,8 @@
     </div>
 
     <div class="bg-slate-100 rounded-lg p-5 flex-1 mt-[5.25rem] ">
-
-        <livewire:component.breadcrumb :courseSlug="$this->course->slug" />
+    
+         <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs"/>
 
         <div>
             <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">

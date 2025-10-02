@@ -5,7 +5,7 @@
         Add New
     </div>
 
-    <div x-show="openOptions" @click.away="openOptions = false" x-collapse
+    <div x-show="openOptions" @click.away="openOptions = false" x-collapse x-cloak
         class="text-sm absolute bg-white right-0 top-full mt-1 rounded-md shadow-lg border border-gray-200 z-50 text-black w-44 whitespace-nowrap">
 
         <div class="flex items-center justify-start p-3 gap-2 hover:bg-gray-200 cursor-pointer"

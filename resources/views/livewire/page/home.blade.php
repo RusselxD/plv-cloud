@@ -24,10 +24,8 @@
             <div class="gap-5 xl:gap-6 grid xl:grid-cols-2">
                 <!-- Default list (courses) -->
                 @foreach ($result as $r)
-                    <a href="{{ route('course', ['courseSlug' => $r->slug]) }}" class="relative overflow-hidden p-6 rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.20)]
-                                                 hover:shadow-[0_0_15px_rgba(0,0,0,0.15)] hover:scale-101 bg-white
-                                                 flex items-center justify-start
-                                                 transition-all duration-100 ease-in-out">
+                    <a href="{{ route('course', ['courseSlug' => $r->slug]) }}"
+                        class="relative overflow-hidden p-6 rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.20)] hover:shadow-[0_0_15px_rgba(0,0,0,0.15)] hover:scale-101 bg-white flex items-center justify-start transition-all duration-100 ease-in-out">
                         <div class="font-bold">{{ $r->name }}</div>
                         <div class="absolute left-1 top-[0.40rem] bottom-[0.40rem] rounded-full w-2 bg-primary"></div>
                     </a>

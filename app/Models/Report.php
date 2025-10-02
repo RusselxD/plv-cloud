@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Report extends Model
 {
     public $timestamps = false;
 
@@ -19,18 +19,13 @@ class File extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function folder()
+    public function reportedFile()
     {
-        return $this->belongsTo(Folder::class);
+        return $this->belongsTo(File::class, 'reported_file_id');
     }
 
-    public function course()
+    public function reportedFolder()
     {
-        return $this->belongsTo(Course::class);
-    }
-
-    public function reports()
-    {
-        return $this->hasMany(Report::class, 'reported_file_id');
+        return $this->belongsTo(Folder::class, 'reported_folder_id');
     }
 }

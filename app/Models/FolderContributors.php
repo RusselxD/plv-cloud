@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FolderContributors extends Model
 {
+    protected $guarded = [];
+    
     public $timestamps = false; 
 
     protected $casts = [

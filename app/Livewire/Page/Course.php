@@ -16,6 +16,8 @@ class Course extends Component
 
     public bool $createFolderModalIsOpen = false;
 
+    public $breadcrumbs = [];
+
     #[On('folder-created')] // from CreateFolder
     #[On('file-created')] // from AddNewButton
     #[On('deleted')] // from ConfirmDeleteModal    
@@ -43,6 +45,8 @@ class Course extends Component
     public function mount($courseSlug)
     {
         $this->course = CourseModel::where('slug', $courseSlug)->firstOrFail();
+
+        $this->breadcrumbs[] = ['name' => $this->course->abbreviation, 'url' => route('course', ['courseSlug' => $this->course->slug])];        
     }
 
     public function render()

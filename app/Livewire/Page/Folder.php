@@ -16,6 +16,8 @@ class Folder extends Component
 
     public $search;
 
+    public $breadcrumbs = [];
+
     public $createFolderModalIsOpen = false;
 
     public $renameModalIsOpen = false;
@@ -31,7 +33,36 @@ class Folder extends Component
     #[On('deleted')] // from ConfirmDeleteModal
     public function refresh()
     {
-        $this->render();
+        $this->refreshContents();
+    }
+
+    public $folders;
+    public $files;
+
+    public function refreshContents(){
+        $this->folders = FolderModel::with('user:id,username,profile_picture')
+            ->when($this->search, function ($query) {
+
+                $query->where(function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        // WHERE NAME LIKE %search%
+    
+                        ->orWhereHas('user', function ($q2) {
+                            $q2->where('username', 'like', '%' . $this->search . '%');
+                            // WHERE USERNAME LIKE %search%
+                        });
+                });
+            })
+            ->withCount(['files', 'children'])
+            ->where('parent_id', $this->folder->id)
+            ->get();
+
+        $this->files = File::when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+                // WHERE NAME LIKE %search%
+            })
+            ->where('folder_id', $this->folder->id)
+            ->get();
     }
 
     public function updatedSearch()
@@ -66,6 +97,9 @@ class Folder extends Component
 
     public function openRenameModal()
     {
+        if(auth()->id() != $this->folder->user_id){
+            return;
+        }
         $this->renameModalIsOpen = true;
     }
 
@@ -78,6 +112,20 @@ class Folder extends Component
     public function closeDetailsPane()
     {
         $this->detailPanelIsOpen = false;
+    }
+
+    // build up the crumbs from folder to parent folder to course
+    public function addFolderCrumbs()
+    {
+        $currentFolder = $this->folder;
+
+        while ($currentFolder->folder) {
+            array_unshift($this->breadcrumbs, ['name' => $currentFolder->name, 'url' => route('folder', ['uuid' => $currentFolder->uuid])]);
+            $currentFolder = $currentFolder->folder;
+        }
+        array_unshift($this->breadcrumbs, ['name' => $currentFolder->name, 'url' => route('folder', ['uuid' => $currentFolder->uuid])]);
+        $course = $currentFolder->course;
+        array_unshift($this->breadcrumbs, ['name' => $course->abbreviation, 'url' => route('course', ['courseSlug' => $course->slug])]);
     }
 
     public function mount($uuid)
@@ -100,34 +148,15 @@ class Folder extends Component
             $this->currentUserIsEligibleToUpload =
                 $this->folder->is_public || $isAContributor;
         }
-    }
+
+        $this->addFolderCrumbs();
+        $this->refreshContents();
+    }    
 
     public function render()
     {
-        $folders = FolderModel::with('user:id,username,profile_picture')
-            ->when($this->search, function ($query) {
+        
 
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        // WHERE NAME LIKE %search%
-    
-                        ->orWhereHas('user', function ($q2) {
-                            $q2->where('username', 'like', '%' . $this->search . '%');
-                            // WHERE USERNAME LIKE %search%
-                        });
-                });
-            })
-            ->withCount(['files', 'children'])
-            ->where('parent_id', $this->folder->id)
-            ->get();
-
-        $files = File::when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-                // WHERE NAME LIKE %search%
-            })
-            ->where('folder_id', $this->folder->id)
-            ->get();
-
-        return view('livewire.page.folder', ['folders' => $folders, 'files' => $files]);
+        return view('livewire.page.folder');
     }
 }

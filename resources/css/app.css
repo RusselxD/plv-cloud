@@ -50,6 +50,10 @@
     display: none; /* Safari and Chrome */
 }
 
+[x-cloak] {
+    display: none !important;
+}
+
 .banner {
     background-image: url("/public/assets/banner.png"); /* image path */
     background-size: cover; /* make it cover the whole div */

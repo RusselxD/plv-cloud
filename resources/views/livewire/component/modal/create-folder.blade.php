@@ -1,9 +1,17 @@
-<div class="fixed inset-0 bg-black/10 flex justify-center items-center z-150" wire:click.self="closeModal">
+<div class="fixed inset-0 bg-black/10 flex justify-center items-center z-150" 
+    x-data="{ show: true }" 
+    x-show="show"
+    x-transition 
+    @close-rename-modal.window="show = false"
+    @keydown.escape.window="show = false; $wire.closeModal()"
+    @click.self="show = false; $wire.closeModal()"
+    tabindex="0" 
+    x-init="$el.focus()">
     <div class="w-96 h-fit border-2 bg-white rounded p-4 relative">
         <div class="flex justify-between items-center text-xl mb-3">
             <h1>New Folder</h1>
             <img src="{{ asset('/assets/x.svg') }}" class="w-9 p-2 cursor-pointer hover:bg-gray-200 rounded-full"
-                wire:click="closeModal" />
+                @click.stop="show = false; $wire.closeModal()" />
         </div>
 
         <form wire:submit.prevent="createFolder">
@@ -12,7 +20,7 @@
             @error('folderName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             <div class="flex items-center justify-end gap-2 text-sm mt-4">
                 <button type="button" class="border-2 text-primary border-primary py-2 px-4 rounded-full transition-colors duration-100 ease-in-out
-                            hover:bg-primary hover:text-white cursor-pointer" wire:click="closeModal">Cancel</button>
+                            hover:bg-primary hover:text-white cursor-pointer" @click.stop="show = false; $wire.closeModal()">Cancel</button>
                 <button type="submit" class="bg-primary text-white border-2 border-primary py-2 px-4 rounded-full cursor-pointer transition-colors duration-100 
                     ease-in-out hover:bg-primary/90">Create</button>
             </div>

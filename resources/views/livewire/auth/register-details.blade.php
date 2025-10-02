@@ -1,6 +1,6 @@
 <div class="h-full flex flex-col items-center justify-start py-8 min-h-full">
 
-    <x-ui.general.auth-logo/>
+    <x-ui.general.auth-logo />
 
     <form wire:submit.prevent="register"
         class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
@@ -187,11 +187,13 @@
             </div>
         </div>
 
-        <button type="submit" class="mt-8 px-16 py-3 rounded-full font-medium 
-           border-2 border-primary text-primary bg-white
-           hover:bg-primary hover:text-white cursor-pointer
-           active:bg-primary active:text-white
-           transition-colors duration-200">Sign Up</button>
+        <button type="submit"
+            class="mt-8 px-16 py-3 rounded-full font-medium border-2 border-primary text-primary bg-white hover:bg-primary hover:text-white cursor-pointer active:bg-primary active:text-white transition-colors duration-200">Sign
+            Up</button>
+
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="register">
+            <x-ui.general.spinner />
+        </div>
     </form>
 
     <div class="mt-10 pb-5">

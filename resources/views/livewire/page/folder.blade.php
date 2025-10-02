@@ -1,4 +1,4 @@
-<div class="space-y-3 flex-1 flex flex-col">
+<div class="space-y-3 flex-1 flex flex-col" x-data="{ detailPanelOpen: @entangle('detailPanelIsOpen') }">
 
     <div class="fixed right-3 left-64 top-0 py-2 z-100 bg-white  ">
         <div class="bg-slate-100 w-full rounded-lg flex justify-between items-center py-2 px-4">
@@ -26,22 +26,27 @@
         <!-- Contents Pane -->
         <div @class([
             'bg-slate-100 rounded-lg p-5 flex-1 transition-all duration-300 ease-in-out',
-            'mr-[18.5rem]' => $detailPanelIsOpen,
-            'mr-0' => !$detailPanelIsOpen,
-        ])>
-            <div class="flex justify-between items-center">
-                <livewire:component.breadcrumb :uuid="$folder->uuid" />
 
-                <img src="{{ asset('/assets/details.svg') }}" wire:click="clickInfoIcon" @class([
-                    'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
-                    'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
-                    'hover:bg-gray-200' => !$detailPanelIsOpen,
-                ]) />
+        ]) :class="detailPanelOpen ? 'mr-[22.5rem]' : 'mr-0'">
+            <div class="flex justify-between items-center">
+
+                <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs" />
+
+                <img src="{{ asset('/assets/details.svg') }}" 
+                    @click="detailPanelOpen = !detailPanelOpen" 
+                    @class([
+                        'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
+                        'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
+                        'hover:bg-gray-200' => !$detailPanelIsOpen,
+                    ]) 
+                    :class="detailPanelOpen ? 'bg-blue-100 hover:bg-blue-200' : 'hover:bg-gray-200'" />
             </div>
 
             <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">
-                <h1 class="text-2xl font-bold truncate max-w-[38rem] hover:bg-gray-200 rounded-md -ml-2 py-1 pl-2 pr-3 cursor-pointer"
-                    wire:click="openRenameModal">{{ $folder->name }}</h1>
+                <h1 @class([
+                    'text-2xl font-bold truncate max-w-[38rem] rounded-md -ml-2 py-1 pl-2 pr-3',
+                    'hover:bg-gray-200 cursor-pointer' => auth()->id() == $folder->user_id,
+                ]) wire:click="openRenameModal">{{ $folder->name }}</h1>
                 @if ($currentUserIsEligibleToUpload)
                     <livewire:component.add-new-button :parentIsAFolder="true" :parentId="$folder->id" />
                 @endif
@@ -82,11 +87,11 @@
         </div>
 
         <!-- Details Pane -->
-        <div @class([
-            'bg-slate-100 fixed right-3 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide',
-            'w-72 ' => $detailPanelIsOpen,
-            'w-0' => !$detailPanelIsOpen,
-        ])>
+        <div @close-details-pane.window="detailPanelOpen = false" x-cloak
+            @class([
+                'bg-slate-100 fixed right-3 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide',                
+            ]) 
+            :class="detailPanelOpen ? 'w-[22rem]' : 'w-0'">
             <livewire:component.folder-details-pane :uuid="$this->folder->uuid" />
         </div>
 

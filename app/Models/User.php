@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+    public function sentNotifications()
+    {
+        return $this->hasMany(Notification::class, 'sender_id');
+    }
+
     public function folders()
     {
         return $this->hasMany(Folder::class);
@@ -73,5 +78,10 @@ class User extends Authenticatable
     public function userActivities()
     {
         return $this->hasMany(UserActivity::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }

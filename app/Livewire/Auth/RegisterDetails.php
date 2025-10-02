@@ -80,7 +80,7 @@ class RegisterDetails extends Component
     ];
 
     public function register()
-    {
+    {        
         $this->validate($this->rules());
 
         $user = User::create([

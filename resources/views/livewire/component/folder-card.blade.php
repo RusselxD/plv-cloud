@@ -39,7 +39,7 @@
 
     <!-- Kebab Menu -->
     <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-3 right-12">
-        <div x-show="open" x-collapse @click.away="$wire.closeKebabMenu()"
+        <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
             class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
             <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
                 <img src="{{ asset('assets/edit.svg') }}" class="w-4" />

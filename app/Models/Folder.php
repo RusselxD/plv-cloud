@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Folder extends Model
 {
-    public $timestamps = false; 
+    public $timestamps = false;
 
     protected $casts = [
         'created_at' => 'datetime',
@@ -55,11 +55,16 @@ class Folder extends Model
         return $this->hasMany(FolderLog::class);
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reported_folder_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function ($folder) {        
+        static::creating(function ($folder) {
             $folder->uuid = (string) Str::uuid();
         });
     }

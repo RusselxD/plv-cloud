@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Component;
 
+use App\Models\Folder;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -65,10 +66,13 @@ class FolderCard extends Component
 
     public function mount($folder)
     {
-        $this->folder = $folder;
-        $this->totalContents = $folder->files_count + $folder->children_count;
+        $this->folder = Folder::where('id', $folder->id)
+            ->withCount(['files', 'children'])
+            ->with('user:id,username,profile_picture')
+            ->first();
+        $this->totalContents = $this->folder->files_count + $this->folder->children_count;
 
-        $this->user = $folder->user;
+        $this->user = $this->folder->user;
     }
 
     public function render()

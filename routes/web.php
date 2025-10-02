@@ -10,6 +10,8 @@ use App\Livewire\Page\Home;
 
 
 // use App\Livewire\Auth\RegisterDetails;
+use App\Livewire\Page\Notifications;
+use App\Livewire\Page\Saved;
 use App\Livewire\Page\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)
     ->name('home');
+
+Route::get('/notifications', Notifications::class)
+    ->middleware('auth')
+    ->name('notifications');
+
+Route::get('/saved', Saved::class)
+    ->middleware('auth')
+    ->name('saved');
 
 Route::get('/login', Login::class)
     ->middleware('guest')
