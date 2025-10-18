@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\SignupVerifyController;
+use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\RegisterDetails;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Page\Course;
 use App\Livewire\Page\Folder;
@@ -31,6 +33,14 @@ Route::get('/saved', Saved::class)
 Route::get('/login', Login::class)
     ->middleware('guest')
     ->name('login');
+
+Route::get('/forgot-password', ForgotPassword::class)
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::get('/reset-password/{token}', ResetPassword::class)
+    ->middleware('guest')
+    ->name('password.reset');
 
 Route::get('/register', VerifyEmail::class)
     ->middleware('guest')

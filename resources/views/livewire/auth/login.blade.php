@@ -54,9 +54,9 @@
                     class="mr-2 rounded border-primary text-primary focus:ring-primary cursor-pointer">
                 Remember Me
             </label>
-            <p class="text-sm text-primary hover:underline cursor-pointer">
+            <a href="{{ route('password.request') }}" class="text-sm text-primary hover:underline cursor-pointer">
                 Forgot Password?
-            </p>
+            </a>
         </div>
 
         <button type="submit" class="px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium
