@@ -20,6 +20,8 @@ class FolderCard extends Component
 
     public $confirmDeleteModalIsOpen = false;
 
+    public $currentUserCanModify = false;
+
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
     {
@@ -64,6 +66,14 @@ class FolderCard extends Component
         $this->confirmDeleteModalIsOpen = true;
     }
 
+    public function determineIfUserCanModify(){
+        if($this->folder->course_id == null){
+
+        } else {
+            $this->currentUserCanModify = auth()->id() == $this->folder->user_id;
+        }
+    }
+
     public function mount($folder)
     {
         $this->folder = Folder::where('id', $folder->id)
@@ -73,6 +83,8 @@ class FolderCard extends Component
         $this->totalContents = $this->folder->files_count + $this->folder->children_count;
 
         $this->user = $this->folder->user;
+
+        $this->determineIfUserCanModify();
     }
 
     public function render()

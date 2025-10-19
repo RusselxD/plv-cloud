@@ -10,7 +10,6 @@ use App\Livewire\Page\Course;
 use App\Livewire\Page\Folder;
 use App\Livewire\Page\Home;
 
-
 // use App\Livewire\Auth\RegisterDetails;
 use App\Livewire\Page\Notifications;
 use App\Livewire\Page\Saved;

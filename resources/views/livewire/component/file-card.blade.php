@@ -27,24 +27,32 @@
                 <img src="{{ asset('/assets/download.svg') }}" class="w-4" />
                 <p>Download</p>
             </div>
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+
+            <!-- <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
                 <img src="{{ asset('/assets/details.svg') }}" class="w-4" />
                 <p>Details</p>
-            </div>
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
-                <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
-                <p>Report</p>
-            </div>
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-            wire:click="openRenameModal">
-                <img src="{{ asset('/assets/edit.svg') }}" class="w-4" />
-                <p>Rename</p>
-            </div>
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                wire:click="openConfirmDeleteModal">
-                <img src="{{ asset('/assets/delete.svg') }}" class="w-4" />
-                <p>Delete</p>
-            </div>
+            </div> -->
+            
+            @if (auth()->id() !== $file->user_id)
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
+                    <p>Report</p>
+                </div>
+            @endif
+
+            @if ($currentUserCanModify)
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+                wire:click="openRenameModal">
+                    <img src="{{ asset('/assets/edit.svg') }}" class="w-4" />
+                    <p>Rename</p>
+                </div>
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+                    wire:click="openConfirmDeleteModal">
+                    <img src="{{ asset('/assets/delete.svg') }}" class="w-4" />
+                    <p>Delete</p>
+                </div>
+            @endif
+            
         </div>
     </div>
 

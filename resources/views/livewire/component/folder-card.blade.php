@@ -41,15 +41,26 @@
     <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-3 right-12">
         <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
             class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
-            <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
-                <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
-                <p>Rename</p>
-            </div>
-            <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3"
-                wire:click.stop="openConfirmDeleteModal">
-                <img src="{{ asset('assets/delete.svg') }}" class="w-4" />
-                <p>Delete</p>
-            </div>
+
+            @if ($currentUserCanModify)
+                <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
+                    <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
+                    <p>Rename</p>
+                </div>
+                <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3"
+                    wire:click.stop="openConfirmDeleteModal">
+                    <img src="{{ asset('assets/delete.svg') }}" class="w-4" />
+                    <p>Delete</p>
+                </div>                
+            @endif
+
+            @if (auth()->id() !== $folder->user_id)
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
+                    <p>Report</p>
+                </div>
+            @endif
+            
         </div>
     </div>
 

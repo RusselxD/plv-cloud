@@ -3,6 +3,7 @@
 namespace App\Livewire\Component;
 
 use App\Models\File;
+use App\Models\FolderContributors;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -16,6 +17,8 @@ class FileCard extends Component
 
     public $renameModalIsOpen = false;
     public $confirmDeleteModalIsOpen = false;
+
+    public $currentUserCanModify = false;
 
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
@@ -59,6 +62,18 @@ class FileCard extends Component
     public function openConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = true;
+    }
+
+    public function determineIfUserCanModify(){
+        if ($this->file->course_id == null){
+            $folderId = $this->file->folder_id;
+
+            $contributors = FolderContributors::where('folder_id', $folderId)->pluck('user_id')->toArray();
+            // dump($contributors);
+            $this->currentUserCanModify = in_array(auth()->id(), $contributors) || auth()->id() == $this->file->folder->user_id;
+        } else {
+            $this->currentUserCanModify = auth()->id() == $this->file->user_id;
+        }
     }
 
     public function getFileIcon($mime)
@@ -118,6 +133,8 @@ class FileCard extends Component
     {
         $this->file = $file;
         $this->icon = $this->getFileIcon($file->mime_type);
+
+        $this->determineIfUserCanModify();
     }
 
     public function render()
