@@ -34,7 +34,8 @@
             </div> -->
             
             @if (auth()->id() !== $file->user_id)
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+                    wire:click="openReportModal">
                     <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
                     <p>Report</p>
                 </div>
@@ -67,6 +68,13 @@
     @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
             <livewire:component.modal.confirm-delete-modal :targetId="$file->id" :isAFolder="false" />
+        </div>
+    @endif
+
+    <!-- Report File Modal -->
+    @if ($reportModalIsOpen)
+        <div wire:click.stop>
+            <livewire:component.modal.report-modal :reportedItemId="$file->id" :isAFolder="false"/>
         </div>
     @endif
 </div>

@@ -16,7 +16,10 @@ class FileCard extends Component
     public $optionsAreOpen = false;
 
     public $renameModalIsOpen = false;
+
     public $confirmDeleteModalIsOpen = false;
+
+    public $reportModalIsOpen = false;
 
     public $currentUserCanModify = false;
 
@@ -31,6 +34,13 @@ class FileCard extends Component
     public function closeConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = false;
+        $this->optionsAreOpen = false;
+    }
+
+    #[On('close-report-modal')] // from ReportModal
+    public function closeReportModal()
+    {
+        $this->reportModalIsOpen = false;
         $this->optionsAreOpen = false;
     }
 
@@ -62,6 +72,10 @@ class FileCard extends Component
     public function openConfirmDeleteModal()
     {
         $this->confirmDeleteModalIsOpen = true;
+    }
+
+    public function openReportModal(){
+        $this->reportModalIsOpen = true;
     }
 
     public function determineIfUserCanModify(){

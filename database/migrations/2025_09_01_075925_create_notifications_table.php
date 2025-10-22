@@ -12,8 +12,9 @@ return new class extends Migration {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class, 'sender_id')->constrained()->cascadeOnDelete();
+            $table->string('title');            
             $table->string('message');
+            $table->string('type');
             $table->boolean('is_read')->default(false);
             $table->string('url');
             $table->timestamp('created_at')->useCurrent();

@@ -79,7 +79,8 @@ class FolderDetailsPane extends Component
 
         Notification::create([
             'user_id' => $this->folder->user_id,
-            'sender_id' => auth()->id(),
+            'title' => "Contributor Request",
+            'type' => "request",
             'message' => auth()->user()->username . ' has requested to be a contributor in your folder "' . $this->folder->name . '"',
             'url' => route('folder', ['uuid' => $this->folder->uuid])
         ]);
@@ -111,7 +112,8 @@ class FolderDetailsPane extends Component
 
         Notification::create([
             'user_id' => $request->user_id,
-            'sender_id' => auth()->id(),
+            'title' => $approved ? "Contributor Request Approved" : "Contributor Request Declined",
+            'type' => $approved ? "approve" : "decline",
             'message' => $this->folder->user->username . ' has ' . ($approved ? 'approved' : 'declined') . ' your request to be a contributor in "' . $this->folder->name . '"',
             'url' => route('folder', ['uuid' => $this->folder->uuid])
         ]);

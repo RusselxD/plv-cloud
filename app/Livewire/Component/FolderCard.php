@@ -36,6 +36,13 @@ class FolderCard extends Component
         $this->openKebabMenu = false;
     }
 
+    #[On('close-report-modal')] // from ReportModal
+    public function closeReportModal()
+    {
+        $this->reportModalIsOpen = false;
+        $this->openKebabMenu = false;
+    }
+
     public function goToFolder()
     {
         return redirect()->to(route('folder', ['uuid' => $this->folder->uuid]));
