@@ -263,12 +263,27 @@
                     </div>
                 </div>
                 @foreach ($contributors as $contributor)
-                    <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
-                        <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
-                        <div class="ml-2 flex-1 overflow-hidden">
-                            <p class="text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
-                            <p class="text-xs text-gray-500">Contributor</p>
+                    <div class="w-full bg-white rounded-md p-3 flex justify-between items-center group">
+                        <div class="flex items-center justify-start flex-1">
+                            <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
+                            <div class="ml-2 flex-1 overflow-hidden">
+                                <p class="text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
+                                <p class="text-xs text-gray-500">Contributor</p>
+                            </div>
                         </div>
+
+                        @if ($userIsTheOwner)
+                            <button class="hidden group-hover:block text-black cursor-pointer" wire:click="removeAContributor({{ $contributor['id'] }}, '{{ $contributor['username'] }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-circle-x-icon lucide-circle-x w-5 h-5">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="m15 9-6 6" />
+                                    <path d="m9 9 6 6" />
+                                </svg> 
+                            </button>
+                        @endif
+
                     </div>
                 @endforeach
 
@@ -276,8 +291,8 @@
                 @if ($userIsTheOwner)
                     @if ($folder->folderRequests->isEmpty())
                         <div class="mt-2 flex flex-col items-center justify-center py-5 bg-gray-200 rounded-md text-gray-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="lucide lucide-users-icon lucide-users w-10">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                                 <path d="M16 3.128a4 4 0 0 1 0 7.744" />

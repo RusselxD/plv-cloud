@@ -75,6 +75,11 @@ class Folder extends Component
         $this->render();
     }
 
+    public function clearSearch()
+    {
+        $this->search = '';        
+    }
+
     public function openCreateFolderModal()
     {
         if (!Auth::check()) {
@@ -155,7 +160,7 @@ class Folder extends Component
 
     public function render()
     {
-        
+        $this->refreshContents();
 
         return view('livewire.page.folder');
     }

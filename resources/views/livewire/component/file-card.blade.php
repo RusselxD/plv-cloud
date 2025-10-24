@@ -28,22 +28,9 @@
                 <p>Download</p>
             </div>
 
-            <!-- <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
-                <img src="{{ asset('/assets/details.svg') }}" class="w-4" />
-                <p>Details</p>
-            </div> -->
-            
-            @if (auth()->id() !== $file->user_id)
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                    wire:click="openReportModal">
-                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
-                    <p>Report</p>
-                </div>
-            @endif
-
             @if ($currentUserCanModify)
                 <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                wire:click="openRenameModal">
+                    wire:click="openRenameModal">
                     <img src="{{ asset('/assets/edit.svg') }}" class="w-4" />
                     <p>Rename</p>
                 </div>
@@ -53,14 +40,22 @@
                     <p>Delete</p>
                 </div>
             @endif
-            
+
+            @if (auth()->id() !== $file->user_id)
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+                    wire:click="openReportModal">
+                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
+                    <p>Report</p>
+                </div>
+            @endif
+
         </div>
     </div>
 
     <!-- Rename Modal -->
     @if ($renameModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.modal.rename-modal :targetId="$file->id" :isAFolder="false" :oldName="$file->name"/>
+            <livewire:component.modal.rename-modal :targetId="$file->id" :isAFolder="false" :oldName="$file->name" />
         </div>
     @endif
 
@@ -74,7 +69,7 @@
     <!-- Report File Modal -->
     @if ($reportModalIsOpen)
         <div wire:click.stop>
-            <livewire:component.modal.report-modal :reportedItemId="$file->id" :isAFolder="false"/>
+            <livewire:component.modal.report-modal :reportedItemId="$file->id" :isAFolder="false" />
         </div>
     @endif
 </div>

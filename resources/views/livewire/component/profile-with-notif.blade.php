@@ -1,13 +1,13 @@
 <div class="flex items-center gap-3 h-16">
 
     @auth
-        <div class="w-10 h-10 p-2 bg-white rounded-full relative">
+        <a href="{{ route('notifications') }}" class="w-10 h-10 p-2 bg-white rounded-full relative">
             <img src="{{ asset('/assets/bell.svg') }}" class="" />
             @if($hasANotif)
                 <div class="absolute bg-blue-600 w-3 h-3 rounded-full top-0 right-0">
                 </div>
             @endif  
-        </div>
+        </a>
 
         <a href="{{ route('user', ['username' => auth()->user()->username]) }}"
             class="hover:bg-gray-200 flex gap-2 p-3 cursor-pointer rounded-lg transition-colors duration-100 ease-in-out">

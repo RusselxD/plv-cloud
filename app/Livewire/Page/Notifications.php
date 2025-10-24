@@ -25,53 +25,107 @@ class Notifications extends Component
 
     public $search;
 
-    public $showAll = true;    
+    public $showAll = true;
 
     public $allNotifsCount = 0;
     public $unreadNotifsCount = 0;
 
-    public function clickSearch(){}
+    public $confirmDeleteAllModalIsOpen = false;
 
-    public function toggleShowAll(){
-        if (!$this->showAll){            
-            $this->showAll = true;            
+    public function clickSearch()
+    {
+    }
+
+    public function sendDispatchForNotifUpdate(){
+        $this->dispatch('update-notifs'); // caught by Sidebar and ProfileWithNotif
+    }
+
+    public function toggleShowAll()
+    {
+        if (!$this->showAll) {
+            $this->showAll = true;
         }
     }
 
-    public function showUnread(){
-        if ($this->showAll){
+    public function showUnread()
+    {
+        if ($this->showAll) {
             $this->showAll = false;
         }
-    }    
-
-    public function markAllAsRead(){
-        Notification::where('user_id', auth()->id())->where('is_read', false)->update(['is_read' => true]);
     }
 
-    public function markAsRead($id){
+    public function markAllAsRead()
+    {
+        Notification::where('user_id', auth()->id())->where('is_read', false)->update(['is_read' => true]);
+        $this->sendDispatchForNotifUpdate();
+    }
+
+    public function openConfirmDeleteAllNotificationsModal()
+    {
+        $this->confirmDeleteAllModalIsOpen = true;
+    }
+
+    public function closeConfirmDeleteAllNotificationsModal()
+    {
+        $this->confirmDeleteAllModalIsOpen = false;
+    }
+
+    public function markAsRead($id)
+    {
         $notification = Notification::find($id);
         if ($notification) {
             $notification->is_read = true;
             $notification->save();
-        }
+            $this->sendDispatchForNotifUpdate();
+        }    
     }
 
-    public function deleteNotification($id){
+    public function goToNotificationURL($notificationId, $url)
+    {
+        Notification::find($notificationId)->update(['is_read' => true]);
+        return redirect($url);
+    }
+
+
+    public function deleteNotification($id)
+    {
         $notification = Notification::find($id);
         if ($notification) {
             $notification->delete();
             $this->dispatch('success_flash', message: 'Notification deleted successfully');
+            $this->sendDispatchForNotifUpdate();
         }
+    }
+
+    public function deleteAllNotifications()
+    {
+        Notification::where('user_id', auth()->id())->delete();
+        $this->dispatch('success_flash', message: 'All notifications deleted successfully');
+        $this->sendDispatchForNotifUpdate();
+        $this->confirmDeleteAllModalIsOpen = false;
     }
 
     public function render()
     {
         $this->allNotifsCount = Notification::where('user_id', auth()->id())->count();
         $this->unreadNotifsCount = Notification::where('user_id', auth()->id())->where('is_read', false)->count();
-        
-        $notifications = $this->showAll ? 
-            Notification::where('user_id', auth()->id())->get() :
-            Notification::where('user_id', auth()->id())->where('is_read', false)->get();
+
+        $query = Notification::where('user_id', auth()->id());
+
+        // Apply search filter if search has content
+        if (!empty($this->search)) {
+            $query->where(function ($q) {
+                $q->where('title', 'LIKE', '%' . $this->search . '%')
+                    ->orWhere('message', 'LIKE', '%' . $this->search . '%');
+            });
+        }
+
+        // Apply read/unread filter
+        if (!$this->showAll) {
+            $query->where('is_read', false);
+        }
+
+        $notifications = $query->orderBy('created_at', 'desc')->get();
 
         return view('livewire.page.notifications', compact('notifications'));
     }

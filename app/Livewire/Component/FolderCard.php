@@ -73,11 +73,28 @@ class FolderCard extends Component
         $this->confirmDeleteModalIsOpen = true;
     }
 
-    public function determineIfUserCanModify(){
-        if($this->folder->course_id == null){
+    public function determineIfUserCanModify()
+    {
 
-        } else {
-            $this->currentUserCanModify = auth()->id() == $this->folder->user_id;
+        $currentUserId = auth()->id();
+
+        if ($currentUserId === null) {
+            $this->currentUserCanModify = false;
+            return;
+        }
+
+        // early out if the current user is the owner of this folder
+        if ($this->folder->user_id == $currentUserId) {
+            $this->currentUserCanModify = true;
+            return;
+        }
+
+        // dump($this->folder);
+        if ($this->folder->course_id === null) {
+            // this means that this folder is under a folder 
+
+            $this->currentUserCanModify = $this->folder->folder->user_id == $currentUserId // owner of parent folder
+                || $this->folder->folder->folderContributors->contains('user_id', $currentUserId); // contributor in parent folder
         }
     }
 
@@ -85,7 +102,7 @@ class FolderCard extends Component
     {
         $this->folder = Folder::where('id', $folder->id)
             ->withCount(['files', 'children'])
-            ->with('user:id,username,profile_picture')
+            ->with('user:id,username,profile_picture', 'course', 'folder.folderContributors')
             ->first();
         $this->totalContents = $this->folder->files_count + $this->folder->children_count;
 

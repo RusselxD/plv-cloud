@@ -51,11 +51,11 @@ class FolderDetailsPane extends Component
             // changed folder privacy to (public/private)            
         ]);
 
-        UserActivity::create([
-            'user_id' => auth()->id(),
-            'details' => 'Changed folder "' . $this->folder->name . '" privacy to ' . ($this->folder->is_public ? 'public' : 'private'),
-            // Changed folder "Name" privacy to (public/private)            
-        ]);
+        // UserActivity::create([
+        //     'user_id' => auth()->id(),
+        //     'details' => 'Changed folder "' . $this->folder->name . '" privacy to ' . ($this->folder->is_public ? 'public' : 'private'),
+        //     // Changed folder "Name" privacy to (public/private)            
+        // ]);
 
         $this->folder->load([
             'folderLogs.user:id,username,profile_picture',
@@ -125,18 +125,18 @@ class FolderDetailsPane extends Component
             // approved/declined the request of username to be a contributor
         ]);
 
-        UserActivity::create([
-            'user_id' => auth()->id(),
-            'details' => ($approved ? 'Approved' : 'Declined') . ' the request of ' . $request->user->username . ' to be a contributor in "' . $this->folder->name . '"',
-            // Approved/Declined the request of username to be a contributor in "Name"
-        ]);
+        // UserActivity::create([
+        //     'user_id' => auth()->id(),
+        //     'details' => ($approved ? 'Approved' : 'Declined') . ' the request of ' . $request->user->username . ' to be a contributor in "' . $this->folder->name . '"',
+        //     // Approved/Declined the request of username to be a contributor in "Name"
+        // ]);
 
         $request->delete();
         $this->folder->load([
             'folderContributors.user:id,username,profile_picture',
         ]);
         $this->storeContributors();
-        
+
         $this->dispatch('success_flash', message: 'Request ' . ($approved ? 'approved' : 'declined') . ' successfully');
     }
 
@@ -156,11 +156,11 @@ class FolderDetailsPane extends Component
             // acknowledged the report by username of "reported_item_name"
         ]);
 
-        UserActivity::create([
-            'user_id' => auth()->id(),
-            'details' => 'Acknowledged the report by ' . $report['username'] . ' of "' . $report['reported_item_name'] . '" in folder "' . $this->folder->name . '"',
-            // Acknowledged the report by username of "reported_item_name"
-        ]);
+        // UserActivity::create([
+        //     'user_id' => auth()->id(),
+        //     'details' => 'Acknowledged the report by ' . $report['username'] . ' of "' . $report['reported_item_name'] . '" in folder "' . $this->folder->name . '"',
+        //     // Acknowledged the report by username of "reported_item_name"
+        // ]);
 
 
         $this->folder->load([
@@ -184,9 +184,15 @@ class FolderDetailsPane extends Component
                 'username' => $report->user->username,
                 'reason' => $report->reason,
                 'reported_date' => $report->created_at->format('M d, Y'),
-                'is_acknowledged' => $report->is_acknowledged
+                'is_acknowledged' => $report->is_acknowledged,
+                'non_formatted_date' => $report->created_at, // for sorting
             ];
         }
+
+        // sort by date (newest first)
+        $this->reports = $this->reports
+            ->sortByDesc('non_formatted_date');
+
     }
 
     private function collectReports()
@@ -236,6 +242,28 @@ class FolderDetailsPane extends Component
         }
 
         $this->folder->unsetRelation('folderContributors');
+    }
+
+    public function removeAContributor($id, $username)
+    {
+        FolderContributors::where('user_id', $id)->where('folder_id', $this->folder->id)->delete();
+        FolderLog::create([
+            'user_id' => $this->folder->user_id,
+            'folder_id' => $this->folder->id,
+            'details' => 'removed ' . $username . ' as a contributor.'
+        ]);
+
+        $this->logs = [];
+        $this->contributors = []; // Reset the array before reloading
+        $this->folder->load([
+            'folderContributors.user:id,username,profile_picture',
+            'folderLogs.user:id,username,profile_picture',
+        ]);
+        $this->storeContributors();
+        $this->storeLogs();
+
+        $this->dispatch('success_flash', message: 'Contributor removed successfully.');
+
     }
 
     private function storeCounts()

@@ -1,4 +1,4 @@
-@props(['name', 'route', 'path'])
+@props(['name', 'route', 'path', 'notif_count' => 0])
 
 @php
      $activeIcons = [
@@ -19,11 +19,21 @@
      <div class="flex items-center justify-start px-3 py-2 rounded-md gap-2 bg-gray-200">
           {!! $activeIcons[$route] !!}
           <p>{{ $name }}</p>
+          @if ($name === "Notifications" && $notif_count > 0)
+               <span class="ml-1 w-6 h-6 rounded-full bg-blue-600 text-white text-sm flex items-center justify-center">
+                    {{ $notif_count }}
+               </span>
+          @endif
      </div>
 @else
      <a href="{{ route($route) }}"
           class="flex items-center justify-start cursor-pointer px-3 py-2 rounded-md gap-2 hover:bg-gray-200">
           {!! $noneActiveIcons[$route] !!}
           <p>{{ $name }}</p>
+          @if ($name === "Notifications" && $notif_count > 0)
+               <span class="ml-1 w-6 h-6 rounded-full bg-blue-600 text-white text-sm flex items-center justify-center">
+                    {{ $notif_count }}
+               </span>
+          @endif
      </a>
 @endif

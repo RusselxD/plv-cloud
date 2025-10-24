@@ -3,6 +3,7 @@
 namespace App\Livewire\Component;
 
 use App\Models\Notification;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ProfileWithNotif extends Component
@@ -10,10 +11,16 @@ class ProfileWithNotif extends Component
     public $isLoggedIn = false;
     public $hasANotif = false;
 
+    #[On('update-notifs')] // from Notifications Page
+    public function refresh(){
+        if ($this->isLoggedIn){
+            $this->render();
+        }
+    }
+
     public function mount(){
         $this->isLoggedIn = auth()->check();        
     }
-
 
     public function render()
     {

@@ -10,7 +10,7 @@
                 <p class="text-gray-600 text-sm mb-2">Menu</p>
                 <div class="space-y-1">
                     <x-ui.sidebar.link name="Home" route="home" path="/" />
-                    <x-ui.sidebar.link name="Notifications" route="notifications" path="notifications" />
+                    <x-ui.sidebar.link name="Notifications" route="notifications" path="notifications" :notif_count="$notifs_count" />
                     <x-ui.sidebar.link name="Saved" route="saved" path="saved" />
                 </div>
 
