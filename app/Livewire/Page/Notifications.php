@@ -32,7 +32,7 @@ class Notifications extends Component
 
     public $confirmDeleteAllModalIsOpen = false;
 
-    public function clickSearch()
+    public function submitSearch()
     {
     }
 

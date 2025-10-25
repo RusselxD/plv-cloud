@@ -4,6 +4,8 @@ namespace App\Livewire\Component;
 
 use App\Models\File;
 use App\Models\FolderContributors;
+use App\Models\Save;
+use App\Models\UserActivity;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -22,6 +24,8 @@ class FileCard extends Component
     public $reportModalIsOpen = false;
 
     public $currentUserCanModify = false;
+
+    public $isSaved;
 
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
@@ -82,7 +86,7 @@ class FileCard extends Component
         if ($this->file->course_id == null){
             $folderId = $this->file->folder_id;
 
-            $contributors = FolderContributors::where('folder_id', $folderId)->pluck('user_id')->toArray();
+            $contributors = $this->file->folder->folderContributors->pluck('user_id')->toArray();
             // dump($contributors);
             $this->currentUserCanModify = in_array(auth()->id(), $contributors) || auth()->id() == $this->file->folder->user_id;
         } else {
@@ -143,12 +147,57 @@ class FileCard extends Component
         };
     }
 
+        public function saveFile()
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        Save::create(
+            ['user_id' => auth()->id(), 'file_id' => $this->file->id]
+        );
+
+        UserActivity::create([
+            'user_id'=> auth()->id(),
+            'details' => "Saved file: " . $this->file->name
+        ]);
+
+        $this->dispatch('success_flash', message: 'File saved successfully.');
+        $this->optionsAreOpen = false;
+        $this->isSaved = true;
+    }
+
+    public function unsaveFile()
+    {
+        if (!auth()->check()) {
+            return;
+        }        
+
+        Save::where('user_id', auth()->id())
+            ->where('file_id', $this->file->id)
+            ->delete();
+
+        UserActivity::create([
+            'user_id'=> auth()->id(),
+            'details' => "Unsaved file: " . $this->file->name
+        ]);
+
+        $this->dispatch('unsave-file'); // to Saved Page
+        $this->dispatch('success_flash', message: 'File unsaved successfully.');
+        $this->optionsAreOpen = false;
+        $this->isSaved = false;
+    }
+
     public function mount($file)
     {
         $this->file = $file;
         $this->icon = $this->getFileIcon($file->mime_type);
 
         $this->determineIfUserCanModify();
+
+        $this->isSaved = Save::where('user_id', auth()->id())
+            ->where('file_id', $this->file->id)
+            ->exists();
     }
 
     public function render()

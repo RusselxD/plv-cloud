@@ -22,6 +22,21 @@
     <div x-data="{ open: @entangle('optionsAreOpen') }" class="absolute bottom-4 right-12">
         <div x-show="open" x-collapse @click.away="$wire.closeOptions()" x-cloak
             class="w-40 bg-white rounded-sm border overflow-hidden shadow-md text-sm">
+
+            @auth
+                @if ($isSaved)
+                    <div class="flex cursor-pointer items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="unsaveFile">
+                        <img src="{{ asset('assets/save-filled.svg') }}" class="w-4" />
+                        <p>Unsave</p>
+                    </div>
+                @else
+                    <div class="flex cursor-pointer items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="saveFile">
+                        <img src="{{ asset('assets/save.svg') }}" class="w-4" />
+                        <p>Save</p>
+                    </div>
+                @endif
+            @endauth
+
             <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
                 wire:click="downloadFile">
                 <img src="{{ asset('/assets/download.svg') }}" class="w-4" />

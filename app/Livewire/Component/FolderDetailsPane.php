@@ -30,8 +30,8 @@ class FolderDetailsPane extends Component
     #[On('close-rename-modal')] // from RenameModal
     public function refresh()
     {
-        $this->folder->loadCount(['files', 'children']);
-        $this->storeCounts();
+        // $this->folder->loadCount(['files', 'children']);
+        // $this->storeCounts();
 
         $this->folder->load([
             'folderLogs.user:id,username,profile_picture',
@@ -274,13 +274,14 @@ class FolderDetailsPane extends Component
         unset($this->folder->files_count, $this->folder->children_count);
     }
 
-    public function mount($uuid)
+    public function mount($folder)
     {
         // First, get the folder with minimal data to determine access level
-        $this->folder = Folder::where('uuid', $uuid)
-            ->with(['user:id,username,profile_picture'])
-            ->withCount(['files', 'children'])
-            ->firstOrFail();
+        // $this->folder = Folder::where('uuid', $uuid)
+        //     ->with(['user:id,username,profile_picture'])
+        //     ->withCount(['files', 'children'])
+        //     ->firstOrFail();
+        $this->folder = $folder;
 
         $this->userIsTheOwner = $this->folder->user_id === auth()->id();
 
@@ -324,11 +325,13 @@ class FolderDetailsPane extends Component
             $this->storeContributors();
         }
 
-        $this->storeCounts();
+        // $this->storeCounts();
     }
 
     public function render()
     {
+        $this->folder->loadCount(['files', 'children']);
+        $this->storeCounts();
         return view('livewire.component.folder-details-pane', ['folder' => $this->folder]);
     }
 }

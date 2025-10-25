@@ -39,8 +39,9 @@ class Folder extends Component
     public $folders;
     public $files;
 
-    public function refreshContents(){
-        $this->folders = FolderModel::with('user:id,username,profile_picture')
+    public function refreshContents()
+    {
+        $this->folders = FolderModel::with('user:id,username,profile_picture', 'course', 'folderContributors', 'folder')
             ->when($this->search, function ($query) {
 
                 $query->where(function ($q) {
@@ -57,7 +58,8 @@ class Folder extends Component
             ->where('parent_id', $this->folder->id)
             ->get();
 
-        $this->files = File::when($this->search, function ($query) {
+        $this->files = File::with('folder.folderContributors')
+            ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
                 // WHERE NAME LIKE %search%
             })
@@ -77,7 +79,7 @@ class Folder extends Component
 
     public function clearSearch()
     {
-        $this->search = '';        
+        $this->search = '';
     }
 
     public function openCreateFolderModal()
@@ -102,7 +104,7 @@ class Folder extends Component
 
     public function openRenameModal()
     {
-        if(auth()->id() != $this->folder->user_id){
+        if (auth()->id() != $this->folder->user_id) {
             return;
         }
         $this->renameModalIsOpen = true;
@@ -156,7 +158,7 @@ class Folder extends Component
 
         $this->addFolderCrumbs();
         $this->refreshContents();
-    }    
+    }
 
     public function render()
     {

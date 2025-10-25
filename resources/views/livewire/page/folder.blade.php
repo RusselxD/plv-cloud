@@ -111,7 +111,7 @@
             'bg-slate-100 fixed right-3 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide',
         ])
             :class="detailPanelOpen ? 'w-[22rem]' : 'w-0'">
-            <livewire:component.folder-details-pane :uuid="$this->folder->uuid" />
+            <livewire:component.folder-details-pane :folder="$this->folder" />
         </div>
 
     </div>

@@ -33,4 +33,9 @@ class File extends Model
     {
         return $this->hasMany(Report::class, 'reported_file_id');
     }
+
+    public function saves()
+    {
+        return $this->hasMany(Save::class);
+    }
 }

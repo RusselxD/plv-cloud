@@ -51,8 +51,8 @@ class Course extends Component
 
     public function render()
     {
-        $folders = Folder::select('id', 'name', 'uuid', 'user_id')
-            ->with('user:id,username,profile_picture')
+        $folders = Folder::select('id', 'name', 'uuid', 'user_id', 'course_id')
+            ->with('user:id,username,profile_picture', 'course', 'folderContributors')
             ->when($this->search, function ($query) {
 
                 $query->where(function ($q) {

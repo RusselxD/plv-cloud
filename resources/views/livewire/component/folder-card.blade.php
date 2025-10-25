@@ -42,6 +42,20 @@
         <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
             class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
 
+            @auth
+                @if ($isSaved)
+                    <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="unsaveFolder">
+                        <img src="{{ asset('assets/save-filled.svg') }}" class="w-4" />
+                        <p>Unsave</p>
+                    </div>
+                @else
+                    <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="saveFolder">
+                        <img src="{{ asset('assets/save.svg') }}" class="w-4" />
+                        <p>Save</p>
+                    </div>
+                @endif
+            @endauth
+
             @if ($currentUserCanModify)
                 <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
@@ -51,7 +65,7 @@
                     wire:click.stop="openConfirmDeleteModal">
                     <img src="{{ asset('assets/delete.svg') }}" class="w-4" />
                     <p>Delete</p>
-                </div>                
+                </div>
             @endif
 
             @if (auth()->id() !== $folder->user_id)
@@ -60,7 +74,7 @@
                     <p>Report</p>
                 </div>
             @endif
-            
+
         </div>
     </div>
 

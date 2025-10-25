@@ -3,6 +3,8 @@
 namespace App\Livewire\Component;
 
 use App\Models\Folder;
+use App\Models\Save;
+use App\Models\UserActivity;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -21,6 +23,8 @@ class FolderCard extends Component
     public $confirmDeleteModalIsOpen = false;
 
     public $currentUserCanModify = false;
+    
+    public $isSaved;
 
     #[On('close-rename-modal')] // from RenameModal
     public function closeRenameModal()
@@ -96,19 +100,66 @@ class FolderCard extends Component
             $this->currentUserCanModify = $this->folder->folder->user_id == $currentUserId // owner of parent folder
                 || $this->folder->folder->folderContributors->contains('user_id', $currentUserId); // contributor in parent folder
         }
+    }    
+
+    public function saveFolder()
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        Save::create(
+            ['user_id' => auth()->id(), 'folder_id' => $this->folder->id]
+        );
+
+        UserActivity::create([
+            'user_id'=> auth()->id(),
+            'details' => "Saved folder: " . $this->folder->name
+        ]);
+        
+        $this->dispatch('success_flash', message: 'Folder saved successfully.');        
+        $this->openKebabMenu = false;
+        $this->isSaved = true;
+    }
+
+    public function unsaveFolder()
+    {
+        if (!auth()->check()) {
+            return;
+        }        
+
+        Save::where('user_id', auth()->id())
+            ->where('folder_id', $this->folder->id)
+            ->delete();
+
+        UserActivity::create([
+            'user_id'=> auth()->id(),
+            'details' => "Unsaved folder: " . $this->folder->name
+        ]);
+
+        $this->dispatch('unsave-folder'); // to Saved Page
+        $this->dispatch('success_flash', message: 'Folder unsaved successfully.');
+        $this->openKebabMenu = false;
+        $this->isSaved = false;
     }
 
     public function mount($folder)
     {
-        $this->folder = Folder::where('id', $folder->id)
-            ->withCount(['files', 'children'])
-            ->with('user:id,username,profile_picture', 'course', 'folder.folderContributors')
-            ->first();
+        // $this->folder = Folder::where('id', $folder->id)
+        //     ->withCount(['files', 'children'])
+        //     ->with('user:id,username,profile_picture', 'course', 'folder.folderContributors')
+        //     ->first();
+        $this->folder = $folder;
+
         $this->totalContents = $this->folder->files_count + $this->folder->children_count;
 
         $this->user = $this->folder->user;
 
         $this->determineIfUserCanModify();
+
+        $this->isSaved = Save::where('user_id', auth()->id())
+            ->where('folder_id', $this->folder->id)
+            ->exists();
     }
 
     public function render()

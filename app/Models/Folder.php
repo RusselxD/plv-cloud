@@ -60,6 +60,11 @@ class Folder extends Model
         return $this->hasMany(Report::class, 'reported_folder_id');
     }
 
+    public function saves()
+    {
+        return $this->hasMany(Save::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
