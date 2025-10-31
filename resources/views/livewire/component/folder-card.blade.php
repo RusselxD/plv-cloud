@@ -1,4 +1,4 @@
-<div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative" wire:click="goToFolder">
+<div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative z-50" wire:click="goToFolder">
     <div class="grid grid-cols-[0.5fr_2fr]">
         <!-- Folder Icon -->
         <div class="flex items-center justify-center aspect-square h-full border-r border-gray-500">

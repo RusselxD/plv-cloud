@@ -19,7 +19,7 @@
             class="w-8 rounded-full p-2 transition-colors cursor-pointer duration-100 ease-in-out hover:bg-gray-200" />
     </div>
 
-    <div x-data="{ open: @entangle('optionsAreOpen') }" class="absolute bottom-4 right-12">
+    <div x-data="{ open: @entangle('optionsAreOpen') }" class="absolute bottom-4 right-12 z-50">
         <div x-show="open" x-collapse @click.away="$wire.closeOptions()" x-cloak
             class="w-40 bg-white rounded-sm border overflow-hidden shadow-md text-sm">
 
@@ -56,7 +56,7 @@
                 </div>
             @endif
 
-            @if (auth()->id() !== $file->user_id)
+            @if (auth()->id() !== $file->user_id && auth()->check())
                 <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
                     wire:click="openReportModal">
                     <img src="{{ asset('/assets/report.svg') }}" class="w-4" />

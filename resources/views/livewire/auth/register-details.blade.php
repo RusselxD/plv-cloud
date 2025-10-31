@@ -160,16 +160,6 @@
 
         <div class="mt-4 flex justify-between items-start w-full gap-3">
             <div class="w-full">
-                <label for="student_number" class="mb-1 text-sm text-primary">Student Number</label>
-                <input id="student_number" type="text" wire:model="studentNumber"
-                    class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
-                @error('studentNumber') <p
-                    class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
-                    {{ $message }}
-                </p> @enderror
-            </div>
-
-            <div class="w-full">
                 <label for="courseId" class="mb-1 text-sm text-primary">Course</label>
                 <select wire:model="courseId"
                     class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none">

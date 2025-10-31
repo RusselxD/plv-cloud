@@ -36,6 +36,11 @@ class Course extends Component
         $this->render();
     }
 
+    public function clearSearch()
+    {
+        $this->search = '';
+    }
+
     public function goToFolder($folderSlug)
     {
         return redirect()

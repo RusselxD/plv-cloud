@@ -78,16 +78,17 @@ class FileCard extends Component
         $this->confirmDeleteModalIsOpen = true;
     }
 
-    public function openReportModal(){
+    public function openReportModal()
+    {
         $this->reportModalIsOpen = true;
     }
 
-    public function determineIfUserCanModify(){
-        if ($this->file->course_id == null){
-            $folderId = $this->file->folder_id;
+    public function determineIfUserCanModify()
+    {
+        if ($this->file->course_id == null) {
 
             $contributors = $this->file->folder->folderContributors->pluck('user_id')->toArray();
-            // dump($contributors);
+
             $this->currentUserCanModify = in_array(auth()->id(), $contributors) || auth()->id() == $this->file->folder->user_id;
         } else {
             $this->currentUserCanModify = auth()->id() == $this->file->user_id;
@@ -147,7 +148,7 @@ class FileCard extends Component
         };
     }
 
-        public function saveFile()
+    public function saveFile()
     {
         if (!auth()->check()) {
             return;
@@ -158,7 +159,7 @@ class FileCard extends Component
         );
 
         UserActivity::create([
-            'user_id'=> auth()->id(),
+            'user_id' => auth()->id(),
             'details' => "Saved file: " . $this->file->name
         ]);
 
@@ -171,14 +172,14 @@ class FileCard extends Component
     {
         if (!auth()->check()) {
             return;
-        }        
+        }
 
         Save::where('user_id', auth()->id())
             ->where('file_id', $this->file->id)
             ->delete();
 
         UserActivity::create([
-            'user_id'=> auth()->id(),
+            'user_id' => auth()->id(),
             'details' => "Unsaved file: " . $this->file->name
         ]);
 

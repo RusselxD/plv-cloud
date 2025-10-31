@@ -3,7 +3,7 @@
     <div class="bg-slate-50 w-full rounded-lg flex justify-between items-center py-2 px-4">
         <form wire:submit.prevent="submitSearch"
             class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
-            <input wire:model.live.debounce.300ms="search" type="text" placeholder="Start typing to search."
+            <input wire:model.live.debounce.300ms="search" type="text" placeholder="Start typing to search notifications..."
                 class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
             <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -18,7 +18,7 @@
         <livewire:component.profile-with-notif />
     </div>
 
-    <div class="bg-slate-50/85 rounded-lg py-8 px-10 flex-1">
+    <div class="bg-slate-50/85 rounded-lg py-8 px-10 flex-1 flex flex-col">
         <h1 class="text-3xl font-bold">Notifications</h1>
         <p class="text-gray-800 mt-2">Stay updated with your recent activities.</p>
 
@@ -27,13 +27,13 @@
                 <button @class([
                     'py-2 px-5 rounded-lg border',
                     'bg-blue-600 text-white border-blue-500' => $showAll,
-                    'border-gray-400 cursor-pointer' => !$showAll
+                    'border-gray-400 cursor-pointer hover:bg-gray-200 transition-colors duration-100 ease-in-out' => !$showAll
                 ]) wire:click="toggleShowAll">All
                     ({{ $allNotifsCount }})</button>
                 <button @class([
                     'py-2 px-5 rounded-lg border',
                     'bg-blue-600 text-white border-blue-500' => !$showAll,
-                    'border-gray-400 cursor-pointer' => $showAll
+                    'border-gray-400 cursor-pointer hover:bg-gray-200 transition-colors duration-100 ease-in-out' => $showAll
                 ]) wire:click="showUnread">Unread
                     ({{ $unreadNotifsCount }})</button>
             </div>
@@ -66,17 +66,44 @@
 
         @if ($notifications->isEmpty())
 
-            <div class="flex items-center justify-center flex-col p-10 border bg-white rounded-md border-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-bell-icon lucide-bell w-16 h-16 text-gray-400">
-                    <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-                    <path
-                        d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
-                </svg>
-                <p class="text-xl font-medium my-2">No Notifications</p>
-                <p class="text-sm text-gray-600">You're all caught up!</p>
-            </div>
+            @if ($search)
+
+                <div class="flex flex-col items-center justify-center flex-1">
+                    <!-- Empty result of search -->
+                    <div class="w-20 h-20 flex items-center justify-center rounded-full bg-gray-200 -mt-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-search-icon lucide-search w-12 h-12">
+                            <path d="m21 21-4.34-4.34" />
+                            <circle cx="11" cy="11" r="8" />
+                        </svg>
+                    </div>
+                    <p class="text-xl font-medium my-4">No notifications found</p>
+                    <p class="text-gray-700 text-center break-all max-w-[80%] ">No notifications found for
+                        "<strong>{{ $search }}</strong>".</p>
+                    <p class="text-gray-700 text-center"> Try searching with different keywords.</p>
+                    <button wire:click="clearSearch"
+                        class="py-3 px-5 mt-4 rounded-lg hover:bg-gray-200 border border-gray-400 transition-colors duration-150 ease-in-out cursor-pointer">Clear
+                        Search</button>
+                </div>
+
+            @else
+
+                <div class="flex items-center justify-center flex-col p-10 border bg-white rounded-md border-gray-300 flex-1">
+                    <div class="w-20 h-20 flex items-center justify-center rounded-full bg-gray-200 -mt-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-bell-icon lucide-bell  w-12 h-12">
+                            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+                            <path
+                                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+                        </svg>
+                    </div>
+                    <p class="text-xl font-medium my-2">No Notifications</p>
+                    <p class="text-sm text-gray-600">You're all caught up!</p>
+                </div>
+
+            @endif
 
         @else
 

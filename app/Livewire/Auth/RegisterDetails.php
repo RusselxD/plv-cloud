@@ -19,8 +19,7 @@ class RegisterDetails extends Component
     public $email;
     public $username;
     public $password;
-    public $password_confirmation;
-    public $studentNumber;
+    public $password_confirmation;    
     public $firstName;
     public $lastName;
     public $courseId;
@@ -38,8 +37,7 @@ class RegisterDetails extends Component
                     ->symbols(),
                 'confirmed',
             ],
-            'password_confirmation' => ['required'],
-            'studentNumber' => ['required', 'unique:users,student_number', 'regex:/^\d{2}-\d{4}$/'],
+            'password_confirmation' => ['required'],            
             'firstName' => ['required', 'string', 'min:1', 'max:50'],
             'lastName' => ['required', 'string', 'min:1', 'max:50'],
             'courseId' => ['required', 'exists:courses,id'],
@@ -63,10 +61,6 @@ class RegisterDetails extends Component
 
         'password_confirmation.required' => 'Please confirm your password.',
 
-        'studentNumber.required' => 'Student number is required.',
-        'studentNumber.unique' => 'This student number is already registered.',
-        'studentNumber.regex' => 'Student number must follow the format: 12-3456.',
-
         'firstName.required' => 'Please enter your first name.',
         'firstName.min' => 'First name must have at least 1 character.',
         'firstName.max' => 'First name cannot be longer than 50 characters.',
@@ -86,8 +80,7 @@ class RegisterDetails extends Component
         $user = User::create([
             'email' => trim($this->email),
             'username' => $this->username,
-            'password' => bcrypt($this->password),
-            'student_number' => $this->studentNumber,
+            'password' => bcrypt($this->password),            
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'course_id' => $this->courseId,

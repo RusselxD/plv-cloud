@@ -34,9 +34,16 @@ class Notifications extends Component
 
     public function submitSearch()
     {
+        $this->render();
     }
 
-    public function sendDispatchForNotifUpdate(){
+    public function clearSearch()
+    {
+        $this->search = '';
+    }
+
+    public function sendDispatchForNotifUpdate()
+    {
         $this->dispatch('update-notifs'); // caught by Sidebar and ProfileWithNotif
     }
 
@@ -77,7 +84,7 @@ class Notifications extends Component
             $notification->is_read = true;
             $notification->save();
             $this->sendDispatchForNotifUpdate();
-        }    
+        }
     }
 
     public function goToNotificationURL($notificationId, $url)
@@ -118,6 +125,7 @@ class Notifications extends Component
                 $q->where('title', 'LIKE', '%' . $this->search . '%')
                     ->orWhere('message', 'LIKE', '%' . $this->search . '%');
             });
+            $this->showAll = true;
         }
 
         // Apply read/unread filter
