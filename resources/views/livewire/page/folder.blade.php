@@ -5,7 +5,7 @@
             <form wire:submit.prevent="clickSearch"
                 class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
-                    class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
+                    class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" maxlength="100" />
                 <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -32,26 +32,41 @@
 
                 <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs" />
 
-                <img src="{{ asset('/assets/details.svg') }}" @click="detailPanelOpen = !detailPanelOpen" @class([
-                    'w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out',
-                    'bg-blue-100 hover:bg-blue-200' => $detailPanelIsOpen,
-                    'hover:bg-gray-200' => !$detailPanelIsOpen,
-                ])
-                    :class="detailPanelOpen ? 'bg-blue-100 hover:bg-blue-200' : 'hover:bg-gray-200'" />
+                <div class="flex items-center space-x-1">
+                    @auth
+                        @if ($isSaved)
+                            <img src="{{ asset('assets/save-filled.svg') }}" class="w-6 cursor-pointer" wire:click="unsaveFolder"/>
+
+                        @else
+                            <img src="{{ asset('assets/save.svg') }}" class="w-6 cursor-pointer" wire:click="saveFolder"/>
+                        @endif
+                    @endauth
+                    <img src="{{ asset('/assets/details.svg') }}" @click="detailPanelOpen = !detailPanelOpen"
+                        class='w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out'
+                        :class="detailPanelOpen ? 'bg-blue-100 hover:bg-blue-200' : 'hover:bg-gray-200'" />
+                </div>
+
             </div>
 
             <div class="flex items-start justify-between my-5 border-b border-slate-500 pb-3">
-                <h1 @class([
-                    'text-2xl font-bold truncate max-w-[38rem] rounded-md -ml-2 py-1 pl-2 pr-3',
-                    'hover:bg-gray-200 cursor-pointer' => auth()->id() == $folder->user_id,
-                ])    wire:click="openRenameModal">{{ $folder->name }}</h1>
+                @if(auth()->id() === $folder->user_id)
+                    <h1 class="text-2xl font-bold truncate max-w-[38rem] rounded-md -ml-2 py-1 pl-2 pr-3 hover:bg-gray-200 cursor-pointer"
+                        wire:click="openRenameModal">
+                        {{ $folder->name }}
+                    </h1>
+                @else
+                    <h1 class="text-2xl font-bold truncate max-w-[38rem] rounded-md -ml-2 py-1 pl-2 pr-3">
+                        {{ $folder->name }}
+                    </h1>
+                @endif
+
                 @if ($currentUserIsEligibleToUpload)
                     <livewire:component.add-new-button :parentIsAFolder="true" :parentId="$folder->id" />
                 @endif
             </div>
 
             @if ($search && $folders->isEmpty() && $files->isEmpty())
-                <div class="flex flex-col items-center justify-center flex-1 -mt-10">
+                <div class="flex flex-col items-center justify-center flex-1 ">
                     <!-- Empty result of search -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -68,7 +83,7 @@
                         Search</button>
                 </div>
             @elseif(!$search && $folders->isEmpty() && $files->isEmpty())
-                <div class="flex flex-col items-center justify-center flex-1 -mt-20">
+                <div class="flex flex-col items-center justify-center mt-20">
                     <!-- No folders or files found in this folder. -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

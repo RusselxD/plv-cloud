@@ -57,7 +57,7 @@ class ReportModal extends Component
         "hate" => "Hate Speech / Violence",
         "copyright"=> "Copyright Violation",
         "illegal"=> "Illegal Content",
-        "notbelongs"=> "Doesn't belong in this folder",
+        "notbelongs"=> "Doesn't belong in this directory",
         "spam"=> "Spam / Irrelevant Content",
         "lowquality"=> "Low Quality / Broken File",
         "other"=> "Others (Please Specify)",

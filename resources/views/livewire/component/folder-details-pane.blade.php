@@ -165,10 +165,12 @@
         </div>
 
         @if (!$this->userIsAContributor)
+        <!-- Contributor's Tab (not authenticated as contributor) -->
             <p class="mt-3 mb-2 text-sm">Contributors</p>
             <div class="space-y-2">
                 <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
-                    <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
+                    <img src="{{ $folder->user->profile_picture ? asset('storage/' . $folder->user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                        alt="{{ $folder->user->username }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>                    
                     <div class="ml-2 flex-1 overflow-hidden">
                         <p class="text-sm font-medium block truncate max-w-[90%]">{{ $folder->user->username }}</p>
                         <p class="text-xs text-gray-500">Owner</p>
@@ -176,7 +178,8 @@
                 </div>
                 @foreach ($contributors as $contributor)
                     <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
-                        <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
+                        <img src="{{ $contributor['profile_picture'] ? asset('storage/' . $contributor['profile_picture']) : asset('assets/profile_picture/default.jpg') }}"    
+                            alt="{{ $contributor['username'] }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>
                         <div class="ml-2 flex-1 overflow-hidden">
                             <p class="text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
                             <p class="text-xs text-gray-500">Contributor</p>
@@ -256,7 +259,8 @@
                 x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100">
                 <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
-                    <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
+                    <img src="{{ $folder->user->profile_picture ? asset('storage/' . $folder->user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                    alt="{{ $folder->user->username }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>                    
                     <div class="ml-2 flex-1 overflow-hidden">
                         <p class="text-sm font-medium block truncate max-w-[90%]">{{ $folder->user->username }}</p>
                         <p class="text-xs text-gray-500">Owner</p>
@@ -265,7 +269,8 @@
                 @foreach ($contributors as $contributor)
                     <div class="w-full bg-white rounded-md p-3 flex justify-between items-center group">
                         <div class="flex items-center justify-start flex-1">
-                            <div class="rounded-full bg-gray-400 w-8 h-8 flex-shrink-0"></div>
+                            <img src="{{ $contributor['profile_picture'] ? asset('storage/' . $contributor['profile_picture']) : asset('assets/profile_picture/default.jpg') }}"
+                    alt="{{ $contributor['username'] }}'s profile picture" class="w-8 h-8 object-cover rounded-full"/>                            
                             <div class="ml-2 flex-1 overflow-hidden">
                                 <p class="text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
                                 <p class="text-xs text-gray-500">Contributor</p>
@@ -319,7 +324,8 @@
                                     'border-b border-gray-200' => !$loop->last,
                                 ])>
                                     <div class="flex items-center space-x-2">
-                                        <span class="rounded-full bg-gray-500 w-5 h-5 flex-shrink-0"></span>
+                                        <img src="{{ $request->user->profile_picture ? asset('storage/' . $request->user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                                            alt="{{ $request->user->username }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>                                        
                                         <div>
                                             <p class="text-sm font-medium break-all">{{ $request->user->username }}</p>
                                             <p class="text-xs text-gray-500">Requested {{ $request->created_at->diffForHumans() }}</p>
@@ -362,7 +368,8 @@
                         'border-b border-gray-300' => !$loop->last,
                     ])>
                         <div class="w-full flex items-start justify-start py-3 px-1">
-                            <div class="rounded-full bg-gray-400 w-6 h-6 flex-shrink-0"></div>
+                            <img src="{{ $log['profile_picture'] ? asset('storage/' . $log['profile_picture']) : asset('assets/profile_picture/default.jpg') }}"
+                                alt="{{ $log['username'] }}'s profile picture" class="w-6 h-6 object-cover rounded-full flex-shrink-0"/>                            
                             <div class="ml-2 flex-1 overflow-hidden">
                                 <p class="text-[13px] block break-words max-w-[90%]">
                                     <span>

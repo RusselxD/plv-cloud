@@ -1,4 +1,5 @@
-<div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative z-50" wire:click="goToFolder">
+<div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative"
+    wire:click="goToFolder">
     <div class="grid grid-cols-[0.5fr_2fr]">
         <!-- Folder Icon -->
         <div class="flex items-center justify-center aspect-square h-full border-r border-gray-500">
@@ -22,23 +23,25 @@
     </div>
 
     <!-- Bottom -->
-    <div class="flex items-center justify-between pr-2 border-t border-gray-600">
-        <div class="flex items-center justify-start gap-2 group py-[0.40rem] px-2 relative group"
-            wire:click.stop.self="goToProfile">
-            <div class="w-5 h-5 bg-gray-500 rounded-full">
-                <!-- Profile Picture -->
-            </div>
-            <p class="max-w-22 text-xs truncate group-hover:underline">{{ $folder->user->username }}</p>
+    @if ($showBottom)
+        <div class="flex items-center justify-between pr-2 border-t border-gray-600">
+            <div class="flex items-center justify-start gap-2 group py-[0.40rem] px-2 relative group"
+                wire:click.stop.self="goToProfile">
 
-            <!-- Profile Preview -->
-            <div wire:click.stop class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
-                <x-ui.general.profile-preview-card :user="$user" />
+                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                    alt="{{ $user->username }}'s profile picture" class="w-5 h-5 object-cover rounded-full" />
+                <p class="max-w-22 text-xs truncate group-hover:underline">{{ $folder->user->username }}</p>
+
+                <!-- Profile Preview -->
+                <div wire:click.stop class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
+                    <x-ui.general.profile-preview-card :user="$user" />
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <!-- Kebab Menu -->
-    <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-3 right-12">
+    <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-1 right-12 z-10">
         <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
             class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
 
@@ -56,6 +59,12 @@
                 @endif
             @endauth
 
+            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+                wire:click.stop="downloadFolder">
+                <img src="{{ asset('/assets/download.svg') }}" class="w-4" />
+                <p>Download</p>
+            </div>
+
             @if ($currentUserCanModify)
                 <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
                     <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
@@ -69,7 +78,7 @@
             @endif
 
             @if (auth()->id() !== $folder->user_id)
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer">
+                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer" wire:click.stop="openReportModal">
                     <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
                     <p>Report</p>
                 </div>
@@ -89,6 +98,13 @@
     @if ($confirmDeleteModalIsOpen)
         <div wire:click.stop>
             <livewire:component.modal.confirm-delete-modal :targetId="$folder->id" :isAFolder="true" />
+        </div>
+    @endif
+
+    <!-- Report File Modal -->
+    @if ($reportModalIsOpen)
+        <div wire:click.stop>
+            <livewire:component.modal.report-modal :reportedItemId="$folder->id" :isAFolder="true" />
         </div>
     @endif
 </div>

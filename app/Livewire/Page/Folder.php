@@ -6,6 +6,8 @@ use App\Models\Course;
 use App\Models\File;
 use \App\Models\Folder as FolderModel;
 use App\Models\FolderContributors;
+use App\Models\Save;
+use App\Models\UserActivity;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -135,6 +137,46 @@ class Folder extends Component
         array_unshift($this->breadcrumbs, ['name' => $course->abbreviation, 'url' => route('course', ['courseSlug' => $course->slug])]);
     }
 
+    public $isSaved;
+
+    public function saveFolder()
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        Save::create(
+            ['user_id' => auth()->id(), 'folder_id' => $this->folder->id]
+        );
+
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => "Saved folder: " . $this->folder->name
+        ]);
+
+        $this->dispatch('success_flash', message: 'Folder saved successfully.');
+        $this->isSaved = true;
+    }
+
+    public function unsaveFolder()
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        Save::where('user_id', auth()->id())
+            ->where('folder_id', $this->folder->id)
+            ->delete();
+
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => "Unsaved folder: " . $this->folder->name
+        ]);
+
+        $this->dispatch('success_flash', message: 'Folder unsaved successfully.');
+        $this->isSaved = false;
+    }
+
     public function mount($uuid)
     {
         $this->folder = FolderModel::where('uuid', $uuid)->firstOrFail();
@@ -158,6 +200,10 @@ class Folder extends Component
 
         $this->addFolderCrumbs();
         $this->refreshContents();
+
+        $this->isSaved = Save::where('user_id', auth()->id())
+            ->where('folder_id', $this->folder->id)
+            ->exists();
     }
 
     public function render()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\SignupVerifyController;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
@@ -57,5 +58,8 @@ Route::get('/folder/{uuid}', Folder::class)
 
 Route::get('/u/{username}', User::class)
     ->name('user');
+
+Route::get('/file/download/{id}', [FileController::class, 'download'])->name('file.download');
+Route::get('/folder/download/{id}', [FileController::class, 'downloadFolder'])->name('folder.download');
 
 Route::get('/signup/verify/{token}', [SignupVerifyController::class, 'verify'])->name('verify.email');

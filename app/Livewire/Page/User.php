@@ -31,6 +31,12 @@ class User extends Component
 
     public $updateProfileToPublic;
 
+    public function hydrate()
+    {
+        // Reload the user with counts after every request to prevent losing withCount data
+        $this->user->loadCount('files', 'folders');
+    }
+
     public function openEditing()
     {
         $this->isEditing = true;
@@ -127,8 +133,8 @@ class User extends Component
         // Update profile picture if uploaded
         if (is_object($this->newProfilePicture)) {
             // Delete old profile picture if exists
-            if ($this->user->profile_picture && \Storage::exists($this->user->profile_picture)) {
-                \Storage::delete($this->user->profile_picture);
+            if ($this->user->profile_picture && \Storage::disk('public')->exists($this->user->profile_picture)) {
+                \Storage::disk('public')->delete($this->user->profile_picture);
             }
 
             // Store new profile picture
@@ -156,6 +162,8 @@ class User extends Component
         // Update local state
         $this->newProfilePicture = $this->user->profile_picture;
 
+        $this->user->loadCount('files', 'folders');
+
         // Redirect to new username URL if username changed
         if ($usernameChanged) {
             session()->flash('success', 'Profile updated successfully.');
@@ -168,19 +176,18 @@ class User extends Component
 
     public function mount($username)
     {
-        $this->user = UserModel::with('course', 'files', 'folders')->where("username", $username)->firstOrFail();
+        $this->user = UserModel::with('course', 'files', 'folders', 'userActivities')->withCount('files', 'folders')->where("username", $username)->firstOrFail();
+        if (auth()->id() == $this->user->id) {
+            $this->courses = Course::get();
 
-        // if (auth()->id() == $this->user->id) {
-        $this->courses = Course::get();
+            $this->newProfilePicture = $this->user->profile_picture;
 
-        $this->newProfilePicture = $this->user->profile_picture;
-
-        $this->newFirstName = $this->user->first_name;
-        $this->newLastName = $this->user->last_name;
-        $this->newUsername = $this->user->username;
-        $this->newCourseId = $this->user->course_id;
-        $this->updateProfileToPublic = $this->user->is_public;
-        // }
+            $this->newFirstName = $this->user->first_name;
+            $this->newLastName = $this->user->last_name;
+            $this->newUsername = $this->user->username;
+            $this->newCourseId = $this->user->course_id;
+            $this->updateProfileToPublic = $this->user->is_public;
+        }
 
     }
 

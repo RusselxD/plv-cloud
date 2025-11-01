@@ -5,7 +5,7 @@
             <form wire:submit.prevent="clickSearch"
                 class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-96 h-12">
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
-                    class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" />
+                    class="px-3 flex-1 focus:outline-none focus:ring-0 border-none text-sm" maxlength="100"/>
                 <button class="p-3 h-full cursor-pointer hover:bg-gray-200" type="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

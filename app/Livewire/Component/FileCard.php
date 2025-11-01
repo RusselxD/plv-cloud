@@ -51,11 +51,12 @@ class FileCard extends Component
     public function downloadFile()
     {
         File::where('id', $this->file->id)->update(['download_count' => $this->file->download_count + 1]);
-        $this->dispatch('success_flash', message: 'File downloaded successfully');
-        return response()->download(
-            storage_path('app/public/' . $this->file->storage_path),
-            $this->file->name  // Use the original filename
-        );
+
+        // Dispatch event to trigger download via JavaScript
+        $this->dispatch('trigger-download', [
+            'url' => route('file.download', ['id' => $this->file->id]),
+            'filename' => $this->file->name
+        ]);
     }
 
     public function clickKebab()

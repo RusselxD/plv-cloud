@@ -1,10 +1,9 @@
-<div class="border-l-2 border-gray-400 flex-1 flex flex-col items-center -my-3 -mr-3 pb-5">
+<div class="border-l border-gray-400 bg-gray-50 flex-1 flex flex-col items-center -my-3 -mr-3 pb-5">
     <div class="p-7 w-full">
         <div class="flex items-center">
             <div class="mr-5">
                 <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
-                    alt="{{ $user->username }}'s profile picture"
-                    class="bg-gray-200 rounded-full w-20 h-20 object-cover" />
+                    alt="{{ $user->username }}'s profile picture" class="rounded-full w-20 h-20 object-cover" />
             </div>
             <div>
                 <p class="font-medium text-lg">{{ $user->first_name }} {{ $user->last_name }}</p>
@@ -22,7 +21,7 @@
                         d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
                 </svg>
                 <div>
-                    <p class="font-bold text-lg">1</p>
+                    <p class="font-bold text-lg">{{ $user->folders_count }}</p>
                     <p class="text-gray-700">Folders</p>
                 </div>
             </div>
@@ -38,7 +37,7 @@
                     <path d="M16 17H8" />
                 </svg>
                 <div>
-                    <p class="font-bold text-lg">1</p>
+                    <p class="font-bold text-lg">{{ $user->files_count }}</p>
                     <p class="text-gray-700">Files</p>
                 </div>
             </div>
@@ -52,7 +51,7 @@
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 </svg>
                 <div>
-                    <p class="font-bold text-lg">999999999999999999</p>
+                    <p class="font-bold text-lg">{{ $user->files_count + $user->folders_count }}</p>
                     <p class="text-gray-700">Total Uploads</p>
                 </div>
             </div>
@@ -301,17 +300,17 @@
                         <p class="text-gray-700 text-sm mb-1">Profile Visibility</p>
                         <div class="w-full grid grid-cols-2 gap-5">
                             <div :class="{
-                                                                    'border-green-500 bg-green-50': isPublic,
-                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': !isPublic
-                                                                }"
+                                                                                                                                                                    'border-green-500 bg-green-50': isPublic,
+                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': !isPublic
+                                                                                                                                                                }"
                                 class="p-3 rounded-lg border-2 flex items-center justify-start"
                                 @click="isPublic = true; $wire.setProfileToPublic()">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     :class="{
-                                                                            'bg-green-200 text-green-700': isPublic,
-                                                                            'bg-gray-200 text-gray-700': !isPublic
-                                                                        }"
+                                                                                                                                                                            'bg-green-200 text-green-700': isPublic,
+                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic
+                                                                                                                                                                        }"
                                     class="lucide lucide-eye-icon lucide-eye p-2 w-10 h-10 rounded-md">
                                     <path
                                         d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
@@ -324,17 +323,17 @@
                             </div>
 
                             <div :class="{
-                                                                    'border-gray-700 bg-gray-50': !isPublic,
-                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': isPublic
-                                                                }"
+                                                                                                                                                                    'border-gray-700 bg-gray-50': !isPublic,
+                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': isPublic
+                                                                                                                                                                }"
                                 class="p-3 rounded-lg border-2 flex items-center justify-start"
                                 @click="isPublic = false; $wire.setProfileToPrivate()">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     :class="{
-                                                                            'bg-gray-200 text-gray-700': !isPublic,
-                                                                            'bg-gray-200 text-gray-700': isPublic
-                                                                        }"
+                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic,
+                                                                                                                                                                            'bg-gray-200 text-gray-700': isPublic
+                                                                                                                                                                        }"
                                     class="lucide lucide-eye-off-icon lucide-eye-off p-2 w-10 h-10 rounded-md">
                                     <path
                                         d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
@@ -427,7 +426,64 @@
         </div>
     @endif
 
-    <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg">
+    @if ($user->is_public || $user->id == auth()->id())
 
-    </div>
+        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg">
+            <h1 class="text-lg font-semibold mb-3">Uploaded Content</h1>
+            @if ($user->folders_count > 0)
+                <p class="mb-2 font-medium">
+                    <span>Folders</span>
+                    <span>({{ $user->folders_count }})</span>
+                </p>
+                <div class="grid grid-cols-3 gap-7">
+                    @foreach ($user->folders as $folder)
+                        <livewire:component.folder-card :folder="$folder" :key="'user-folder-' . $folder->id" :showBottom="false" />
+                    @endforeach
+                </div>
+            @endif
+            @if ($user->files_count > 0)
+                <p class="mb-2 mt-3 font-medium">
+                    <span>Files</span>
+                    <span>({{ $user->files_count }})</span>
+                </p>
+                <div class="grid grid-cols-3 gap-7">
+                    @foreach ($user->files as $file)
+                        <livewire:component.file-card :file="$file" :key="'user-file-' . $file->id" />
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+    @else
+
+        <div
+            class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] px-5 py-14 rounded-lg text-center flex flex-col items-center justify-center space-y-4">
+            <div class="rounded-full w-20 h-20 bg-gray-200 flex justify-center items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-lock-icon lucide-lock w-10 h-10 text-gray-500">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            </div>
+            <p class="text-2xl font-semibold">This Account is Private</p>
+            <p class="text-gray-700 ">This user has set their account to private. Only they can view their uploaded content
+                on their profile.</p>
+        </div>
+    @endif
+
+    @if (auth()->id() == $user->id)
+        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg mt-5">
+            <h1 class="text-lg font-semibold mb-3">Activity Log</h1>
+            <div class="space-y-1 flex flex-col items-center">
+                @foreach ($user->userActivities as $activity)
+                    <div class="flex items-center justify-between  text-sm py-2 w-full">
+                        <p>{{ $activity->details }}</p>
+                        <p>{{ $activity->created_at->format('F j, Y h:i A') }}</p>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+    @endif
 </div>

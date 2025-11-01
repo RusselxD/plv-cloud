@@ -47,6 +47,7 @@ class AddNewButton extends Component
     public function openNewFolder()
     {
         $this->openCreateFolderModal = true;
+        $this->openOptions = false;
     }
 
     // Thank you copilot.
@@ -92,7 +93,7 @@ class AddNewButton extends Component
                 ($this->parentIsAFolder ? 'folder "' : 'course "') . $parentName . '"',
         ]);
 
-        if($this->parentIsAFolder){
+        if ($this->parentIsAFolder) {
             FolderLog::create([
                 'folder_id' => $this->parentId,
                 'user_id' => auth()->id(),
@@ -104,9 +105,9 @@ class AddNewButton extends Component
     // automatically runs when user insert file/s
     public function updatedUploads()
     {
-        // $this->validate([
-        //     'uploads.*' => 'required|file|mimes:zip',
-        // ]);
+        $this->validate([
+            'uploads.*' => 'file|max:102400', // 100MB max per file
+        ]);
 
         foreach ($this->uploads as $file) {
             $path = $file->store('uploads', 'public');
@@ -125,6 +126,9 @@ class AddNewButton extends Component
         }
 
         $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane
+        $this->dispatch('success_flash', message: 'File/s uploaded successfully.');
+        $this->reset('uploads');
+        $this->openOptions = false;
     }
 
     public function mount($parentIsAFolder, $parentId)

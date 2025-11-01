@@ -22,8 +22,12 @@ class FolderCard extends Component
 
     public $confirmDeleteModalIsOpen = false;
 
+    public $reportModalIsOpen = false;
+
     public $currentUserCanModify = false;
-    
+
+    public $showBottom;
+
     public $isSaved;
 
     #[On('close-rename-modal')] // from RenameModal
@@ -77,9 +81,13 @@ class FolderCard extends Component
         $this->confirmDeleteModalIsOpen = true;
     }
 
+    public function openReportModal()
+    {
+        $this->reportModalIsOpen = true;
+    }
+
     public function determineIfUserCanModify()
     {
-
         $currentUserId = auth()->id();
 
         if ($currentUserId === null) {
@@ -100,7 +108,16 @@ class FolderCard extends Component
             $this->currentUserCanModify = $this->folder->folder->user_id == $currentUserId // owner of parent folder
                 || $this->folder->folder->folderContributors->contains('user_id', $currentUserId); // contributor in parent folder
         }
-    }    
+    }
+
+    public function downloadFolder()
+    {
+        // Dispatch event to trigger download via JavaScript
+        $this->dispatch('trigger-folder-download', [
+            'url' => route('folder.download', ['id' => $this->folder->id]),
+            'foldername' => $this->folder->name
+        ]);
+    }
 
     public function saveFolder()
     {
@@ -113,11 +130,11 @@ class FolderCard extends Component
         );
 
         UserActivity::create([
-            'user_id'=> auth()->id(),
+            'user_id' => auth()->id(),
             'details' => "Saved folder: " . $this->folder->name
         ]);
-        
-        $this->dispatch('success_flash', message: 'Folder saved successfully.');        
+
+        $this->dispatch('success_flash', message: 'Folder saved successfully.');
         $this->openKebabMenu = false;
         $this->isSaved = true;
     }
@@ -126,14 +143,14 @@ class FolderCard extends Component
     {
         if (!auth()->check()) {
             return;
-        }        
+        }
 
         Save::where('user_id', auth()->id())
             ->where('folder_id', $this->folder->id)
             ->delete();
 
         UserActivity::create([
-            'user_id'=> auth()->id(),
+            'user_id' => auth()->id(),
             'details' => "Unsaved folder: " . $this->folder->name
         ]);
 
@@ -143,12 +160,11 @@ class FolderCard extends Component
         $this->isSaved = false;
     }
 
-    public function mount($folder)
+
+
+    public function mount($folder, $showBottom = true)
     {
-        // $this->folder = Folder::where('id', $folder->id)
-        //     ->withCount(['files', 'children'])
-        //     ->with('user:id,username,profile_picture', 'course', 'folder.folderContributors')
-        //     ->first();
+        $this->showBottom = $showBottom;
         $this->folder = $folder;
 
         $this->totalContents = $this->folder->files_count + $this->folder->children_count;

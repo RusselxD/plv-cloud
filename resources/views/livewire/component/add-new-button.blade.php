@@ -8,6 +8,10 @@
     <div x-show="openOptions" @click.away="openOptions = false" x-collapse x-cloak
         class="text-sm absolute bg-white right-0 top-full mt-1 rounded-md shadow-lg border border-gray-200 z-50 text-black w-44 whitespace-nowrap">
 
+        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="uploads">
+            <x-ui.general.spinner />
+        </div>
+
         <div class="flex items-center justify-start p-3 gap-2 hover:bg-gray-200 cursor-pointer"
             wire:click="openNewFolder">
             <img src="{{ asset('/assets/folder.svg') }}" class="w-5" />
@@ -20,10 +24,14 @@
         </label>
     </div>
 
-    <div wire:loading wire:target="files,updatedFiles"
-        class="fixed inset-0 bg-black/10 flex justify-center items-center z-150">
-        Uploading....
-    </div>
+    <!-- Loading indicator for file uploads -->
+    <!-- <div wire:loading wire:target="uploads" class="fixed inset-0 bg-black/50 flex justify-center items-center z-[999]">
+        <div class="bg-white rounded-lg p-6 shadow-xl flex flex-col items-center gap-4">
+            <x-ui.general.spinner/>
+            <p class="text-lg font-semibold text-gray-800">Uploading files...</p>
+            <p class="text-sm text-gray-600">Please wait while your files are being uploaded</p>
+        </div>
+    </div> -->
 
     @if ($openCreateFolderModal)
         <livewire:component.modal.create-folder :parentIsFolder="$parentIsAFolder" :parentId="$parentId" />
