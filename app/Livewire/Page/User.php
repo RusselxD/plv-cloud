@@ -3,6 +3,7 @@
 namespace App\Livewire\Page;
 
 use App\Models\Course;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User as UserModel;
 use Livewire\WithFileUploads;
@@ -18,6 +19,8 @@ class User extends Component
     public $isEditing = false;
 
     public $changePasswordIsShown = false;
+
+    public $deleteAccountModalIsOpen = false;
 
     public $newFirstName;
     public $newLastName;
@@ -60,6 +63,17 @@ class User extends Component
     public function setProfileToPrivate()
     {
         $this->updateProfileToPublic = false;
+    }
+
+    public function openDeleteAccountModal()
+    {
+        $this->deleteAccountModalIsOpen = true;
+    }
+
+    #[On('close-delete-account-modal')]
+    public function closeDeleteAccountModal()
+    {
+        $this->deleteAccountModalIsOpen = false;
     }
 
     public function noChanges()

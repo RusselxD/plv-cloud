@@ -300,17 +300,17 @@
                         <p class="text-gray-700 text-sm mb-1">Profile Visibility</p>
                         <div class="w-full grid grid-cols-2 gap-5">
                             <div :class="{
-                                                                                                                                                                    'border-green-500 bg-green-50': isPublic,
-                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': !isPublic
-                                                                                                                                                                }"
+                                                                                                                                                                                                                    'border-green-500 bg-green-50': isPublic,
+                                                                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': !isPublic
+                                                                                                                                                                                                                }"
                                 class="p-3 rounded-lg border-2 flex items-center justify-start"
                                 @click="isPublic = true; $wire.setProfileToPublic()">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     :class="{
-                                                                                                                                                                            'bg-green-200 text-green-700': isPublic,
-                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic
-                                                                                                                                                                        }"
+                                                                                                                                                                                                                            'bg-green-200 text-green-700': isPublic,
+                                                                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic
+                                                                                                                                                                                                                        }"
                                     class="lucide lucide-eye-icon lucide-eye p-2 w-10 h-10 rounded-md">
                                     <path
                                         d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
@@ -323,17 +323,17 @@
                             </div>
 
                             <div :class="{
-                                                                                                                                                                    'border-gray-700 bg-gray-50': !isPublic,
-                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': isPublic
-                                                                                                                                                                }"
+                                                                                                                                                                                                                    'border-gray-700 bg-gray-50': !isPublic,
+                                                                                                                                                                                                                    'border-gray-300 cursor-pointer hover:bg-gray-100': isPublic
+                                                                                                                                                                                                                }"
                                 class="p-3 rounded-lg border-2 flex items-center justify-start"
                                 @click="isPublic = false; $wire.setProfileToPrivate()">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     :class="{
-                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic,
-                                                                                                                                                                            'bg-gray-200 text-gray-700': isPublic
-                                                                                                                                                                        }"
+                                                                                                                                                                                                                            'bg-gray-200 text-gray-700': !isPublic,
+                                                                                                                                                                                                                            'bg-gray-200 text-gray-700': isPublic
+                                                                                                                                                                                                                        }"
                                     class="lucide lucide-eye-off-icon lucide-eye-off p-2 w-10 h-10 rounded-md">
                                     <path
                                         d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
@@ -349,6 +349,23 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- Delete Account Section -->
+                    <div class="mt-4">
+                        <button wire:click="openDeleteAccountModal"
+                            class="flex items-center justify-center border-2 px-4 py-2 rounded-md space-x-2 text-sm text-red-600 border-red-600 hover:bg-red-600 hover:text-white transition-colors duration-150 ease-in-out cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-trash-2 w-5 h-5">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                <line x1="10" x2="10" y1="11" y2="17" />
+                                <line x1="14" x2="14" y1="11" y2="17" />
+                            </svg>
+                            <span>Delete Account</span>
+                        </button>
                     </div>
                 </div>
             @else
@@ -429,27 +446,52 @@
     @if ($user->is_public || $user->id == auth()->id())
 
         <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg">
-            <h1 class="text-lg font-semibold mb-3">Uploaded Content</h1>
-            @if ($user->folders_count > 0)
-                <p class="mb-2 font-medium">
-                    <span>Folders</span>
-                    <span>({{ $user->folders_count }})</span>
-                </p>
-                <div class="grid grid-cols-3 gap-7">
-                    @foreach ($user->folders as $folder)
-                        <livewire:component.folder-card :folder="$folder" :key="'user-folder-' . $folder->id" :showBottom="false" />
-                    @endforeach
-                </div>
-            @endif
-            @if ($user->files_count > 0)
-                <p class="mb-2 mt-3 font-medium">
-                    <span>Files</span>
-                    <span>({{ $user->files_count }})</span>
-                </p>
-                <div class="grid grid-cols-3 gap-7">
-                    @foreach ($user->files as $file)
-                        <livewire:component.file-card :file="$file" :key="'user-file-' . $file->id" />
-                    @endforeach
+            @if ($user->files_count + $user->folders_count > 0)
+
+                <h1 class="text-lg font-semibold mb-3">Uploaded Content</h1>
+                @if ($user->folders_count > 0)
+                    <p class="mb-2 font-medium">
+                        <span>Folders</span>
+                        <span>({{ $user->folders_count }})</span>
+                    </p>
+                    <div class="grid grid-cols-3 gap-7">
+                        @foreach ($user->folders as $folder)
+                            <livewire:component.folder-card :folder="$folder" :key="'user-folder-' . $folder->id" :showParent="true" />
+                        @endforeach
+                    </div>
+                @endif
+                @if ($user->files_count > 0)
+                    <p class="mb-2 mt-3 font-medium">
+                        <span>Files</span>
+                        <span>({{ $user->files_count }})</span>
+                    </p>
+                    <div class="grid grid-cols-3 gap-7">
+                        @foreach ($user->files as $file)
+                            <livewire:component.file-card :file="$file" :key="'user-file-' . $file->id" />
+                        @endforeach
+                    </div>
+                @endif
+
+            @else
+                <div class="flex flex-col items-center justify-center flex-1 my-10">
+                    <!-- No folders or files found in this folder. -->
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-folder-open-icon lucide-folder-open w-20 h-20">
+                        <path
+                            d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+                    </svg>
+
+                    <p class="text-xl font-medium my-4">No uploads yet</p>
+
+                    <p class="text-gray-700">
+                        @if (auth()->id() == $user->id)
+                            <span>You haven't uploaded any files or folders. Start uploading to see your content here.</span>
+                        @else
+                            <span>This user hasn't uploaded any files or folders.</span>
+                        @endif
+                    </p>
                 </div>
             @endif
         </div>
@@ -472,18 +514,49 @@
         </div>
     @endif
 
-    @if (auth()->id() == $user->id)
-        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg mt-5">
+    @if (auth()->id() == $user->id && $user->userActivities->count() > 0)
+        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg mt-5" x-data="{ showAllActivities: false }">
             <h1 class="text-lg font-semibold mb-3">Activity Log</h1>
             <div class="space-y-1 flex flex-col items-center">
-                @foreach ($user->userActivities as $activity)
-                    <div class="flex items-center justify-between  text-sm py-2 w-full">
+                @foreach ($user->userActivities->take(5) as $activity)
+                    <div class="flex items-center justify-between text-sm py-2 w-full">
                         <p>{{ $activity->details }}</p>
                         <p>{{ $activity->created_at->format('F j, Y h:i A') }}</p>
                     </div>
                 @endforeach
+
+                <template x-if="showAllActivities">
+                    <div class="w-full space-y-1">
+                        @foreach ($user->userActivities->skip(5) as $activity)
+                            <div class="flex items-center justify-between text-sm py-2 w-full">
+                                <p>{{ $activity->details }}</p>
+                                <p>{{ $activity->created_at->format('F j, Y h:i A') }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </template>
             </div>
 
+            @if ($user->userActivities->count() > 5)
+                <div class="flex justify-center mt-3">
+                    <button @click="showAllActivities = !showAllActivities"
+                        class="flex items-center gap-2 cursor-pointer text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150">
+                        <span x-text="showAllActivities ? 'Show Less' : 'Show All Activities'"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': showAllActivities }">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+            @endif
+        </div>
+    @endif
+
+    <!-- Delete Account Modal -->
+    @if ($deleteAccountModalIsOpen)
+        <div wire:click.stop>
+            <livewire:component.modal.delete-account />
         </div>
     @endif
 </div>

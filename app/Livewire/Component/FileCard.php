@@ -50,13 +50,19 @@ class FileCard extends Component
 
     public function downloadFile()
     {
+        // Update the download count in the database
         File::where('id', $this->file->id)->update(['download_count' => $this->file->download_count + 1]);
+
+        // Reload the file to get the updated download_count
+        $this->file = File::find($this->file->id);
 
         // Dispatch event to trigger download via JavaScript
         $this->dispatch('trigger-download', [
             'url' => route('file.download', ['id' => $this->file->id]),
             'filename' => $this->file->name
         ]);
+
+        $this->dispatch('success_flash', message: 'File download started.');
     }
 
     public function clickKebab()

@@ -70,7 +70,12 @@ class Saved extends Component
 
     public function mount()
     {
-        $this->saves = Save::with('folder', 'file')->where('user_id', auth()->id())->get();
+        $this->saves = Save::with([
+            'folder' => function ($query) {
+                $query->withCount(['children', 'files']);
+            },
+            'file'
+        ])->where('user_id', auth()->id())->get();
 
         $this->foldersCount = $this->saves->whereNotNull('folder')->count();
         $this->filesCount = $this->saves->whereNotNull('file')->count();

@@ -15,11 +15,15 @@
         </a>
 
         <a href="{{ route('user', ['username' => $user->username]) }}"
-            class="hover:bg-gray-200 flex gap-2 p-3 cursor-pointer rounded-lg transition-colors duration-100 ease-in-out">
+            @class([
+                ' flex gap-2 p-3 cursor-pointer rounded-lg transition-colors duration-100 ease-in-out',
+                'bg-white' => $hasBackground,
+                'hover:bg-gray-200' => !$hasBackground
+                ])>
             <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
                 alt="{{ $user->username }}'s profile picture" class="w-10 h-10 object-cover rounded-full"/>            
             <div>
-                <p class="">{{ $user->username }}</p>
+                <p class="truncate max-w-44">{{ $user->username }}</p>
                 <p class="text-xs text-gray-600">{{ $user->first_name }} {{ $user->last_name }}</p>
                 </p>
             </div>

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->uuid('uuid')->unique();
             $table->string('name');            
             $table->boolean('is_public')->default(false);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Course::class)->nullable();
             $table->foreignIdFor(Folder::class, 'parent_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamp('created_at')->useCurrent();

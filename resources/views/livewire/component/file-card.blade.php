@@ -1,67 +1,163 @@
-<div class="border border-gray-300 rounded-lg flex items-center justify-center px-3 py-3 relative">
-    <img class="w-7 mr-3" src="{{ asset($icon) }}" />
+<div class="group relative" x-data="{ menuOpen: false }">
+    <!-- Card Content -->
+    <div
+        class="rounded-xl bg-white shadow-sm hover:shadow-lg border border-gray-200 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
+        <!-- Colored Top Border -->
+        <div class="h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600"></div>
 
-    <div class="flex items-center justify-between flex-1 overflow-hidden">
-        <div class="flex flex-col max-w-[80%] overflow-hidden gap">
-            <p class="text-sm font-medium truncate">{{ $file->name }}</p>
-            <span class="text-xs text-gray-600">
-                <span>{{ $file->file_size }}</span>
-                <span>&middot;</span>
-                <span>{{ $file->download_count }}</span>
-                @if ($file->download_count == 1)
-                    <span>download</span>
-                @else
-                    <span>downloads</span>
-                @endif
-            </span>
+        <!-- Main Content -->
+        <div class="p-4 flex items-center gap-4">
+            <!-- File Icon -->
+            <div class="flex-shrink-0">
+                <div
+                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <img class="w-7" src="{{ asset($icon) }}" />
+                </div>
+            </div>
+
+            <!-- File Info -->
+            <div class="flex-1 min-w-0">
+                <h3
+                    class="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-200">
+                    {{ $file->name }}
+                </h3>
+                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                    <!-- File Size -->
+                    <div class="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-3 h-3">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" x2="12" y1="15" y2="3" />
+                        </svg>
+                        <span class="font-medium">{{ $file->file_size }}</span>
+                    </div>
+
+                    <span class="text-gray-400">•</span>
+
+                    <!-- Download Count -->
+                    <div class="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-3 h-3">
+                            <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+                        </svg>
+                        <span class="font-medium">{{ $file->download_count }}</span>
+                        <span>{{ $file->download_count === 1 ? 'download' : 'downloads' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kebab Menu Button -->
+            <button class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
+                @click.stop="menuOpen = !menuOpen">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-more-vertical w-5 h-5 text-gray-400 group-hover/kebab:text-gray-600">
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                </svg>
+            </button>
         </div>
-        <img src="{{ asset('assets/kebab.svg') }}" wire:click="clickKebab"
-            class="w-8 rounded-full p-2 transition-colors cursor-pointer duration-100 ease-in-out hover:bg-gray-200" />
     </div>
 
-    <div x-data="{ open: @entangle('optionsAreOpen') }" class="absolute bottom-4 right-12 z-50">
-        <div x-show="open" x-collapse @click.away="$wire.closeOptions()" x-cloak
-            class="w-40 bg-white rounded-sm border overflow-hidden shadow-md text-sm">
+    <!-- Kebab Menu -->
+    <div class="absolute top-2 right-14 z-50">
+        <div x-show="menuOpen" x-collapse @click.away="menuOpen = false" x-cloak
+            class="w-48 bg-white rounded-lg border border-gray-200 overflow-hidden shadow-xl text-sm">
 
             @auth
                 @if ($isSaved)
-                    <div class="flex cursor-pointer items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="unsaveFile">
-                        <img src="{{ asset('assets/save-filled.svg') }}" class="w-4" />
-                        <p>Unsave</p>
-                    </div>
+                    <button
+                        class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                        @click.stop="menuOpen = false; $wire.unsaveFile()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-yellow-500 group-hover:text-yellow-600">
+                            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                        </svg>
+                        <span class="text-gray-700 group-hover:text-gray-900 font-medium">Unsave</span>
+                    </button>
                 @else
-                    <div class="flex cursor-pointer items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="saveFile">
-                        <img src="{{ asset('assets/save.svg') }}" class="w-4" />
-                        <p>Save</p>
-                    </div>
+                    <button
+                        class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                        @click.stop="menuOpen = false; $wire.saveFile()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-gray-500 group-hover:text-yellow-500">
+                            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                        </svg>
+                        <span class="text-gray-700 group-hover:text-gray-900 font-medium">Save</span>
+                    </button>
                 @endif
+
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
             @endauth
 
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                wire:click="downloadFile">
-                <img src="{{ asset('/assets/download.svg') }}" class="w-4" />
-                <p>Download</p>
-            </div>
+            <button
+                class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                @click.stop="menuOpen = false; $wire.downloadFile()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="w-4 h-4 text-gray-500 group-hover:text-blue-500">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" x2="12" y1="15" y2="3" />
+                </svg>
+                <span class="text-gray-700 group-hover:text-gray-900 font-medium">Download</span>
+            </button>
 
             @if ($currentUserCanModify)
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                    wire:click="openRenameModal">
-                    <img src="{{ asset('/assets/edit.svg') }}" class="w-4" />
-                    <p>Rename</p>
-                </div>
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                    wire:click="openConfirmDeleteModal">
-                    <img src="{{ asset('/assets/delete.svg') }}" class="w-4" />
-                    <p>Delete</p>
-                </div>
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                    @click.stop="menuOpen = false; $wire.openRenameModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-blue-500">
+                        <path
+                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                        <path d="m15 5 4 4" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-gray-900 font-medium">Rename</span>
+                </button>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 transition-colors duration-150 text-left group"
+                    @click.stop="menuOpen = false; $wire.openConfirmDeleteModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-red-500">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" x2="10" y1="11" y2="17" />
+                        <line x1="14" x2="14" y1="11" y2="17" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-red-600 font-medium">Delete</span>
+                </button>
             @endif
 
             @if (auth()->id() !== $file->user_id && auth()->check())
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
-                    wire:click="openReportModal">
-                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
-                    <p>Report</p>
-                </div>
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-orange-50 transition-colors duration-150 text-left group"
+                    @click.stop="menuOpen = false; $wire.openReportModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-orange-500">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                        <line x1="4" x2="4" y1="22" y2="15" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-orange-600 font-medium">Report</span>
+                </button>
             @endif
 
         </div>

@@ -2,78 +2,42 @@
 
 namespace App\Livewire\Page;
 
-use App\Models\Course;
 use App\Models\File;
 use App\Models\Folder;
-use App\Models\User;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Home extends Component
 {
+    public $highlightFiles = [];
 
-    public $search = "";
+    public $highlightFolders = [];
 
-    public function updatedSearch()
+    #[On('deleted')] // from ConfirmDeleteModal
+    public function refresh()
     {
-        $this->render();
+        $this->refreshContents();
     }
 
-    public function submitSearch()
+    public function refreshContents()
     {
-        $this->render();
+        $this->highlightFiles = File::orderBy('download_count', 'desc')
+            ->limit(5)
+            ->get();
+
+        $this->highlightFolders = Folder::withCount(['children', 'files'])
+            ->orderByRaw('(children_count + files_count) DESC')
+            ->limit(5)
+            ->get();
     }
 
-    public function queryUsers()
+    public function mount()
     {
-        return User::where(function ($query) {
-            $query->where('is_private', false)
-                // if a user is not a private account, show if any of these fields match
-                ->where(function ($q) {
-                    $q->where('username', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%')
-                        ->orWhere('student_number', 'like', '%' . $this->search . '%')
-                        ->orWhere('first_name', 'like', '%' . $this->search . '%')
-                        ->orWhere('last_name', 'like', '%' . $this->search . '%');
-                });
-        })
-            ->orWhere(function ($query) {
-                // if a user is a private account, only show if the username matches
-                $query->where('is_private', true)
-                    ->where('username', 'like', '%' . $this->search . '%');
-            })
-            ->orderBy('username', 'asc')
-            ->get(['username', 'student_number', 'first_name', 'last_name', 'profile_picture']);
+        $this->refreshContents();   
     }
 
     public function render()
     {
-        if (empty($this->search)) {
-
-            $defaultCourses = Course::orderBy('abbreviation', 'asc')->get();
-
-            return view('livewire.page.home', ['result' => $defaultCourses]);
-
-        } else {
-
-            $courses = Course::where('name', 'like', '%' . $this->search . '%')
-                ->orWhere('abbreviation', 'like', '%' . $this->search . '%')
-                ->orderBy('abbreviation', 'asc')
-                ->get();
-
-            $folders = Folder::where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('name', 'asc')
-                ->get();
-
-            $files = File::where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('download_count', 'asc')
-                ->get();
-
-            $users = $this->queryUsers();
-
-            dd($courses, $folders, $files, $users);
-
-            return view('livewire.page.home');
-        }
-
+        return view('livewire.page.home');
     }
 }

@@ -64,7 +64,7 @@ class ConfirmDeleteModal extends Component
         $item->delete();
         $this->logAction($name, $parent, $parentType);
 
-        $this->dispatch('deleted'); // caught by Course or Folder and FolderDetailsPane
+        $this->dispatch('deleted'); // caught by Course or (Folder and FolderDetailsPane) or Home or Notifications
         $this->dispatch('success_flash', message: 'Deleted successfully');
         
     }

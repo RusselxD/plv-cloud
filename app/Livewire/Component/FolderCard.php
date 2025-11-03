@@ -26,7 +26,7 @@ class FolderCard extends Component
 
     public $currentUserCanModify = false;
 
-    public $showBottom;
+    public $showParent;
 
     public $isSaved;
 
@@ -160,11 +160,19 @@ class FolderCard extends Component
         $this->isSaved = false;
     }
 
+    public function goToParentDirectory(){
+        if($this->folder->course_id != null){
+            return redirect()->to(route('course', ['courseSlug' => $this->folder->course->slug]));
+        } else {
+            return redirect()->to(route('folder', ['uuid' => $this->folder->folder->uuid]));
+        }
+    }
 
+    public $parentName;
 
-    public function mount($folder, $showBottom = true)
+    public function mount($folder, $showParent = false)
     {
-        $this->showBottom = $showBottom;
+        $this->showParent = $showParent;
         $this->folder = $folder;
 
         $this->totalContents = $this->folder->files_count + $this->folder->children_count;
@@ -176,6 +184,8 @@ class FolderCard extends Component
         $this->isSaved = Save::where('user_id', auth()->id())
             ->where('folder_id', $this->folder->id)
             ->exists();
+
+        $this->parentName = $this->folder->course_id != null ? $this->folder->course->abbreviation : $this->folder->folder->name;
     }
 
     public function render()

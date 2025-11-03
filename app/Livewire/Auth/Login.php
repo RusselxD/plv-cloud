@@ -24,6 +24,10 @@ class Login extends Component
         'password.required' => 'Please enter your password.',
     ];
 
+    public function guestLogin(){
+        return redirect()->route('home');
+    }
+
     public function submit()
     {
         $this->validate();

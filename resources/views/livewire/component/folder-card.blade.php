@@ -1,87 +1,198 @@
-<div class="border border-gray-600 w-full rounded-lg cursor-pointer hover:shadow-md relative"
-    wire:click="goToFolder">
-    <div class="grid grid-cols-[0.5fr_2fr]">
-        <!-- Folder Icon -->
-        <div class="flex items-center justify-center aspect-square h-full border-r border-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="gray"
-                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
-                <path
-                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-            </svg>
-        </div>
+<div class="group relative w-full cursor-pointer" wire:click="goToFolder">
 
-        <!-- Folder name + kebab -->
-        <div class="flex items-start justify-between p-3 overflow-hidden">
-            <div class="max-w-[80%]">
-                <p class="font-semibold truncate w-full overflow-ellipsis">{{ $folder->name }}</p>
-                <p class="text-slate-600 text-xs mt-1">{{ $totalContents }} contents</p>
-            </div>
-            <button class="p-2 cursor-pointer hover:bg-gray-200 rounded-full" wire:click.stop="clickKebab">
-                <img src="{{ asset('/assets/kebab.svg') }}" class="w-4" />
-            </button>
-        </div>
-    </div>
+    <!-- Card Content with rounded corners and overflow hidden -->
+    <div
+        class="rounded-xl bg-white shadow-sm hover:shadow-lg border border-gray-200 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
+        <!-- Colored Top Border -->
+        <div class="h-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600"></div>
 
-    <!-- Bottom -->
-    @if ($showBottom)
-        <div class="flex items-center justify-between pr-2 border-t border-gray-600">
-            <div class="flex items-center justify-start gap-2 group py-[0.40rem] px-2 relative group"
-                wire:click.stop.self="goToProfile">
+        <!-- Main Content -->
+        <div class="p-4 pt-4">
+            <!-- Header Section -->
+            <div class="flex items-start gap-4 mb-3">
+                <!-- Folder Icon -->
+                <div class="flex-shrink-0">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-yellow-50 to-yellow-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-folder text-yellow-600">
+                            <path
+                                d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                        </svg>
+                    </div>
+                </div>
 
-                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
-                    alt="{{ $user->username }}'s profile picture" class="w-5 h-5 object-cover rounded-full" />
-                <p class="max-w-22 text-xs truncate group-hover:underline">{{ $folder->user->username }}</p>
+                <!-- Folder Info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                            <h3
+                                class="font-semibold text-gray-900 truncate text-base group-hover:text-yellow-600 transition-colors duration-200">
+                                {{ $folder->name }}
+                            </h3>
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-files w-3.5 h-3.5 text-gray-400">
+                                    <path d="M20 7h-3a2 2 0 0 1-2-2V2" />
+                                    <path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z" />
+                                    <path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8" />
+                                </svg>
+                                <span class="text-xs text-gray-500 font-medium">{{ $totalContents }}
+                                    {{ $totalContents === 1 ? 'item' : 'items' }}</span>
+                            </div>
+                        </div>
 
-                <!-- Profile Preview -->
-                <div wire:click.stop class="hidden group-hover:block hover:block absolute top-[2.1rem] left-0 w-fit z-100">
-                    <x-ui.general.profile-preview-card :user="$user" />
+                        <!-- Kebab Menu Button -->
+                        <button
+                            class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
+                            wire:click.stop="clickKebab">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-more-vertical w-5 h-5 text-gray-400 group-hover/kebab:text-gray-600">
+                                <circle cx="12" cy="12" r="1" />
+                                <circle cx="12" cy="5" r="1" />
+                                <circle cx="12" cy="19" r="1" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    @endif
+
+        <!-- Footer -->
+        <div class="px-4 py-1 border-t border-gray-100 bg-gray-50/50">
+            <div class="flex items-center justify-between gap-2">
+                <!-- Owner Info -->
+                <div class="flex items-center gap-2 py-1 min-w-0 flex-1" wire:click.stop="goToProfile">
+                    <div class="flex-shrink-0">
+                        <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                            alt="{{ $user->username }}'s profile picture"
+                            class="w-6 h-6 object-cover rounded-full ring-2 ring-white shadow-sm" />
+                    </div>
+                    <span
+                        class="text-xs text-gray-600 font-medium truncate hover:text-yellow-600 hover:underline transition-colors duration-200">
+                        {{ $folder->user->username }}
+                    </span>
+                </div>
+
+                <!-- Parent Directory Link -->
+                @if ($showParent)
+                    <div class="flex items-center gap-1.5 min-w-0 flex-shrink-0" wire:click.stop="goToParentDirectory">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-corner-up-left w-3 h-3 text-gray-400">
+                            <polyline points="9 14 4 9 9 4" />
+                            <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
+                        </svg>
+                        <span
+                            class="text-xs text-gray-500 hover:text-yellow-600 hover:underline cursor-pointer truncate max-w-[120px] transition-colors duration-200">
+                            {{ $parentName }}
+                        </span>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <!-- End Card Content -->
 
     <!-- Kebab Menu -->
-    <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-1 right-12 z-10">
+    <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-2 right-14 z-50">
         <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
-            class="w-40 h-fit bg-white rounded-sm border overflow-hidden shadow-md text-sm">
+            class="w-48 bg-white rounded-lg border border-gray-200 overflow-hidden shadow-xl text-sm">
 
             @auth
                 @if ($isSaved)
-                    <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="unsaveFolder">
-                        <img src="{{ asset('assets/save-filled.svg') }}" class="w-4" />
-                        <p>Unsave</p>
-                    </div>
+                    <button
+                        class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                        wire:click.stop="unsaveFolder">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-yellow-500 group-hover:text-yellow-600">
+                            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                        </svg>
+                        <span class="text-gray-700 group-hover:text-gray-900 font-medium">Unsave</span>
+                    </button>
                 @else
-                    <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="saveFolder">
-                        <img src="{{ asset('assets/save.svg') }}" class="w-4" />
-                        <p>Save</p>
-                    </div>
+                    <button
+                        class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                        wire:click.stop="saveFolder">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-4 h-4 text-gray-500 group-hover:text-yellow-500">
+                            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                        </svg>
+                        <span class="text-gray-700 group-hover:text-gray-900 font-medium">Save</span>
+                    </button>
                 @endif
+
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
             @endauth
 
-            <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer"
+            <button
+                class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
                 wire:click.stop="downloadFolder">
-                <img src="{{ asset('/assets/download.svg') }}" class="w-4" />
-                <p>Download</p>
-            </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="w-4 h-4 text-gray-500 group-hover:text-blue-500">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" x2="12" y1="15" y2="3" />
+                </svg>
+                <span class="text-gray-700 group-hover:text-gray-900 font-medium">Download</span>
+            </button>
 
             @if ($currentUserCanModify)
-                <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3" wire:click.stop="openRenameModal">
-                    <img src="{{ asset('assets/edit.svg') }}" class="w-4" />
-                    <p>Rename</p>
-                </div>
-                <div class="flex items-center justify-start hover:bg-gray-100 p-2 gap-3"
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors duration-150 text-left group"
+                    wire:click.stop="openRenameModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-blue-500">
+                        <path
+                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                        <path d="m15 5 4 4" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-gray-900 font-medium">Rename</span>
+                </button>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 transition-colors duration-150 text-left group"
                     wire:click.stop="openConfirmDeleteModal">
-                    <img src="{{ asset('assets/delete.svg') }}" class="w-4" />
-                    <p>Delete</p>
-                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-red-500">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" x2="10" y1="11" y2="17" />
+                        <line x1="14" x2="14" y1="11" y2="17" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-red-600 font-medium">Delete</span>
+                </button>
             @endif
 
-            @if (auth()->id() !== $folder->user_id)
-                <div class="hover:bg-gray-100 bg-white py-2 px-2 gap-3 flex items-center justify-start cursor-pointer" wire:click.stop="openReportModal">
-                    <img src="{{ asset('/assets/report.svg') }}" class="w-4" />
-                    <p>Report</p>
-                </div>
+            @if (auth()->id() !== $folder->user_id && auth()->check())
+                <!-- Divider -->
+                <div class="h-px bg-gray-200 my-1"></div>
+
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-orange-50 transition-colors duration-150 text-left group"
+                    wire:click.stop="openReportModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4 text-gray-500 group-hover:text-orange-500">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                        <line x1="4" x2="4" y1="22" y2="15" />
+                    </svg>
+                    <span class="text-gray-700 group-hover:text-orange-600 font-medium">Report</span>
+                </button>
             @endif
 
         </div>

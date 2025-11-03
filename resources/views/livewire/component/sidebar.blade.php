@@ -9,8 +9,10 @@
 
                 <p class="text-gray-600 text-sm mb-2">Menu</p>
                 <div class="space-y-1">
-                    <x-ui.sidebar.link name="Home" route="home" path="/" />
-                    <x-ui.sidebar.link name="Notifications" route="notifications" path="notifications" :notif_count="$notifs_count" />
+                    <x-ui.sidebar.link name="Home" route="home" path="home" />
+                    <x-ui.sidebar.link name="Courses" route="courses" path="courses" />
+                    <x-ui.sidebar.link name="Notifications" route="notifications" path="notifications"
+                        :notif_count="$notifs_count" />
                     <x-ui.sidebar.link name="Saved" route="saved" path="saved" />
                 </div>
 
@@ -40,8 +42,10 @@
             </div>
 
             <p class="text-gray-600 text-sm mb-2">Menu</p>
-            <x-ui.sidebar.link name="Home" route="home" path="/" />
-            
+            <div class="space-y-1">
+                <x-ui.sidebar.link name="Home" route="home" path="home" />
+                <x-ui.sidebar.link name="Courses" route="courses" path="courses" />
+            </div>
         </div>
     @endguest
 </div>

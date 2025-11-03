@@ -10,6 +10,7 @@ class ProfileWithNotif extends Component
 {
     public $isLoggedIn = false;
     public $hasANotif = false;
+    public $hasBackground = false;
 
     #[On('update-notifs')] // from Notifications Page
     public function refresh(){
@@ -18,8 +19,9 @@ class ProfileWithNotif extends Component
         }
     }
 
-    public function mount(){
-        $this->isLoggedIn = auth()->check();        
+    public function mount($hasBackground = false){
+        $this->isLoggedIn = auth()->check();
+        $this->hasBackground = $hasBackground;
     }
 
     public function render()

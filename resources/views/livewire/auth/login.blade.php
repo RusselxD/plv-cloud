@@ -59,13 +59,28 @@
             </a>
         </div>
 
-        <button type="submit" class="px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium
+        <button type="submit" class="w-full py-2 lg:px-16 lg:py-3 rounded-full font-semibold
            border-2 border-primary text-primary bg-white
            hover:bg-primary hover:text-white cursor-pointer
-           active:bg-primary active:text-white 
+           active:bg-primary active:text-white
            transition-colors duration-200">
             Login
 
+        </button>
+
+        <p class="relative w-full flex items-center justify-center my-3 text-gray-500">
+            <span class="text-center bg-white px-5 z-10">or</span>
+            <span class="absolute border-t left-0 right-0 top-1/2 transform -translate-y-1/2 z-5"></span>
+        </p>
+
+        <button wire:click.stop="guestLogin" class="w-full border-2 border-gray-300 flex items-center justify-center py-3 rounded-xl hover:bg-gray-100 hover:border-gray-400 cursor-pointer transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-user-icon lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span class="ml-2">Continue as Guest</span>
         </button>
 
         <span class="mt-10 text-sm">
@@ -73,7 +88,7 @@
             <a class="font-bold text-primary" href="{{ route('register') }}">Sign up</a>
         </span>
 
-        <div class="absolute inset-0 bg-black/20" wire:loading wire:target="submit">
+        <div class="absolute inset-0 z-11 bg-black/20" wire:loading wire:target="submit">
             <x-ui.general.spinner />
         </div>
     </form>
