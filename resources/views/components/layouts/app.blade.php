@@ -22,7 +22,7 @@
         {{ $slot }}
 
         <x-ui.flashes.success-flash />
-
+        <x-ui.flashes.error-flash />
     </main>
 </body>
 

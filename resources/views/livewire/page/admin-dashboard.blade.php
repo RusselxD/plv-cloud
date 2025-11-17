@@ -158,10 +158,8 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-8 w-8">
-                                                <div
-                                                    class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-semibold">
-                                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                                </div>
+                                                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                                                    alt="{{ $user->username }}'s profile picture" class="w-8 h-8 rounded-full"/>
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
@@ -314,17 +312,25 @@
                                     <span class="font-medium">Location:</span>
                                     @if ($report->reported_file_id && $report->reportedFile)
                                         @if ($report->reportedFile->folder)
-                                            <span>Folder: {{ $report->reportedFile->folder->name }}</span>
+                                            <a href="{{ route('folder', ['uuid' => $report->reportedFile->folder->uuid]) }}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                                Folder: {{ $report->reportedFile->folder->name }}
+                                            </a>
                                         @elseif($report->reportedFile->course)
-                                            <span>Course: {{ $report->reportedFile->course->name }}</span>
+                                            <a href="{{ route('course', ['courseSlug' => $report->reportedFile->course->slug]) }}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                                Course: {{ $report->reportedFile->course->name }}
+                                            </a>
                                         @else
                                             <span class="text-gray-400">Unknown</span>
                                         @endif
                                     @elseif ($report->reported_folder_id && $report->reportedFolder)
                                         @if ($report->reportedFolder->folder)
-                                            <span>Parent Folder: {{ $report->reportedFolder->folder->name }}</span>
+                                            <a href="{{ route('folder', ['uuid' => $report->reportedFolder->folder->uuid]) }}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                                Parent Folder: {{ $report->reportedFolder->folder->name }}
+                                            </a>
                                         @elseif($report->reportedFolder->course)
-                                            <span>Course: {{ $report->reportedFolder->course->name }}</span>
+                                            <a href="{{ route('course', ['courseSlug' => $report->reportedFolder->course->slug]) }}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                                Course: {{ $report->reportedFolder->course->name }}
+                                            </a>
                                         @else
                                             <span class="text-gray-400">Unknown</span>
                                         @endif

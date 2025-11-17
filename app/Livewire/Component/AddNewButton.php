@@ -105,9 +105,27 @@ class AddNewButton extends Component
     // automatically runs when user insert file/s
     public function updatedUploads()
     {
-        $this->validate([
-            'uploads.*' => 'file|max:102400', // 100MB max per file
-        ]);
+        // Check file size manually before validation
+        foreach ($this->uploads as $file) {
+            $fileSizeInKB = $file->getSize() / 1024;
+            if ($fileSizeInKB > 10240) {
+                $this->dispatch('error_flash', message: 'Each file upload must not exceed 10MB.');                
+                $this->reset('uploads');
+                $this->openOptions = false;
+                return;
+            }
+        }
+
+        try {
+            $this->validate([
+                'uploads.*' => 'file|max:10240', // 10MB max per file
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('error_flash', message: 'File upload failed. Please ensure files are under 10MB.');
+            $this->reset('uploads');
+            $this->openOptions = false;
+            return;
+        }
 
         foreach ($this->uploads as $file) {
             $path = $file->store('uploads', 'public');

@@ -80,20 +80,7 @@
                         <p class="text-sm text-gray-500">Welcome back, Administrator</p>
                     </div>
 
-                    <div class="flex items-center gap-4">
-                        <!-- Admin Info -->
-                        <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg">
-                            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="lucide lucide-user w-5 h-5 text-white">
-                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                    <circle cx="12" cy="7" r="4" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium text-gray-700">Admin</span>
-                        </div>
-
+                    <div class="flex items-center gap-4">                        
                         <!-- Logout Button -->
                         <a href="{{ route('admin.login') }}"
                             onclick="event.preventDefault(); sessionStorage.clear(); window.location.href='{{ route('admin.login') }}';"

@@ -60,9 +60,7 @@ class FileCard extends Component
         $this->dispatch('trigger-download', [
             'url' => route('file.download', ['id' => $this->file->id]),
             'filename' => $this->file->name
-        ]);
-
-        $this->dispatch('success_flash', message: 'File download started.');
+        ]);        
     }
 
     public function clickKebab()

@@ -60,7 +60,7 @@
 
     @if (auth()->id() == $user->id)
 
-        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg relative mb-5">
+        <div class="shadow-[0_0px_10px_rgba(0,0,0,0.15)] w-[95%] p-5 rounded-lg relative mb-5 overflow-hidden">
 
             <div class="absolute inset-0 bg-black/20" wire:loading wire:target="saveChanges">
                 <x-ui.general.spinner />
@@ -133,6 +133,11 @@
                                 class="rounded-full w-full h-full object-cover" />
                         @endif
 
+                        <!-- Loading Spinner Overlay -->
+                        <div class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center" wire:loading wire:target="newProfilePicture">
+                            <x-ui.general.spinner />
+                        </div>
+
                         <label
                             class="absolute bottom-0 right-0 cursor-pointer rounded-full p-2 bg-blue-600 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -151,8 +156,10 @@
                         @error('newProfilePicture')
                             <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                         @enderror
-                        @if ($user->profile_picture !== null)
-                            <p class="text-sm font-medium text-red-500 mt-2 cursor-pointer">Remove Photo</p>
+                        @if ($user->profile_picture !== null && !$removeProfilePicture)
+                            <p class="text-sm font-medium text-red-500 mt-2 cursor-pointer hover:text-red-700 transition-colors duration-150" wire:click="removePhoto">Remove Photo</p>
+                        @elseif ($removeProfilePicture)
+                            <p class="text-sm font-medium text-gray-500 mt-2">Photo will be removed when you save</p>
                         @endif
                     </div>
                 </div>

@@ -45,7 +45,7 @@
                         </div>
 
                         <!-- Kebab Menu Button -->
-                        <button
+                        <button x-ref="kebabButton"
                             class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
                             wire:click.stop="clickKebab">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -100,8 +100,27 @@
 
     <!-- Kebab Menu -->
     <div x-data="{ open: @entangle('openKebabMenu') }" class="absolute top-2 right-14 z-50">
-        <div x-show="open" x-cloak x-collapse @click.away="$wire.closeKebabMenu()"
-            class="w-48 bg-white rounded-lg border border-gray-200 overflow-hidden shadow-xl text-sm">
+        <div x-show="open" @click.away="$wire.closeKebabMenu()" x-cloak
+            x-transition
+            x-init="
+                $watch('open', value => {
+                    if (value) {
+                        $nextTick(() => {
+                            const rect = $el.getBoundingClientRect();
+                            const spaceBelow = window.innerHeight - rect.top;
+                            
+                            if (spaceBelow < rect.height) {
+                                $el.classList.add('bottom-full', 'mb-2');
+                                $el.classList.remove('top-0');
+                            } else {
+                                $el.classList.add('top-0');
+                                $el.classList.remove('bottom-full', 'mb-2');
+                            }
+                        });
+                    }
+                });
+            "
+            class="absolute right-0 top-0 w-48 bg-white rounded-lg border border-gray-200 overflow-visible shadow-xl text-sm">
 
             @auth
                 @if ($isSaved)

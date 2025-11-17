@@ -22,6 +22,8 @@ class User extends Component
 
     public $deleteAccountModalIsOpen = false;
 
+    public $removeProfilePicture = false;
+
     public $newFirstName;
     public $newLastName;
     public $newUsername;
@@ -70,6 +72,12 @@ class User extends Component
         $this->deleteAccountModalIsOpen = true;
     }
 
+    public function removePhoto()
+    {
+        $this->removeProfilePicture = true;
+        $this->newProfilePicture = null;
+    }
+
     #[On('close-delete-account-modal')]
     public function closeDeleteAccountModal()
     {
@@ -86,7 +94,8 @@ class User extends Component
             $this->newUsername === $this->user->username &&
             $this->newCourseId === $this->user->course_id &&
             $this->updateProfileToPublic === $this->user->is_public &&
-            !$profilePictureChanged;
+            !$profilePictureChanged &&
+            !$this->removeProfilePicture;
     }
 
     public function saveChanges()
@@ -144,8 +153,17 @@ class User extends Component
             $this->user->password = \Hash::make($this->newPassword);
         }
 
+        // Handle profile picture removal
+        if ($this->removeProfilePicture) {
+            // Delete old profile picture if exists
+            if ($this->user->profile_picture && \Storage::disk('public')->exists($this->user->profile_picture)) {
+                \Storage::disk('public')->delete($this->user->profile_picture);
+            }
+            $this->user->profile_picture = null;
+            $this->removeProfilePicture = false;
+        }
         // Update profile picture if uploaded
-        if (is_object($this->newProfilePicture)) {
+        elseif (is_object($this->newProfilePicture)) {
             // Delete old profile picture if exists
             if ($this->user->profile_picture && \Storage::disk('public')->exists($this->user->profile_picture)) {
                 \Storage::disk('public')->delete($this->user->profile_picture);

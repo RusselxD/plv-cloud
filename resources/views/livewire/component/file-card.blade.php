@@ -21,36 +21,36 @@
                     class="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-200">
                     {{ $file->name }}
                 </h3>
-                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500 overflow-hidden">
                     <!-- File Size -->
-                    <div class="flex items-center gap-1">
+                    <div class="flex items-center gap-1 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="w-3 h-3">
+                            class="w-3 h-3 flex-shrink-0">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" x2="12" y1="15" y2="3" />
                         </svg>
-                        <span class="font-medium">{{ $file->file_size }}</span>
+                        <span class="font-medium whitespace-nowrap">{{ $file->file_size }}</span>
                     </div>
 
-                    <span class="text-gray-400">•</span>
+                    <span class="text-gray-400 flex-shrink-0">•</span>
 
                     <!-- Download Count -->
-                    <div class="flex items-center gap-1">
+                    <div class="flex items-center gap-1 min-w-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="w-3 h-3">
+                            class="w-3 h-3 flex-shrink-0">
                             <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                         </svg>
-                        <span class="font-medium">{{ $file->download_count }}</span>
-                        <span>{{ $file->download_count === 1 ? 'download' : 'downloads' }}</span>
+                        <span class="font-medium flex-shrink-0">{{ $file->download_count }}</span>
+                        <span class="truncate">{{ $file->download_count === 1 ? 'download' : 'downloads' }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Kebab Menu Button -->
-            <button class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
+            <button x-ref="kebabButton" class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
                 @click.stop="menuOpen = !menuOpen">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -65,8 +65,28 @@
 
     <!-- Kebab Menu -->
     <div class="absolute top-2 right-14 z-50">
-        <div x-show="menuOpen" x-collapse @click.away="menuOpen = false" x-cloak
-            class="w-48 bg-white rounded-lg border border-gray-200 overflow-hidden shadow-xl text-sm">
+        <div x-show="menuOpen" @click.away="menuOpen = false" x-cloak
+            x-transition
+            x-anchor.bottom-end="$refs.kebabButton"
+            x-init="
+                $watch('menuOpen', value => {
+                    if (value) {
+                        $nextTick(() => {
+                            const rect = $el.getBoundingClientRect();
+                            const spaceBelow = window.innerHeight - rect.top;
+                            
+                            if (spaceBelow < rect.height) {
+                                $el.classList.add('bottom-full', 'mb-2');
+                                $el.classList.remove('top-0');
+                            } else {
+                                $el.classList.add('top-0');
+                                $el.classList.remove('bottom-full', 'mb-2');
+                            }
+                        });
+                    }
+                });
+            "
+            class="absolute right-0 top-0 w-48 bg-white rounded-lg border border-gray-200 overflow-visible shadow-xl text-sm">
 
             @auth
                 @if ($isSaved)
