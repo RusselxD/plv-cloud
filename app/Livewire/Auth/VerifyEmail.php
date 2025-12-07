@@ -77,10 +77,10 @@ class VerifyEmail extends Component
         $link = route('verify.email', ['token' => $token]);
 
         try {
-            // Send email synchronously (Gmail has issues with queue)
-            Mail::to($this->email)->send(new VerifyEmailMail($this->email, $link));
+            // Send email asynchronously using queue with Resend
+            Mail::to($this->email)->queue(new VerifyEmailMail($this->email, $link));
             
-            \Log::info('Email sent successfully to: ' . $this->email);
+            \Log::info('Email queued successfully for: ' . $this->email);
 
             return 0;
 

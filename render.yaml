@@ -35,19 +35,11 @@ services:
       - key: CLOUDINARY_URL
         value: cloudinary://227885633682225:FBxVPBDH3-mPDNI1k29AIXKs3CQ@dxshlvqc7
       - key: MAIL_MAILER
-        value: smtp
-      - key: MAIL_HOST
-        value: smtp.gmail.com
-      - key: MAIL_PORT
-        value: 587
-      - key: MAIL_USERNAME
-        value: plvcloud.noreply@gmail.com
-      - key: MAIL_PASSWORD
-        value: ffnyrujfunqlhlwk
-      - key: MAIL_ENCRYPTION
-        value: tls
+        value: resend
+      - key: RESEND_KEY
+        sync: false # Set manually in Render dashboard: re_cPNZJ145_5W1bd8qEAY2BjkDxdttLFXNd
       - key: MAIL_FROM_ADDRESS
-        value: plvcloud.noreply@gmail.com
+        value: onboarding@resend.dev
       - key: MAIL_FROM_NAME
         value: PLV Cloud
       - key: ADMIN_USERNAME
