@@ -4,15 +4,16 @@
     "src": "public/assets/banner.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-x6fnx_au.css",
+    "file": "assets/app-CSLQMvEy.css",
     "src": "resources/css/app.css",
     "isEntry": true,
+    "name": "app",
     "names": [
       "app.css"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DzUBHxNc.js",
+    "file": "assets/app-Hh8OxEKz.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

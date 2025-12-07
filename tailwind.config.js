@@ -4,9 +4,18 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
-
-        // REQUIRED FOR LIVEWIRE
-        "./app/Http/Livewire/**/*.php",
-        "./resources/views/livewire/**/*.blade.php",
+        "./app/View/Components/**/*.php",
+        "./app/Livewire/**/*.php",
     ],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+                primary: "#204990",
+            },
+        },
+    },
+    plugins: [],
 };
