@@ -13,7 +13,7 @@ services:
       - key: APP_KEY
         value: base64:5cFK3AwD51Clij1tG5+hSbjPMPLR7w9KvwEUlojNiPU=
       - key: APP_DEBUG
-        value: false
+        value: true
       - key: APP_URL
         value: https://plvcloud.onrender.com
       - key: ASSET_URL
@@ -21,7 +21,7 @@ services:
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL
-        value: error
+        value: debug
       - key: DB_CONNECTION
         value: pgsql
       - key: DATABASE_URL
