@@ -4,5 +4,9 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+
+        // REQUIRED FOR LIVEWIRE
+        "./app/Http/Livewire/**/*.php",
+        "./resources/views/livewire/**/*.blade.php",
     ],
 };
