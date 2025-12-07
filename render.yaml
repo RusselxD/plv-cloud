@@ -48,6 +48,8 @@ services:
         value: tls
       - key: MAIL_FROM_ADDRESS
         value: plvcloud.noreply@gmail.com
+      - key: MAIL_FROM_NAME
+        value: PLV Cloud
       - key: ADMIN_USERNAME
         value: plvcloudadmin
       - key: ADMIN_PASSWORD
