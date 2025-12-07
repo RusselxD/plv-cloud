@@ -13,6 +13,11 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Skip if courses already exist
+        if (Course::count() > 0) {
+            return;
+        }
+
         collect([
             ["Bachelor of Science in Accountancy", "BSA"],
             ["Bachelor of Secondary Education - Math", "BSED Math"],
