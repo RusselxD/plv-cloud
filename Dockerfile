@@ -30,6 +30,12 @@ WORKDIR /var/www
 # Copy application files
 COPY . /var/www
 
+# Remove any cached config files that might have been copied
+RUN rm -f /var/www/bootstrap/cache/config.php \
+    && rm -f /var/www/bootstrap/cache/routes*.php \
+    && rm -f /var/www/bootstrap/cache/events.php \
+    && rm -f /var/www/bootstrap/cache/services.php
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
