@@ -26,11 +26,11 @@ class VerifyEmail extends Component
             'email' => [
                 'required',
                 'email',
-                function ($attribute, $value, $fail) {
-                    if (!str_ends_with($value, '@plv.edu.ph')) {
-                        $fail('The ' . $attribute . ' must be a PLV email address.');
-                    }
-                },
+                // function ($attribute, $value, $fail) {
+                //     if (!str_ends_with($value, '@plv.edu.ph')) {
+                //         $fail('The ' . $attribute . ' must be a PLV email address.');
+                //     }
+                // },
                 'unique:users,email'
             ],
         ];
