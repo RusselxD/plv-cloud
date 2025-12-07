@@ -1,0 +1,20 @@
+{
+  "public/assets/banner.png": {
+    "file": "assets/banner-DhB6LjE3.png",
+    "src": "public/assets/banner.png"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-x6fnx_au.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DzUBHxNc.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
