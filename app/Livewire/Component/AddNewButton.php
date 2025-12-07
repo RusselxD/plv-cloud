@@ -5,10 +5,15 @@ namespace App\Livewire\Component;
 use App\Models\Course;
 use App\Models\File;
 use App\Models\Folder;
+use App\Models\FolderContributors;
 use App\Models\FolderLog;
 use App\Models\UserActivity;
+use Cloudinary\Cloudinary;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary as CloudinaryFacade;
 use Livewire\Attributes\On;
 use Livewire\Component;
+
+
 use Livewire\WithFileUploads;
 
 class AddNewButton extends Component
@@ -174,7 +179,21 @@ class AddNewButton extends Component
         }
 
         foreach ($this->uploads as $file) {
-            $path = $file->store('uploads', 'public');
+            try {
+                // Use Cloudinary Uploader to upload the file directly
+                $result = CloudinaryFacade::uploadApi()->upload($file->getRealPath(), [
+                    'folder' => 'plv-cloud-uploads'
+                ]);
+                $url = $result['secure_url'];
+            } catch (\Exception $e) {
+                \Log::error('Cloudinary upload error: ' . $e->getMessage());
+                \Log::error('Stack trace: ' . $e->getTraceAsString());
+                $this->dispatch('error_flash', message: 'Failed to upload file: ' . $e->getMessage());
+                $this->reset('uploads');
+                $this->openOptions = false;
+                return;
+            }
+
             $mime = $file->getMimeType();
             $originalName = $file->getClientOriginalName();
             
@@ -183,7 +202,7 @@ class AddNewButton extends Component
             
             File::create([
                 'name' => $uniqueName,
-                'storage_path' => $path,
+                'storage_path' => $url,
                 'file_size' => $this->humanizeFileSize($file->getSize()),
                 'mime_type' => $mime,
                 'user_id' => auth()->id(),
@@ -191,6 +210,27 @@ class AddNewButton extends Component
                 'course_id' => $this->parentIsAFolder ? null : $this->parentId
             ]);
             $this->logFileUpload($uniqueName);
+        }
+
+        // If files are uploaded to a public folder, add the current user as a contributor if not already
+        if ($this->parentIsAFolder) {
+            $folder = Folder::find($this->parentId);
+            
+            if ($folder && $folder->is_public) {
+                $isOwner = $folder->user_id === auth()->id();
+                $isAlreadyContributor = FolderContributors::where('folder_id', $this->parentId)
+                    ->where('user_id', auth()->id())
+                    ->exists();
+                
+                // Add user as contributor if they're not the owner and not already a contributor
+                if (!$isOwner && !$isAlreadyContributor) {
+                    FolderContributors::create([
+                        'folder_id' => $this->parentId,
+                        'user_id' => auth()->id(),
+                        'created_at' => now()
+                    ]);
+                }
+            }
         }
 
         $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane

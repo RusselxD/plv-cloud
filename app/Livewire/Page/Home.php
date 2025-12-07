@@ -26,9 +26,12 @@ class Home extends Component
             ->get();
 
         $this->highlightFolders = Folder::withCount(['children', 'files'])
-            ->orderByRaw('(children_count + files_count) DESC')
-            ->limit(5)
-            ->get();
+            ->get()
+            ->sortByDesc(function ($folder) {
+                return $folder->children_count + $folder->files_count;
+            })
+            ->take(5);
+
     }
 
     public function mount()

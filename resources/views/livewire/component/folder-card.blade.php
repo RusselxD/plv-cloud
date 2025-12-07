@@ -68,7 +68,7 @@
                 <!-- Owner Info -->
                 <div class="flex items-center gap-1.5 sm:gap-2 py-1 min-w-0 flex-1" wire:click.stop="goToProfile">
                     <div class="flex-shrink-0">
-                        <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                        <img src="{{ $user->profile_picture ? $user->profile_picture : asset('assets/profile_picture/default.jpg') }}"
                             alt="{{ $user->username }}'s profile picture"
                             class="w-5 h-5 sm:w-6 sm:h-6 object-cover rounded-full ring-2 ring-white shadow-sm" />
                     </div>

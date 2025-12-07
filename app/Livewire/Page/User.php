@@ -7,6 +7,8 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User as UserModel;
 use Livewire\WithFileUploads;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary as CloudinaryFacade;
+use Illuminate\Support\Facades\Log;
 
 class User extends Component
 {
@@ -160,23 +162,24 @@ class User extends Component
 
         // Handle profile picture removal
         if ($this->removeProfilePicture) {
-            // Delete old profile picture if exists
-            if ($this->user->profile_picture && \Storage::disk('public')->exists($this->user->profile_picture)) {
-                \Storage::disk('public')->delete($this->user->profile_picture);
-            }
             $this->user->profile_picture = null;
             $this->removeProfilePicture = false;
         }
         // Update profile picture if uploaded
         elseif (is_object($this->newProfilePicture)) {
-            // Delete old profile picture if exists
-            if ($this->user->profile_picture && \Storage::disk('public')->exists($this->user->profile_picture)) {
-                \Storage::disk('public')->delete($this->user->profile_picture);
+            try {
+                // Upload to Cloudinary
+                $result = CloudinaryFacade::uploadApi()->upload($this->newProfilePicture->getRealPath(), [
+                    'folder' => 'plv-cloud-profile-pictures'
+                ]);
+                
+                // Store Cloudinary URL
+                $this->user->profile_picture = $result['secure_url'];
+            } catch (\Exception $e) {
+                Log::error('Profile picture upload failed: ' . $e->getMessage());
+                $this->dispatch('error_flash', message: 'Failed to upload profile picture. Please try again.');
+                return;
             }
-
-            // Store new profile picture
-            $path = $this->newProfilePicture->store('profile_pictures', 'public');
-            $this->user->profile_picture = $path;
         }
 
         // Check if username changed

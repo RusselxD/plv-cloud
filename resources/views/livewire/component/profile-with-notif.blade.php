@@ -20,7 +20,7 @@
                 'bg-white' => $hasBackground,
                 'hover:bg-gray-200' => !$hasBackground
                 ])>
-            <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+            <img src="{{ $user->profile_picture ? $user->profile_picture : asset('assets/profile_picture/default.jpg') }}"
                 alt="{{ $user->username }}'s profile picture" class="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full flex-shrink-0"/>            
             <div class="hidden sm:block">
                 <p class="truncate max-w-32 sm:max-w-44 text-sm sm:text-base">{{ $user->username }}</p>

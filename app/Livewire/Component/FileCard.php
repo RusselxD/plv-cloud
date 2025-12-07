@@ -56,11 +56,8 @@ class FileCard extends Component
         // Reload the file to get the updated download_count
         $this->file = File::find($this->file->id);
 
-        // Dispatch event to trigger download via JavaScript
-        $this->dispatch('trigger-download', [
-            'url' => route('file.download', ['id' => $this->file->id]),
-            'filename' => $this->file->name
-        ]);        
+        // Redirect to download route that handles Cloudinary files
+        return redirect()->route('file.download', ['id' => $this->file->id]);
     }
 
     public function clickKebab()

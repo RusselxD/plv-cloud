@@ -124,9 +124,9 @@
 
         <!-- Details Pane -->
         <div @close-details-pane.window="detailPanelOpen = false" x-cloak @class([
-            ' bg-slate-100 fixed right-0 px-1 md:right-0 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide z-40',
+            ' bg-slate-100 fixed right-0 lg:right-3 px-1 top-[6rem] bottom-3 rounded-lg transition-all duration-300 ease-in-out overflow-x-hidden scrollbar-hide z-40',
         ])
-            :class="detailPanelOpen ? 'w-full sm:w-[20rem] lg:w-[22rem]' : 'w-0 left-full'">
+            :class="detailPanelOpen ? 'w-full sm:w-[20rem] lg:w-[22rem]' : 'w-0 left-full '">
             <livewire:component.folder-details-pane :folder="$this->folder" />
         </div>
 

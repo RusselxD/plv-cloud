@@ -14,13 +14,20 @@ class FileController extends Controller
     {
         $file = File::findOrFail($id);
 
-        $filePath = storage_path('app/public/' . $file->storage_path);
+        // Since files are stored on Cloudinary, storage_path is the Cloudinary URL
+        $cloudinaryUrl = $file->storage_path;
 
-        if (!file_exists($filePath)) {
+        // Download file from Cloudinary
+        $fileContents = file_get_contents($cloudinaryUrl);
+
+        if ($fileContents === false) {
             abort(404, 'File not found');
         }
 
-        return response()->download($filePath, $file->name);
+        // Return as download response
+        return response($fileContents)
+            ->header('Content-Type', $file->mime_type)
+            ->header('Content-Disposition', 'attachment; filename="' . $file->name . '"');
     }
 
     public function downloadFolder($id)
@@ -61,9 +68,20 @@ class FileController extends Controller
 
         // Add all files in this folder
         foreach ($folder->files as $file) {
-            $filePath = storage_path('app/public/' . $file->storage_path);
-            if (file_exists($filePath)) {
-                $zip->addFile($filePath, $currentPath . '/' . $file->name);
+            // Since files are stored on Cloudinary, storage_path is the Cloudinary URL
+            $cloudinaryUrl = $file->storage_path;
+            
+            try {
+                // Download file from Cloudinary
+                $fileContents = file_get_contents($cloudinaryUrl);
+                
+                if ($fileContents !== false) {
+                    // Add file content to zip from string
+                    $zip->addFromString($currentPath . '/' . $file->name, $fileContents);
+                }
+            } catch (\Exception $e) {
+                // Log error but continue with other files
+                \Log::warning('Failed to download file from Cloudinary: ' . $file->name);
             }
         }
 

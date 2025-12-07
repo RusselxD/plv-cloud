@@ -2,7 +2,7 @@
     <div class=" p-3 sm:p-5 md:p-7 w-full">
         <div class="flex flex-col lg:flex-row items-center lg:items-start">
             <div class="mb-3 lg:mb-0 lg:mr-5">
-                <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
+                <img src="{{ $user->profile_picture ? $user->profile_picture : asset('assets/profile_picture/default.jpg') }}"
                     alt="{{ $user->username }}'s profile picture" class="rounded-full w-16 h-16 sm:w-20 sm:h-20 object-cover" />
             </div>
             <div class="text-center lg:text-left">

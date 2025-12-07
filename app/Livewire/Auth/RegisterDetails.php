@@ -83,8 +83,8 @@ class RegisterDetails extends Component
             'email' => trim($this->email),
             'username' => $this->username,
             'password' => bcrypt($this->password),            
-            'first_name' => $this->firstName,
-            'last_name' => $this->lastName,
+            'first_name' => ucwords(strtolower($this->firstName)),
+            'last_name' => ucwords(strtolower($this->lastName)),
             'course_id' => $this->courseId,
             'email_verified_at' => now(),
         ]);
