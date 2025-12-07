@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev \
     nodejs \
-    npm
+    npm \
+    nginx \
+    supervisor
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -32,10 +34,15 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install Node dependencies and build assets
-# Use npm install instead of npm ci for better compatibility with package-lock.json
 RUN npm install && npm run build && ls -la /var/www/public/build
 
-# Set permissions - MUST be done after npm build to include built assets
+# Configure Nginx
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+
+# Configure Supervisor
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Set permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache \
@@ -44,8 +51,5 @@ RUN chown -R www-data:www-data /var/www \
 # Expose port
 EXPOSE 8080
 
-# Start application
-CMD php artisan storage:link && \
-    php artisan migrate --force && \
-    php artisan optimize && \
-    php artisan serve --host=0.0.0.0 --port=8080
+# Start supervisord to manage nginx and php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
