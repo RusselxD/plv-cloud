@@ -25,9 +25,7 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DATABASE_URL
-        fromDatabase:
-          name: plv_cloud_db
-          property: connectionString
+        value: postgresql://plv_cloud_db_user:TKVoUnSIPmQ7vTw5gYu4WKFzYQyLCB6B@dpg-d4qi8963jp1c739hrrn0-a/plv_cloud_db
       - key: SESSION_DRIVER
         value: file
       - key: CACHE_DRIVER
@@ -54,10 +52,3 @@ services:
         value: plvcloudadmin
       - key: ADMIN_PASSWORD
         value: Russel-08
-
-databases:
-  - name: plv_cloud_db
-    databaseName: plvcloud
-    user: plvcloud
-    region: singapore
-    plan: free
