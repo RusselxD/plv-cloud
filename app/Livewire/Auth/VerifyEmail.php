@@ -77,10 +77,10 @@ class VerifyEmail extends Component
         $link = route('verify.email', ['token' => $token]);
 
         try {
-            // Send email synchronously with Brevo (testing)
-            Mail::to($this->email)->send(new VerifyEmailMail($this->email, $link));
+            // Send email asynchronously using queue with Brevo API (fast!)
+            Mail::to($this->email)->queue(new VerifyEmailMail($this->email, $link));
             
-            \Log::info('Email sent successfully to: ' . $this->email);
+            \Log::info('Email queued successfully for: ' . $this->email);
 
             return 0;
 
