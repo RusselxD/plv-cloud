@@ -88,7 +88,7 @@
             <a class="font-bold text-primary" href="{{ route('register') }}">Sign up</a>
         </span>
 
-        <div class="absolute inset-0 z-11 bg-black/20" wire:loading wire:target="submit">
+        <div class="absolute inset-0 z-20 bg-black/20" wire:loading wire:target="submit">
             <x-ui.general.spinner />
         </div>
     </form>
