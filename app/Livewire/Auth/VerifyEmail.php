@@ -79,14 +79,19 @@ class VerifyEmail extends Component
         try {
             // Send email asynchronously using queue
             Mail::to($this->email)->queue(new VerifyEmailMail($this->email, $link));
+            
+            \Log::info('Email queued successfully for: ' . $this->email);
 
             return 0;
 
         } catch (TransportException $e) {
+            \Log::error('TransportException: ' . $e->getMessage());
             return 1;
         } catch (ConnectException $e) {
+            \Log::error('ConnectException: ' . $e->getMessage());
             return 2;
         } catch (Exception $e) {
+            \Log::error('General Exception: ' . $e->getMessage());
             return 3;
         }
     }
