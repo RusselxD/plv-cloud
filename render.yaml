@@ -25,7 +25,9 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: plv_cloud_db
+          property: connectionString
       - key: SESSION_DRIVER
         value: file
       - key: CACHE_DRIVER
@@ -54,7 +56,7 @@ services:
         value: Russel-08
 
 databases:
-  - name: plvcloud-db
+  - name: plv_cloud_db
     databaseName: plvcloud
     user: plvcloud
     region: singapore
