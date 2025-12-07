@@ -24,7 +24,7 @@
 
     <div class="bg-slate-100 rounded-lg p-3 sm:p-4 md:p-5 flex-1 mt-[5.25rem] flex flex-col">
 
-        <span class="mt-12 sm:mt-0">
+        <span class=" mt-[7.5rem] sm:mt-[4.5rem]">
             <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs" />
         </span>
 
