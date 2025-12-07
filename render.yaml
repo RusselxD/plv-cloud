@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: plvcloud
+    env: docker
+    region: singapore
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: PLV Cloud
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        value: base64:5cFK3AwD51Clij1tG5+hSbjPMPLR7w9KvwEUlojNiPU=
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://plvcloud.onrender.com
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: CLOUDINARY_URL
+        value: cloudinary://227885633682225:FBxVPBDH3-mPDNI1k29AIXKs3CQ@dxshlvqc7
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: plvcloud.noreply@gmail.com
+      - key: MAIL_PASSWORD
+        value: ffnyrujfunqlhlwk
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        value: plvcloud.noreply@gmail.com
+      - key: ADMIN_USERNAME
+        value: plvcloudadmin
+      - key: ADMIN_PASSWORD
+        value: Russel-08
+
+databases:
+  - name: plvcloud-db
+    databaseName: plvcloud
+    user: plvcloud
+    region: singapore
+    plan: free
