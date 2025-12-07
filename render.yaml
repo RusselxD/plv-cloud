@@ -31,7 +31,7 @@ services:
       - key: CACHE_DRIVER
         value: file
       - key: QUEUE_CONNECTION
-        value: sync
+        value: database
       - key: CLOUDINARY_URL
         value: cloudinary://227885633682225:FBxVPBDH3-mPDNI1k29AIXKs3CQ@dxshlvqc7
       - key: MAIL_MAILER

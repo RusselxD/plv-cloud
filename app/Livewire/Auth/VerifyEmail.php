@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Mail\VerifyEmailMail;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Exception;
@@ -76,10 +77,8 @@ class VerifyEmail extends Component
         $link = route('verify.email', ['token' => $token]);
 
         try {
-            $e = Mail::send('components.emails.verify', ['link' => $link], function ($message) {
-                $message->to($this->email)
-                    ->subject('Verify your email to sign up');
-            });
+            // Send email asynchronously using queue
+            Mail::to($this->email)->queue(new VerifyEmailMail($this->email, $link));
 
             return 0;
 
