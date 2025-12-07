@@ -92,7 +92,6 @@
 ### 📱 User Experience
 
 -   **Responsive Design** optimized for desktop, tablet, and mobile
--   **Dark Mode** support with Tailwind CSS
 -   **Intuitive UI/UX** with smooth transitions and animations
 -   **Fast Performance** with optimized database queries and caching
 -   **Progressive Web App** capabilities for offline access
@@ -551,7 +550,7 @@ We welcome contributions! Please follow these guidelines:
 -   Cloudinary integration for file storage
 -   Brevo API for email delivery
 -   Queue-based job processing
--   Responsive UI with dark mode support
+-   Responsive UI
 -   Comprehensive notification system
 
 ---
