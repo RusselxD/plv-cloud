@@ -13,4 +13,13 @@ export default defineConfig({
             ],
         }),
     ],
+    build: {
+        manifest: "manifest.json", // Keep manifest at root of build directory
+        outDir: "public/build",
+        rollupOptions: {
+            output: {
+                manualChunks: undefined,
+            },
+        },
+    },
 });

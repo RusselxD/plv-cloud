@@ -32,21 +32,20 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install Node dependencies and build assets
-RUN npm ci && npm run build
+# Use npm install instead of npm ci for better compatibility with package-lock.json
+RUN npm install && npm run build && ls -la /var/www/public/build
 
-# Set permissions
+# Set permissions - MUST be done after npm build to include built assets
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+    && chmod -R 755 /var/www/bootstrap/cache \
+    && chmod -R 755 /var/www/public/build
 
 # Expose port
 EXPOSE 8080
 
 # Start application
 CMD php artisan storage:link && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
     php artisan migrate --force && \
     php artisan optimize && \
     php artisan serve --host=0.0.0.0 --port=8080
