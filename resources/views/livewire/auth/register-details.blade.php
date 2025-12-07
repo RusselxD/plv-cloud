@@ -19,6 +19,7 @@
         <div class="w-full flex flex-col items-stretch mt-3">
             <label for="username" class="mb-1 text-sm text-primary">Username</label>
             <input id="username" type="text" wire:model="username"
+                oninput="this.value = this.value.replace(/[^a-zA-Z0-9._-]/g, '')"
                 class="px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
             @error('username') <p
                 class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
@@ -140,7 +141,7 @@
             <div class="w-full">
                 <label for="first_name" class="mb-1 text-sm text-primary">First Name</label>
                 <input id="first_name" type="text" wire:model="firstName"
-                    oninput="this.value = this.value.replace(/[0-9]/g, '')"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '')"
                     class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
                 @error('firstName') <p
                     class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
@@ -151,7 +152,7 @@
             <div class="w-full">
                 <label for="last_name" class="mb-1 text-sm text-primary">Last Name</label>
                 <input id="last_name" type="text" wire:model="lastName"
-                    oninput="this.value = this.value.replace(/[0-9]/g, '')"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '')"
                     class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
                 @error('lastName') <p
                     class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">

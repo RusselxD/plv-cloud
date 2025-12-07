@@ -38,8 +38,8 @@ class RegisterDetails extends Component
                 'confirmed',
             ],
             'password_confirmation' => ['required'],            
-            'firstName' => ['required', 'string', 'min:1', 'max:50'],
-            'lastName' => ['required', 'string', 'min:1', 'max:50'],
+            'firstName' => ['required', 'string', 'min:1', 'max:50', 'regex:/^[a-zA-Z\s\'\-]+$/'],
+            'lastName' => ['required', 'string', 'min:1', 'max:50', 'regex:/^[a-zA-Z\s\'\-]+$/'],
             'courseId' => ['required', 'exists:courses,id'],
         ];
     }
@@ -64,10 +64,12 @@ class RegisterDetails extends Component
         'firstName.required' => 'Please enter your first name.',
         'firstName.min' => 'First name must have at least 1 character.',
         'firstName.max' => 'First name cannot be longer than 50 characters.',
+        'firstName.regex' => 'First name may only contain letters, spaces, hyphens, and apostrophes.',
 
         'lastName.required' => 'Please enter your last name.',
         'lastName.min' => 'Last name must have at least 1 character.',
         'lastName.max' => 'Last name cannot be longer than 50 characters.',
+        'lastName.regex' => 'Last name may only contain letters, spaces, hyphens, and apostrophes.',
 
         'courseId.required' => 'Please select your course.',
         'courseId.exists' => 'Selected course does not exist.',

@@ -93,7 +93,6 @@ class Notifications extends Component
         return redirect($url);
     }
 
-
     public function deleteNotification($id)
     {
         $notification = Notification::find($id);

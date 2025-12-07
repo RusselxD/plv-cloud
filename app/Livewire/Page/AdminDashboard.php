@@ -12,13 +12,17 @@ use Livewire\Component;
 
 class AdminDashboard extends Component
 {
-    public $currentView = 'dashboard'; // 'dashboard' or 'reports'
+    public $currentView = 'dashboard'; // 'dashboard', 'reports', or 'users'
 
     // Reports data
     public $reports;
     public $totalReports;
     public $pendingReports;
     public $acknowledgedReports;
+
+    // Users data
+    public $users;
+    public $totalUsersCount;
 
     // Dashboard statistics
     public $totalUsers;
@@ -55,6 +59,10 @@ class AdminDashboard extends Component
         $this->totalReports = $this->reports->count();
         $this->pendingReports = $this->reports->where('is_acknowledged', false)->count();
         $this->acknowledgedReports = $this->reports->where('is_acknowledged', true)->count();
+
+        // Load users data (sorted by newest first)
+        $this->users = User::orderBy('created_at', 'desc')->get();
+        $this->totalUsersCount = $this->users->count();
 
         // Load dashboard statistics
         $this->totalUsers = User::count();
@@ -125,6 +133,38 @@ class AdminDashboard extends Component
             $this->loadData();
 
             $this->dispatch('success_flash', message: 'Report status updated.');
+        }
+    }
+
+    public function banUser($userId, $days, $reason = null)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->is_banned = true;
+            $user->banned_until = now()->addDays($days);
+            $user->ban_reason = $reason ?? "Banned by administrator for $days day(s).";
+            $user->save();
+
+            // Reload data
+            $this->loadData();
+
+            $this->dispatch('success_flash', message: "User banned for $days day(s).");
+        }
+    }
+
+    public function unbanUser($userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->is_banned = false;
+            $user->banned_until = null;
+            $user->ban_reason = null;
+            $user->save();
+
+            // Reload data
+            $this->loadData();
+
+            $this->dispatch('success_flash', message: 'User unbanned successfully.');
         }
     }
 

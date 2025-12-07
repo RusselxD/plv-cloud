@@ -17,7 +17,7 @@
 <body class="lg:relative min-h-screen">
 
     <livewire:component.sidebar />
-    <main class="lg:ml-64 relative py-3 pr-3 min-h-screen flex">
+    <main class="lg:ml-64 relative py-3 px-3 lg:pr-3 lg:pl-0 min-h-screen flex">
 
         {{ $slot }}
 

@@ -1,15 +1,15 @@
 <div class="scrollbar-hide" x-data="{ activeTab: 'contributors', reportedContentsOpen: false }">
 
-    <div class="p-3 relative">
+    <div class="p-3 sm:p-4 relative">
 
         <div class="absolute inset-0 z-120 bg-black/20" wire:loading wire:target="toggleFolderPublicity">
             <x-ui.general.spinner />
         </div>
 
         <img src="{{ asset('assets/x.svg') }}" @click="$dispatch('close-details-pane')"
-            class="absolute top-3 right-3 hover:bg-gray-200 rounded-full p-1 w-7 cursor-pointer" />
-        <h1 class="font-semibold text-lg max-w-[85%] break-words">{{ $folder->name }}</h1>
-        <p class="text-xs flex justify-between items-center mt-1 border-b border-gray-400 pb-3">
+            class="absolute top-3 right-3 hover:bg-gray-200 rounded-full p-1 w-6 sm:w-7 cursor-pointer" />
+        <h1 class="font-semibold text-base sm:text-lg max-w-[85%] break-words">{{ $folder->name }}</h1>
+        <p class="text-[10px] sm:text-xs flex justify-between items-center mt-1 border-b border-gray-400 pb-2 sm:pb-3">
             <span class=" text-slate-700 font-light">Created {{ $folder->created_at->format('M d, Y') }}</span>
         </p>
 
@@ -152,37 +152,37 @@
 
         @endif
 
-        <p class="mt-3 text-sm">Contents</p>
+        <p class="mt-3 text-xs sm:text-sm">Contents</p>
         <div class="grid grid-cols-2 gap-2 mt-1">
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">{{ $childrenFolderCount }}</p>
-                <p class="text-sm text-gray-700">Folders</p>
+                <p class="font-bold text-base sm:text-lg">{{ $childrenFolderCount }}</p>
+                <p class="text-xs sm:text-sm text-gray-700">Folders</p>
             </div>
             <div class="text-center bg-white rounded-md py-2">
-                <p class="font-bold text-lg">{{ $filesCount }}</p>
-                <p class="text-sm text-gray-700">Files</p>
+                <p class="font-bold text-base sm:text-lg">{{ $filesCount }}</p>
+                <p class="text-xs sm:text-sm text-gray-700">Files</p>
             </div>
         </div>
 
         @if (!$this->userIsAContributor)
         <!-- Contributor's Tab (not authenticated as contributor) -->
-            <p class="mt-3 mb-2 text-sm">Contributors</p>
+            <p class="mt-3 mb-2 text-xs sm:text-sm">Contributors</p>
             <div class="space-y-2">
-                <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
+                <div class="w-full bg-white rounded-md flex items-center justify-start p-2 sm:p-3">
                     <img src="{{ $folder->user->profile_picture ? asset('storage/' . $folder->user->profile_picture) : asset('assets/profile_picture/default.jpg') }}"
-                        alt="{{ $folder->user->username }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>                    
+                        alt="{{ $folder->user->username }}'s profile picture" class="w-7 h-7 sm:w-8 sm:h-8 object-cover rounded-full flex-shrink-0"/>                    
                     <div class="ml-2 flex-1 overflow-hidden">
-                        <p class="text-sm font-medium block truncate max-w-[90%]">{{ $folder->user->username }}</p>
-                        <p class="text-xs text-gray-500">Owner</p>
+                        <p class="text-xs sm:text-sm font-medium block truncate max-w-[90%]">{{ $folder->user->username }}</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500">Owner</p>
                     </div>
                 </div>
                 @foreach ($contributors as $contributor)
-                    <div class="w-full bg-white rounded-md flex items-center justify-start p-3">
+                    <div class="w-full bg-white rounded-md flex items-center justify-start p-2 sm:p-3">
                         <img src="{{ $contributor['profile_picture'] ? asset('storage/' . $contributor['profile_picture']) : asset('assets/profile_picture/default.jpg') }}"    
-                            alt="{{ $contributor['username'] }}'s profile picture" class="w-8 h-8 object-cover rounded-full flex-shrink-0"/>
+                            alt="{{ $contributor['username'] }}'s profile picture" class="w-7 h-7 sm:w-8 sm:h-8 object-cover rounded-full flex-shrink-0"/>
                         <div class="ml-2 flex-1 overflow-hidden">
-                            <p class="text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
-                            <p class="text-xs text-gray-500">Contributor</p>
+                            <p class="text-xs sm:text-sm font-medium block truncate max-w-[90%]">{{ $contributor['username'] }}</p>
+                            <p class="text-[10px] sm:text-xs text-gray-500">Contributor</p>
                         </div>
                     </div>
                 @endforeach

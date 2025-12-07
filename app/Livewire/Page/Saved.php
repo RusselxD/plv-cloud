@@ -25,6 +25,7 @@ class Saved extends Component
 
     public function submitSearch()
     {
+        
     }
 
     public function changeCategory($categoryInt)

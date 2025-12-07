@@ -61,10 +61,12 @@ class ConfirmDeleteModal extends Component
 
         $parentType = $item->folder == null ? $parentType = 'course' : $parentType = 'folder';
 
+        
         $item->delete();
         $this->logAction($name, $parent, $parentType);
-
+        
         $this->dispatch('deleted'); // caught by Course or (Folder and FolderDetailsPane) or Home or Notifications
+        // dd("nigga");
         $this->dispatch('success_flash', message: 'Deleted successfully');
         
     }

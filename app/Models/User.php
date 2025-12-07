@@ -32,7 +32,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_banned' => 'boolean',
+            'banned_until' => 'datetime',
         ];
+    }
+
+    public function isBanned(): bool
+    {
+        if (!$this->is_banned) {
+            return false;
+        }
+
+        // Check if ban has expired
+        if ($this->banned_until && now()->isAfter($this->banned_until)) {
+            $this->update([
+                'is_banned' => false,
+                'banned_until' => null,
+                'ban_reason' => null,
+            ]);
+            return false;
+        }
+
+        return true;
     }
 
     public function course()

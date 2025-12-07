@@ -50,6 +50,17 @@ class Login extends Component
             return;
         }
 
+        // Check if user is banned
+        if ($user->isBanned()) {
+            $banMessage = 'Your account has been suspended.';
+            if ($user->banned_until) {
+                $banMessage .= ' You can access your account again after ' . $user->banned_until->format('F j, Y \a\t g:i A') . '.';
+            }
+            $this->addError('login', $banMessage);
+            $this->reset(['password']);
+            return;
+        }
+
         // Login the user
         Auth::login($user, $this->remember);
         session()->regenerate();

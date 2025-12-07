@@ -1,32 +1,32 @@
 <div class="group relative" x-data="{ menuOpen: false }">
     <!-- Card Content -->
     <div
-        class="rounded-xl bg-white shadow-sm hover:shadow-lg border border-gray-200 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
+        class="rounded-lg sm:rounded-xl bg-white shadow-sm hover:shadow-lg border border-gray-200 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
         <!-- Colored Top Border -->
-        <div class="h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600"></div>
+        <div class="h-0.5 sm:h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600"></div>
 
         <!-- Main Content -->
-        <div class="p-4 flex items-center gap-4">
+        <div class="p-3 sm:p-4 flex items-center gap-2 sm:gap-3 md:gap-4">
             <!-- File Icon -->
             <div class="flex-shrink-0">
                 <div
-                    class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <img class="w-7" src="{{ asset($icon) }}" />
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <img class="w-5 sm:w-6 md:w-7" src="{{ asset($icon) }}" />
                 </div>
             </div>
 
             <!-- File Info -->
             <div class="flex-1 min-w-0">
                 <h3
-                    class="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-200">
+                    class="text-xs sm:text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-200">
                     {{ $file->name }}
                 </h3>
-                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500 overflow-hidden">
+                <div class="flex items-center gap-1 sm:gap-2 mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-500 overflow-hidden">
                     <!-- File Size -->
-                    <div class="flex items-center gap-1 flex-shrink-0">
+                    <div class="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="w-3 h-3 flex-shrink-0">
+                            class="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" x2="12" y1="15" y2="3" />
@@ -34,27 +34,27 @@
                         <span class="font-medium whitespace-nowrap">{{ $file->file_size }}</span>
                     </div>
 
-                    <span class="text-gray-400 flex-shrink-0">•</span>
+                    <span class="text-gray-400 flex-shrink-0 hidden sm:inline">•</span>
 
                     <!-- Download Count -->
-                    <div class="flex items-center gap-1 min-w-0">
+                    <div class="flex items-center gap-0.5 sm:gap-1 min-w-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="w-3 h-3 flex-shrink-0">
+                            class="w-2.5 h-2.5 sm:w-3 sm:h-3 flex-shrink-0">
                             <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                         </svg>
                         <span class="font-medium flex-shrink-0">{{ $file->download_count }}</span>
-                        <span class="truncate">{{ $file->download_count === 1 ? 'download' : 'downloads' }}</span>
+                        <span class="truncate hidden sm:inline">{{ $file->download_count === 1 ? 'download' : 'downloads' }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Kebab Menu Button -->
-            <button x-ref="kebabButton" class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
+            <button x-ref="kebabButton" class="flex-shrink-0 p-1 sm:p-1.5 hover:bg-gray-100 rounded-lg transition-colors duration-200 group/kebab"
                 @click.stop="menuOpen = !menuOpen">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-more-vertical w-5 h-5 text-gray-400 group-hover/kebab:text-gray-600">
+                    class="lucide lucide-more-vertical w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover/kebab:text-gray-600">
                     <circle cx="12" cy="12" r="1" />
                     <circle cx="12" cy="5" r="1" />
                     <circle cx="12" cy="19" r="1" />
@@ -147,6 +147,12 @@
                     <span class="text-gray-700 group-hover:text-gray-900 font-medium">Rename</span>
                 </button>
 
+                @php
+                    $currentUrl = request()->url();
+                    $isSavedPage = str_contains($currentUrl, '/saved');
+                @endphp
+                
+                @if(!$isSavedPage)
                 <button
                     class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 transition-colors duration-150 text-left group"
                     @click.stop="menuOpen = false; $wire.openConfirmDeleteModal()">
@@ -161,6 +167,7 @@
                     </svg>
                     <span class="text-gray-700 group-hover:text-red-600 font-medium">Delete</span>
                 </button>
+                @endif
             @endif
 
             @if (auth()->id() !== $file->user_id && auth()->check())

@@ -9,6 +9,7 @@ use App\Livewire\Auth\RegisterDetails;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Page\AdminDashboard;
+use App\Livewire\Page\Banned;
 use App\Livewire\Page\Course;
 use App\Livewire\Page\Courses;
 use App\Livewire\Page\Folder;
@@ -25,6 +26,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', Login::class)
     ->middleware('guest')
     ->name('login');
+
+Route::get('/banned', Banned::class)
+    ->middleware('auth')
+    ->name('banned');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
+    return redirect()->route('login');
+})->name('logout');
 
 Route::get('/home', Home::class)
     ->name('home');

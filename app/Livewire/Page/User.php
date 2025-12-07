@@ -107,9 +107,9 @@ class User extends Component
 
         // Validate basic profile fields
         $validationRules = [
-            'newFirstName' => 'required|string|max:255',
-            'newLastName' => 'required|string|max:255',
-            'newUsername' => 'required|string|max:255|unique:users,username,' . $this->user->id,
+            'newFirstName' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\'\-]+$/'],
+            'newLastName' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\'\-]+$/'],
+            'newUsername' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z0-9._-]+$/', 'unique:users,username,' . $this->user->id],
             'newCourseId' => 'required|exists:courses,id',
         ];
 
@@ -120,8 +120,13 @@ class User extends Component
 
         $this->validate($validationRules, [
             'newFirstName.required' => 'First name is required.',
+            'newFirstName.regex' => 'First name may only contain letters, spaces, hyphens, and apostrophes.',
             'newLastName.required' => 'Last name is required.',
+            'newLastName.regex' => 'Last name may only contain letters, spaces, hyphens, and apostrophes.',
             'newUsername.required' => 'Username is required.',
+            'newUsername.min' => 'Username must be at least 3 characters.',
+            'newUsername.max' => 'Username cannot exceed 20 characters.',
+            'newUsername.regex' => 'Username may only contain letters, numbers, dots, underscores, and hyphens.',
             'newUsername.unique' => 'This username is already taken.',
             'newCourseId.required' => 'Please select a course.',
             'newCourseId.exists' => 'Invalid course selected.',

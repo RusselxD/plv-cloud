@@ -80,6 +80,52 @@ class AddNewButton extends Component
         return number_format($value, $decimals) . ' ' . $units[$factor];
     }
 
+    public function getUniqueFileName($originalName)
+    {
+        // Build query to check for existing files in the same location
+        $query = File::query();
+        
+        if ($this->parentIsAFolder) {
+            $query->where('folder_id', $this->parentId);
+        } else {
+            $query->where('course_id', $this->parentId);
+        }
+
+        // Check if file with this name exists
+        $existingFile = $query->where('name', $originalName)->exists();
+        
+        if (!$existingFile) {
+            return $originalName;
+        }
+
+        // Parse filename and extension
+        $pathInfo = pathinfo($originalName);
+        $filename = $pathInfo['filename'];
+        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+
+        // Get all existing files with similar names
+        $existingNames = File::query()
+            ->when($this->parentIsAFolder, function($q) {
+                $q->where('folder_id', $this->parentId);
+            }, function($q) {
+                $q->where('course_id', $this->parentId);
+            })
+            ->where('name', 'like', $filename . '%' . $extension)
+            ->pluck('name')
+            ->toArray();
+
+        // Find the highest number suffix
+        $counter = 1;
+        $newName = $filename . " ({$counter})" . $extension;
+        
+        while (in_array($newName, $existingNames)) {
+            $counter++;
+            $newName = $filename . " ({$counter})" . $extension;
+        }
+
+        return $newName;
+    }
+
     public function logFileUpload($name)
     {
         $parentName = $this->parentIsAFolder ?
@@ -130,9 +176,13 @@ class AddNewButton extends Component
         foreach ($this->uploads as $file) {
             $path = $file->store('uploads', 'public');
             $mime = $file->getMimeType();
-            $name = $file->getClientOriginalName();
+            $originalName = $file->getClientOriginalName();
+            
+            // Get unique filename if duplicate exists
+            $uniqueName = $this->getUniqueFileName($originalName);
+            
             File::create([
-                'name' => $name,
+                'name' => $uniqueName,
                 'storage_path' => $path,
                 'file_size' => $this->humanizeFileSize($file->getSize()),
                 'mime_type' => $mime,
@@ -140,7 +190,7 @@ class AddNewButton extends Component
                 'folder_id' => $this->parentIsAFolder ? $this->parentId : null,
                 'course_id' => $this->parentIsAFolder ? null : $this->parentId
             ]);
-            $this->logFileUpload($name);
+            $this->logFileUpload($uniqueName);
         }
 
         $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane
