@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/logo.svg') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -19,8 +20,8 @@
 <body class="h-[100dvh] relative">
 
     <div class="lg:grid lg:grid-cols-[1fr_0.7fr] h-full">
-        <div class="hidden lg:block h-full max-h-screen relative">
-            <div class="banner rounded-4xl absolute inset-5">
+        <div class="hidden lg:block rounded-[2rem] h-full max-h-screen relative">
+            <div class="banner absolute inset-5 rounded-[2rem]">
             </div>
         </div>
         <div class="overflow-y-auto scrollbar-hide">
