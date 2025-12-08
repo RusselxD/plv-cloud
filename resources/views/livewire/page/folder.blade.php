@@ -36,7 +36,7 @@
                     <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs" />
                 </span>
 
-                <div class="absolute top-12 right-1 sm:top-0 sm:right-0 flex items-center space-x-1 ml-auto">
+                <div class="absolute top-28 right-0 sm:top-16 flex items-center space-x-1 ml-auto">
                     @auth
                         @if ($isSaved)
                             <img src="{{ asset('assets/save-filled.svg') }}" class="w-5 sm:w-6 cursor-pointer" wire:click="unsaveFolder"/>
@@ -46,7 +46,7 @@
                         @endif
                     @endauth
                     <img src="{{ asset('/assets/details.svg') }}" @click="detailPanelOpen = !detailPanelOpen"
-                        class='w-8 sm:w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out'
+                        class='w-9 p-2 rounded-full cursor-pointer transition-colors duration-100 ease-in-out'
                         :class="detailPanelOpen ? 'bg-blue-100 hover:bg-blue-200' : 'hover:bg-gray-200'" />
                 </div>
 
