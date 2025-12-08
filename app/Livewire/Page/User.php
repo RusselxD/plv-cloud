@@ -211,9 +211,11 @@ class User extends Component
                 }
 
                 // Upload to Cloudinary
+                // Set access_mode to 'public' so profile pictures are accessible by everyone
                 $result = CloudinaryFacade::uploadApi()->upload($filePath, [
                     'folder' => 'plv-cloud-profile-pictures',
                     'resource_type' => 'image',
+                    'access_mode' => 'public',
                     'transformation' => [
                         'width' => 400,
                         'height' => 400,

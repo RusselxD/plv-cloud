@@ -17,11 +17,24 @@ class FileController extends Controller
         // Since files are stored on Cloudinary, storage_path is the Cloudinary URL
         $cloudinaryUrl = $file->storage_path;
 
+        \Log::info('File download requested', [
+            'file_id' => $file->id,
+            'file_name' => $file->name,
+            'user_id' => auth()->id(),
+            'uploader_id' => $file->user_id
+        ]);
+
         // Download file from Cloudinary
-        $fileContents = file_get_contents($cloudinaryUrl);
+        $fileContents = @file_get_contents($cloudinaryUrl);
 
         if ($fileContents === false) {
-            abort(404, 'File not found');
+            \Log::error('Failed to download file from Cloudinary', [
+                'file_id' => $file->id,
+                'file_name' => $file->name,
+                'cloudinary_url' => $cloudinaryUrl,
+                'error' => error_get_last()
+            ]);
+            abort(404, 'File not found or not accessible. The file may need to be re-uploaded.');
         }
 
         // Return as download response

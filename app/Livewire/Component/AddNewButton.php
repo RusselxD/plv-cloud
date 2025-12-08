@@ -235,9 +235,11 @@ class AddNewButton extends Component
                 }
                 
                 // Upload to Cloudinary using the file path
+                // Set access_mode to 'public' so files are downloadable by everyone
                 $result = CloudinaryFacade::uploadApi()->upload($filePath, [
                     'folder' => 'plv-cloud-uploads',
-                    'resource_type' => 'auto'
+                    'resource_type' => 'auto',
+                    'access_mode' => 'public'
                 ]);
                 $url = $result['secure_url'];
                 \Log::info("Cloudinary upload successful for file {$index}", [
