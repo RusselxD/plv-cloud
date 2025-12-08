@@ -51,11 +51,11 @@ class FolderDetailsPane extends Component
             // changed folder privacy to (public/private)            
         ]);
 
-        // UserActivity::create([
-        //     'user_id' => auth()->id(),
-        //     'details' => 'Changed folder "' . $this->folder->name . '" privacy to ' . ($this->folder->is_public ? 'public' : 'private'),
-        //     // Changed folder "Name" privacy to (public/private)            
-        // ]);
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => 'Changed folder "' . $this->folder->name . '" privacy to ' . ($this->folder->is_public ? 'public' : 'private'),
+            // Changed folder "Name" privacy to (public/private)            
+        ]);
 
         $this->folder->load([
             'folderLogs.user:id,username,profile_picture',
@@ -125,11 +125,11 @@ class FolderDetailsPane extends Component
             // approved/declined the request of username to be a contributor
         ]);
 
-        // UserActivity::create([
-        //     'user_id' => auth()->id(),
-        //     'details' => ($approved ? 'Approved' : 'Declined') . ' the request of ' . $request->user->username . ' to be a contributor in "' . $this->folder->name . '"',
-        //     // Approved/Declined the request of username to be a contributor in "Name"
-        // ]);
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => ($approved ? 'Approved' : 'Declined') . ' the request of ' . $request->user->username . ' to be a contributor in "' . $this->folder->name . '"',
+            // Approved/Declined the request of username to be a contributor in "Name"
+        ]);
 
         $request->delete();
         $this->folder->load([
@@ -156,12 +156,11 @@ class FolderDetailsPane extends Component
             // acknowledged the report by username of "reported_item_name"
         ]);
 
-        // UserActivity::create([
-        //     'user_id' => auth()->id(),
-        //     'details' => 'Acknowledged the report by ' . $report['username'] . ' of "' . $report['reported_item_name'] . '" in folder "' . $this->folder->name . '"',
-        //     // Acknowledged the report by username of "reported_item_name"
-        // ]);
-
+        UserActivity::create([
+            'user_id' => auth()->id(),
+            'details' => 'Acknowledged the report by ' . $report['username'] . ' of "' . $report['reported_item_name'] . '" in folder "' . $this->folder->name . '"',
+            // Acknowledged the report by username of "reported_item_name"
+        ]);
 
         $this->folder->load([
             'folderLogs.user:id,username,profile_picture',
@@ -276,11 +275,6 @@ class FolderDetailsPane extends Component
 
     public function mount($folder)
     {
-        // First, get the folder with minimal data to determine access level
-        // $this->folder = Folder::where('uuid', $uuid)
-        //     ->with(['user:id,username,profile_picture'])
-        //     ->withCount(['files', 'children'])
-        //     ->firstOrFail();
         $this->folder = $folder;
 
         $this->userIsTheOwner = $this->folder->user_id === auth()->id();

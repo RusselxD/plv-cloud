@@ -53,13 +53,18 @@ class ForgotPassword extends Component
 
         try {
             Mail::send('emails.password-reset', ['resetLink' => $resetLink, 'user' => $user], function ($message) use ($user) {
-                $message->to($user->email);
-                $message->subject('Reset Password Request');
+                $message->to($user->email)
+                        ->subject('Reset Password Request')
+                        ->from(config('mail.from.address'), config('mail.from.name'));
             });
 
             $this->emailSent = true;
             session()->flash('success', 'Password reset link has been sent to your email.');
+            
+            \Log::info('Password reset email sent to: ' . $this->email);
+            
         } catch (\Exception $e) {
+            \Log::error('Failed to send password reset email: ' . $e->getMessage());
             $this->addError('email', 'Failed to send email. Please try again later.');
         }
     }
