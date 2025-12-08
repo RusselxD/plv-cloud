@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/50 flex justify-center items-center z-[60]" 
+<div class="fixed inset-0 bg-black/50 flex justify-center items-center z-[150]" 
     x-data="{ show: true }" 
     x-show="show"
     x-transition 

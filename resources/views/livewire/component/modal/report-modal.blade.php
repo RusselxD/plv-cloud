@@ -1,5 +1,5 @@
 <div 
-    class="fixed inset-0 bg-black/20 flex justify-center items-center z-400 cursor-default"
+    class="fixed inset-0 bg-black/20 flex justify-center items-center z-[100] cursor-default"
     x-data="{ 
         show: true, 
         selectedReason: @entangle('reason') 

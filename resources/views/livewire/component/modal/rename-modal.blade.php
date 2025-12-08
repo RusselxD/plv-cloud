@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-150 cursor-default" x-data="{ show: true }" 
+<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-[150] cursor-default" x-data="{ show: true }" 
     x-show="show"
     x-transition 
     @close-rename-modal.window="show = false"

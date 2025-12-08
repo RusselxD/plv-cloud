@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-150 cursor-auto" x-data="{ show: true }"
+<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-[150] cursor-auto" x-data="{ show: true }"
     x-show="show" x-transition @keydown.escape.window="show = false; $wire.closeModal()"
     @click.self="show = false; $wire.closeModal()" tabindex="0" x-init="$el.focus()">
     <div class="w-[450px] h-fit bg-white rounded-lg p-6 flex flex-col items-center relative">

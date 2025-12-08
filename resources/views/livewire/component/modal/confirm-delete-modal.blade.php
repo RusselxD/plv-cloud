@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-150 cursor-auto" x-data="{ show: true }"
+<div class="fixed inset-0 bg-black/20 flex justify-center items-center z-[150] cursor-auto" x-data="{ show: true }"
     x-show="show"
     x-transition
     @keydown.enter.window="$wire.confirmDeletion().then(() => show = false)"
