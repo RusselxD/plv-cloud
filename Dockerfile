@@ -55,8 +55,12 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /var/www/storage/framework/sessions \
     && mkdir -p /var/www/storage/framework/views \
     && mkdir -p /var/www/storage/framework/cache \
+    && mkdir -p /var/www/storage/framework/cache/data \
     && mkdir -p /var/www/storage/logs \
     && mkdir -p /var/www/storage/app/livewire-tmp \
+    && mkdir -p /var/www/storage/app/private \
+    && mkdir -p /var/www/storage/app/public \
+    && mkdir -p /var/www/storage/app/temp \
     && touch /var/www/storage/logs/laravel.log \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \

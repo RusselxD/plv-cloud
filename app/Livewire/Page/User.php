@@ -102,6 +102,12 @@ class User extends Component
 
     public function saveChanges()
     {
+        \Log::info('Save changes started', [
+            'user_id' => $this->user->id,
+            'has_new_profile_picture' => is_object($this->newProfilePicture),
+            'remove_profile_picture' => $this->removeProfilePicture
+        ]);
+
         if ($this->noChanges()) {
             $this->isEditing = false;
             return;
@@ -117,24 +123,34 @@ class User extends Component
 
         // Only validate profile picture if it's a newly uploaded file (object)
         if (is_object($this->newProfilePicture)) {
+            \Log::info('Validating profile picture', [
+                'size' => $this->newProfilePicture->getSize(),
+                'mime' => $this->newProfilePicture->getMimeType()
+            ]);
             $validationRules['newProfilePicture'] = 'nullable|image|max:2048';
         }
 
-        $this->validate($validationRules, [
-            'newFirstName.required' => 'First name is required.',
-            'newFirstName.regex' => 'First name may only contain letters, spaces, hyphens, and apostrophes.',
-            'newLastName.required' => 'Last name is required.',
-            'newLastName.regex' => 'Last name may only contain letters, spaces, hyphens, and apostrophes.',
-            'newUsername.required' => 'Username is required.',
-            'newUsername.min' => 'Username must be at least 3 characters.',
-            'newUsername.max' => 'Username cannot exceed 20 characters.',
-            'newUsername.regex' => 'Username may only contain letters, numbers, dots, underscores, and hyphens.',
-            'newUsername.unique' => 'This username is already taken.',
-            'newCourseId.required' => 'Please select a course.',
-            'newCourseId.exists' => 'Invalid course selected.',
-            'newProfilePicture.image' => 'Profile picture must be an image.',
-            'newProfilePicture.max' => 'Profile picture must not exceed 2MB.',
-        ]);
+        try {
+            $this->validate($validationRules, [
+                'newFirstName.required' => 'First name is required.',
+                'newFirstName.regex' => 'First name may only contain letters, spaces, hyphens, and apostrophes.',
+                'newLastName.required' => 'Last name is required.',
+                'newLastName.regex' => 'Last name may only contain letters, spaces, hyphens, and apostrophes.',
+                'newUsername.required' => 'Username is required.',
+                'newUsername.min' => 'Username must be at least 3 characters.',
+                'newUsername.max' => 'Username cannot exceed 20 characters.',
+                'newUsername.regex' => 'Username may only contain letters, numbers, dots, underscores, and hyphens.',
+                'newUsername.unique' => 'This username is already taken.',
+                'newCourseId.required' => 'Please select a course.',
+                'newCourseId.exists' => 'Invalid course selected.',
+                'newProfilePicture.image' => 'Profile picture must be an image.',
+                'newProfilePicture.max' => 'Profile picture must not exceed 2MB.',
+            ]);
+            \Log::info('Validation passed');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', ['errors' => $e->errors()]);
+            throw $e;
+        }
 
         // Validate password fields if Change Password section is shown and any field is filled
         if ($this->changePasswordIsShown && ($this->currentPasswordInput || $this->newPassword || $this->confirmNewPassword)) {
@@ -162,21 +178,40 @@ class User extends Component
 
         // Handle profile picture removal
         if ($this->removeProfilePicture) {
+            \Log::info('Removing profile picture');
             $this->user->profile_picture = null;
             $this->removeProfilePicture = false;
         }
         // Update profile picture if uploaded
         elseif (is_object($this->newProfilePicture)) {
             try {
+                \Log::info('Starting Cloudinary upload for profile picture', [
+                    'file_size' => $this->newProfilePicture->getSize(),
+                    'mime_type' => $this->newProfilePicture->getMimeType()
+                ]);
+
                 // Upload to Cloudinary
                 $result = CloudinaryFacade::uploadApi()->upload($this->newProfilePicture->getRealPath(), [
-                    'folder' => 'plv-cloud-profile-pictures'
+                    'folder' => 'plv-cloud-profile-pictures',
+                    'transformation' => [
+                        'width' => 400,
+                        'height' => 400,
+                        'crop' => 'fill',
+                        'gravity' => 'face'
+                    ]
                 ]);
                 
+                \Log::info('Cloudinary upload successful', [
+                    'url' => $result['secure_url']
+                ]);
+
                 // Store Cloudinary URL
                 $this->user->profile_picture = $result['secure_url'];
             } catch (\Exception $e) {
-                Log::error('Profile picture upload failed: ' . $e->getMessage());
+                \Log::error('Profile picture upload failed', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
                 $this->dispatch('error_flash', message: 'Failed to upload profile picture. Please try again.');
                 return;
             }
@@ -193,6 +228,11 @@ class User extends Component
         $this->user->is_public = $this->updateProfileToPublic;
 
         $this->user->save();
+
+        \Log::info('Profile updated successfully', [
+            'user_id' => $this->user->id,
+            'username_changed' => $usernameChanged
+        ]);
 
         // Reset password fields
         $this->currentPasswordInput = '';
