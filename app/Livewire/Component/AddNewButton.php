@@ -156,10 +156,33 @@ class AddNewButton extends Component
     // automatically runs when user insert file/s
     public function updatedUploads()
     {
+        \Log::info('Upload started', [
+            'user_id' => auth()->id(),
+            'file_count' => count($this->uploads ?? []),
+            'parent_is_folder' => $this->parentIsAFolder,
+            'parent_id' => $this->parentId
+        ]);
+
+        if (!$this->uploads || count($this->uploads) === 0) {
+            \Log::warning('No uploads received');
+            $this->dispatch('error_flash', message: 'No files selected.');
+            $this->openOptions = false;
+            return;
+        }
+
         // Check file size manually before validation
-        foreach ($this->uploads as $file) {
+        foreach ($this->uploads as $index => $file) {
+            \Log::info("Checking file {$index}", [
+                'name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType()
+            ]);
+
             $fileSizeInKB = $file->getSize() / 1024;
             if ($fileSizeInKB > 10240) {
+                \Log::error("File too large: {$file->getClientOriginalName()}", [
+                    'size_kb' => $fileSizeInKB
+                ]);
                 $this->dispatch('error_flash', message: 'Each file upload must not exceed 10MB.');                
                 $this->reset('uploads');
                 $this->openOptions = false;
@@ -168,26 +191,38 @@ class AddNewButton extends Component
         }
 
         try {
+            \Log::info('Starting validation');
             $this->validate([
                 'uploads.*' => 'file|max:10240', // 10MB max per file
             ]);
+            \Log::info('Validation passed');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', [
+                'errors' => $e->errors(),
+                'message' => $e->getMessage()
+            ]);
             $this->dispatch('error_flash', message: 'File upload failed. Please ensure files are under 10MB.');
             $this->reset('uploads');
             $this->openOptions = false;
             return;
         }
 
-        foreach ($this->uploads as $file) {
+        foreach ($this->uploads as $index => $file) {
             try {
+                \Log::info("Starting Cloudinary upload for file {$index}");
                 // Use Cloudinary Uploader to upload the file directly
                 $result = CloudinaryFacade::uploadApi()->upload($file->getRealPath(), [
                     'folder' => 'plv-cloud-uploads'
                 ]);
                 $url = $result['secure_url'];
+                \Log::info("Cloudinary upload successful for file {$index}", [
+                    'url' => $url
+                ]);
             } catch (\Exception $e) {
-                \Log::error('Cloudinary upload error: ' . $e->getMessage());
-                \Log::error('Stack trace: ' . $e->getTraceAsString());
+                \Log::error('Cloudinary upload error: ' . $e->getMessage(), [
+                    'file' => $file->getClientOriginalName(),
+                    'trace' => $e->getTraceAsString()
+                ]);
                 $this->dispatch('error_flash', message: 'Failed to upload file: ' . $e->getMessage());
                 $this->reset('uploads');
                 $this->openOptions = false;
@@ -200,6 +235,11 @@ class AddNewButton extends Component
             // Get unique filename if duplicate exists
             $uniqueName = $this->getUniqueFileName($originalName);
             
+            \Log::info('Creating file record in database', [
+                'name' => $uniqueName,
+                'size' => $this->humanizeFileSize($file->getSize())
+            ]);
+
             File::create([
                 'name' => $uniqueName,
                 'storage_path' => $url,
@@ -232,6 +272,10 @@ class AddNewButton extends Component
                 }
             }
         }
+
+        \Log::info('Upload completed successfully', [
+            'file_count' => count($this->uploads ?? [])
+        ]);
 
         $this->dispatch('file-created'); // caught by Course or Folder and FolderDetailsPane
         $this->dispatch('success_flash', message: 'File/s uploaded successfully.');

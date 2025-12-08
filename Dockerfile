@@ -21,6 +21,9 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
+# Copy custom PHP configuration
+COPY docker/php.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -53,6 +56,7 @@ RUN mkdir -p /var/www/storage/framework/sessions \
     && mkdir -p /var/www/storage/framework/views \
     && mkdir -p /var/www/storage/framework/cache \
     && mkdir -p /var/www/storage/logs \
+    && mkdir -p /var/www/storage/app/livewire-tmp \
     && touch /var/www/storage/logs/laravel.log \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \

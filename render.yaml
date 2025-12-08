@@ -46,3 +46,9 @@ services:
         value: plvcloudadmin
       - key: ADMIN_PASSWORD
         value: Russel-08
+      - key: PHP_UPLOAD_MAX_FILESIZE
+        value: 10M
+      - key: PHP_POST_MAX_SIZE
+        value: 12M
+      - key: PHP_MAX_EXECUTION_TIME
+        value: 300
