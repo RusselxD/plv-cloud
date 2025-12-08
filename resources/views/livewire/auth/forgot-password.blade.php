@@ -1,9 +1,9 @@
-<div class="h-full flex flex-col items-center justify-start py-8 min-h-full">
+<div class="h-full flex flex-col items-center justify-start pb-8 pt-20 sm:pb-8 sm:pt-8 min-h-screen">
 
     <x-ui.general.auth-logo />
 
     <div
-        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
+        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 sm:mt-4">
 
         @if ($emailSent)
             <div class="w-full text-center">
@@ -25,19 +25,19 @@
                 </a>
             </div>
         @else
-            <h1 class="text-2xl text-primary font-bold w-full text-center border-b-2 border-primary pb-3">
+            <h1 class="text-xl sm:text-2xl text-primary font-bold w-full text-center border-b-2 border-primary pb-3">
                 Forgot Password?
             </h1>
 
-            <p class="text-sm text-gray-600 text-center mt-4">
+            <p class="text-xs sm:text-sm text-gray-600 text-center mt-3 sm:mt-4">
                 Enter your email address and we'll send you a link to reset your password.
             </p>
 
-            <form wire:submit.prevent="submit" class="w-full mt-6">
+            <form wire:submit.prevent="submit" class="w-full mt-4 sm:mt-6">
                 <div class="w-full flex flex-col items-stretch">
-                    <label for="email" class="mb-1 text-sm text-primary">Email Address</label>
+                    <label for="email" class="mb-1 text-xs sm:text-sm text-primary">Email Address</label>
                     <input id="email" type="email" wire:model="email"
-                        class="px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
+                        class="px-3 py-2 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
                     @error('email')
                         <p
                             class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
@@ -47,12 +47,12 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full mt-6 px-14 py-2 lg:px-16 lg:py-3 rounded-full font-medium border-2 border-primary text-primary bg-white hover:bg-primary hover:text-white cursor-pointer active:bg-primary active:text-white transition-colors duration-200">
+                    class="w-full mt-4 sm:mt-6 py-2 lg:px-16 lg:py-3 rounded-full text-sm sm:text-base font-semibold border-2 border-primary text-primary bg-white hover:bg-primary hover:text-white cursor-pointer active:bg-primary active:text-white transition-colors duration-200">
                     Send Reset Link
                 </button>
             </form>
 
-            <span class="mt-8 text-sm">
+            <span class="mt-6 sm:mt-10 text-xs sm:text-sm">
                 Remember your password?
                 <a class="font-bold text-primary hover:underline" href="{{ route('login') }}">Back to Login</a>
             </span>

@@ -1,26 +1,26 @@
-<div class="h-full flex flex-col items-center justify-start py-8 min-h-full">
+<div class="h-full flex flex-col items-center justify-start pb-8 pt-14 sm:pb-8 sm:pt-8 min-h-screen ">
 
     <x-ui.general.auth-logo />
 
     <form wire:submit.prevent="register"
-        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-8 rounded-lg flex-shrink-0 mt-4">
+        class="relative overflow-hidden bg-white w-[95%] sm:w-[70%] md:w-[60%] lg:w-[80%] shadow-[0_0_10px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center p-5 sm:p-8 rounded-lg flex-shrink-0 mt-2 sm:mt-4">
 
-        <h1 class="text-2xl text-primary font-bold border-b-2 border-primary pb-3 w-full text-center">
+        <h1 class="text-xl sm:text-2xl text-primary font-bold border-b-2 border-primary pb-3 w-full text-center">
             Complete Registration
         </h1>
 
-        <div class="w-full flex flex-col items-stretch mt-5">
-            <p class="mb-1 text-sm text-primary">Email</p>
-            <p class="px-3 py-2 text-sm rounded-lg text-primary border-2 border-primary bg-primary/10">
+        <div class="w-full flex flex-col items-stretch mt-3 sm:mt-5">
+            <p class="mb-1 text-xs sm:text-sm text-primary">Email</p>
+            <p class="px-3 py-2 text-xs sm:text-sm rounded-lg text-primary border-2 border-primary bg-primary/10">
                 {{ $email }}
             </p>
         </div>
 
         <div class="w-full flex flex-col items-stretch mt-3">
-            <label for="username" class="mb-1 text-sm text-primary">Username</label>
+            <label for="username" class="mb-1 text-xs sm:text-sm text-primary">Username</label>
             <input id="username" type="text" wire:model="username"
                 oninput="this.value = this.value.replace(/[^a-zA-Z0-9._-]/g, '')"
-                class="px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
+                class="px-3 py-2 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
             @error('username') <p
                 class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
                 {{ $message }}
@@ -28,7 +28,7 @@
         </div>
 
         <div class="w-full flex flex-col items-stretch mt-3">
-            <label for="password" class="mb-1 text-sm text-primary">Password</label>
+            <label for="password" class="mb-1 text-xs sm:text-sm text-primary">Password</label>
             <div x-data="{ 
                 show: false,
                 password: '',
@@ -59,7 +59,7 @@
             }">
                 <div class="relative">
                     <input id="password" :type="show ? 'text' : 'password'" wire:model="password" x-model="password"
-                        class="px-3 py-2 pr-10 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full" />
+                        class="px-3 py-2 pr-10 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full" />
                     <div @click="show = !show"
                         class="absolute cursor-pointer inset-y-0 right-0 flex items-center pr-3 text-primary hover:text-primary/70">
                         <svg x-show="!show" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,11 +110,11 @@
         </div>
 
         <div class="w-full flex flex-col items-stretch mt-3">
-            <label for="password_confirmation" class="mb-1 text-sm text-primary">Confirm Password</label>
+            <label for="password_confirmation" class="mb-1 text-xs sm:text-sm text-primary">Confirm Password</label>
             <div class="relative" x-data="{ show_confirm: false }">
                 <input id="password_confirmation" :type="show_confirm ? 'text' : 'password'"
                     wire:model="password_confirmation"
-                    class="px-3 py-2 pr-10 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full" />
+                    class="px-3 py-2 pr-10 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full" />
                 <div @click="show_confirm = !show_confirm"
                     class="absolute cursor-pointer inset-y-0 right-0 flex items-center pr-3 text-primary hover:text-primary/70">
                     <svg x-show="!show_confirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,12 +137,12 @@
             </p> @enderror
         </div>
 
-        <div class="mt-4 flex justify-between items-center w-full gap-3">
+        <div class="mt-3 sm:mt-4 flex flex-col sm:flex-row justify-between items-center w-full gap-3">
             <div class="w-full">
-                <label for="first_name" class="mb-1 text-sm text-primary">First Name</label>
+                <label for="first_name" class="mb-1 text-xs sm:text-sm text-primary">First Name</label>
                 <input id="first_name" type="text" wire:model="firstName"
                     oninput="this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '')"
-                    class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
+                    class="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
                 @error('firstName') <p
                     class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
                     {{ $message }}
@@ -150,10 +150,10 @@
             </div>
 
             <div class="w-full">
-                <label for="last_name" class="mb-1 text-sm text-primary">Last Name</label>
+                <label for="last_name" class="mb-1 text-xs sm:text-sm text-primary">Last Name</label>
                 <input id="last_name" type="text" wire:model="lastName"
                     oninput="this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '')"
-                    class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
+                    class="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none" />
                 @error('lastName') <p
                     class="flex items-center gap-2 text-xs text-red-700 bg-red-100 border border-red-300 rounded-md px-3 py-1 mt-2">
                     {{ $message }}
@@ -161,11 +161,11 @@
             </div>
         </div>
 
-        <div class="mt-4 flex justify-between items-start w-full gap-3">
+        <div class="mt-3 sm:mt-4 flex justify-between items-start w-full gap-3">
             <div class="w-full">
-                <label for="courseId" class="mb-1 text-sm text-primary">Course</label>
+                <label for="courseId" class="mb-1 text-xs sm:text-sm text-primary">Course</label>
                 <select wire:model="courseId"
-                    class="w-full px-3 py-2 text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none">
+                    class="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border-2 border-primary focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none">
                     <option value="" selected>Select Course</option>
                     @foreach ($courses as $course)
                         <option value="{{ $course->id }}">{{ $course->abbreviation }}</option>
@@ -181,7 +181,7 @@
         </div>
 
         <button type="submit"
-            class="mt-8 px-16 py-3 rounded-full font-medium border-2 border-primary text-primary bg-white hover:bg-primary hover:text-white cursor-pointer active:bg-primary active:text-white transition-colors duration-200">Sign
+            class="mt-6 sm:mt-8 px-12 sm:px-16 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium border-2 border-primary text-primary bg-white hover:bg-primary hover:text-white cursor-pointer active:bg-primary active:text-white transition-colors duration-200">Sign
             Up</button>
 
         <div class="absolute inset-0 bg-black/20" wire:loading wire:target="register">

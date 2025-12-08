@@ -1,1 +1,1 @@
-<img src="{{ asset('/assets/logo.svg') }}" class="h-16 md:h-20 my-5 flex-shrink-0" />
+<img src="{{ asset('/assets/logo.svg') }}" class="h-12 sm:h-16 md:h-20 my-3 sm:my-5 flex-shrink-0" />
