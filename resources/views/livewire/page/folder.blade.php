@@ -1,7 +1,7 @@
 <div class="space-y-3 flex-1 flex flex-col" x-data="{ detailPanelOpen: @entangle('detailPanelIsOpen') }">
 
     <div class="fixed right-3 left-3 lg:left-64 top-0 py-2 z-30 bg-white">
-        <div class="bg-slate-100 w-full rounded-lg flex flex-col sm:flex-row justify-between items-stretch sm:items-center px-3 sm:px-4 py-3 sm:py-2 gap-3 sm:gap-0">
+        <div class="bg-slate-100 sm:pl-12 lg:pl-3 w-full rounded-lg flex flex-col sm:flex-row justify-between items-stretch sm:items-center px-3 sm:px-4 py-3 sm:py-2 gap-3 sm:gap-0">
             <form wire:submit.prevent="clickSearch"
                 class="border border-gray-600 rounded-md flex justify-center items-stretch bg-white overflow-hidden w-full sm:w-80 md:w-96 h-10 sm:h-12 order-2 sm:order-1">
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Search for folders or files..."
@@ -32,7 +32,7 @@
         ])    :class="detailPanelOpen ? 'lg:mr-[22.5rem]' : 'mr-0'">
             <div class="flex flex-col  relative sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
 
-                <span class="mt-12 sm:mt-0 w-full">
+                <span class="mt-[7.5rem] sm:mt-[4.5rem] w-full">
                     <x-ui.general.breadcrumbs :breadcrumbs="$breadcrumbs" />
                 </span>
 

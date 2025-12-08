@@ -1,4 +1,4 @@
-<div class="fixed inset-0 bg-black/10 flex justify-center items-center z-150" 
+<div class="fixed inset-0 bg-black/50 flex justify-center items-center z-[60]" 
     x-data="{ show: true }" 
     x-show="show"
     x-transition 
@@ -7,7 +7,7 @@
     @click.self="show = false; $wire.closeModal()"
     tabindex="0" 
     x-init="$el.focus()">
-    <div class="w-96 h-fit border-2 bg-white rounded p-4 relative">
+    <div class="w-96 h-fit border-2 bg-white rounded p-4 relative shadow-2xl">
         <div class="flex justify-between items-center text-xl mb-3">
             <h1>New Folder</h1>
             <img src="{{ asset('/assets/x.svg') }}" class="w-9 p-2 cursor-pointer hover:bg-gray-200 rounded-full"
