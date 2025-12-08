@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all proxies (needed for Render.com and other reverse proxies)
+        $middleware->trustProxies(at: '*');
+        
         $middleware->web(append: [
             CheckBannedUser::class,
         ]);

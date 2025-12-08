@@ -209,10 +209,35 @@ class AddNewButton extends Component
 
         foreach ($this->uploads as $index => $file) {
             try {
-                \Log::info("Starting Cloudinary upload for file {$index}");
-                // Use Cloudinary Uploader to upload the file directly
-                $result = CloudinaryFacade::uploadApi()->upload($file->getRealPath(), [
-                    'folder' => 'plv-cloud-uploads'
+                \Log::info("Starting Cloudinary upload for file {$index}", [
+                    'name' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'pathname' => $file->getPathname(),
+                    'real_path' => $file->getRealPath()
+                ]);
+                
+                // Use getPathname() which is more reliable than getRealPath() for Livewire temp files
+                // Try multiple methods to get the file path
+                $filePath = $file->getRealPath() ?: $file->getPathname();
+                
+                // Verify file exists and is readable
+                if (!file_exists($filePath) || !is_readable($filePath)) {
+                    \Log::error("File path not accessible", [
+                        'path' => $filePath,
+                        'real_path' => $file->getRealPath(),
+                        'pathname' => $file->getPathname(),
+                        'exists' => file_exists($filePath),
+                        'readable' => is_readable($filePath),
+                        'temp_dir' => sys_get_temp_dir(),
+                        'storage_path' => storage_path()
+                    ]);
+                    throw new \Exception("File is not accessible. Please try uploading again.");
+                }
+                
+                // Upload to Cloudinary using the file path
+                $result = CloudinaryFacade::uploadApi()->upload($filePath, [
+                    'folder' => 'plv-cloud-uploads',
+                    'resource_type' => 'auto'
                 ]);
                 $url = $result['secure_url'];
                 \Log::info("Cloudinary upload successful for file {$index}", [
@@ -221,6 +246,7 @@ class AddNewButton extends Component
             } catch (\Exception $e) {
                 \Log::error('Cloudinary upload error: ' . $e->getMessage(), [
                     'file' => $file->getClientOriginalName(),
+                    'pathname' => $file->getPathname(),
                     'trace' => $e->getTraceAsString()
                 ]);
                 $this->dispatch('error_flash', message: 'Failed to upload file: ' . $e->getMessage());

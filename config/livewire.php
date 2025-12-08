@@ -73,7 +73,7 @@ return [
             'mov', 'avi', 'wmv', 'mp3', 'm4a',
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
-        'max_upload_time' => 10, 
+        'max_upload_time' => 300,  // Increased to 5 minutes for production (was 10 seconds)
         'cleanup' => true, 
     ],
 

@@ -60,12 +60,15 @@ RUN mkdir -p /var/www/storage/framework/sessions \
     && mkdir -p /var/www/storage/app/livewire-tmp \
     && mkdir -p /var/www/storage/app/private \
     && mkdir -p /var/www/storage/app/public \
+    && mkdir -p /var/www/storage/app/public/livewire-tmp \
     && mkdir -p /var/www/storage/app/temp \
     && touch /var/www/storage/logs/laravel.log \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \
     && chmod -R 775 /var/www/bootstrap/cache \
-    && chmod -R 755 /var/www/public/build
+    && chmod -R 755 /var/www/public/build \
+    && chmod -R 777 /var/www/storage/app/livewire-tmp \
+    && chmod -R 777 /var/www/storage/app/public/livewire-tmp
 
 # Expose port
 EXPOSE 8080

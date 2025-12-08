@@ -187,12 +187,33 @@ class User extends Component
             try {
                 \Log::info('Starting Cloudinary upload for profile picture', [
                     'file_size' => $this->newProfilePicture->getSize(),
-                    'mime_type' => $this->newProfilePicture->getMimeType()
+                    'mime_type' => $this->newProfilePicture->getMimeType(),
+                    'pathname' => $this->newProfilePicture->getPathname(),
+                    'real_path' => $this->newProfilePicture->getRealPath()
                 ]);
 
+                // Use getPathname() which is more reliable than getRealPath() for Livewire temp files
+                // Try multiple methods to get the file path
+                $filePath = $this->newProfilePicture->getRealPath() ?: $this->newProfilePicture->getPathname();
+                
+                // Verify file exists and is readable
+                if (!file_exists($filePath) || !is_readable($filePath)) {
+                    \Log::error("Profile picture file path not accessible", [
+                        'path' => $filePath,
+                        'real_path' => $this->newProfilePicture->getRealPath(),
+                        'pathname' => $this->newProfilePicture->getPathname(),
+                        'exists' => file_exists($filePath),
+                        'readable' => is_readable($filePath),
+                        'temp_dir' => sys_get_temp_dir(),
+                        'storage_path' => storage_path()
+                    ]);
+                    throw new \Exception("File is not accessible. Please try uploading again.");
+                }
+
                 // Upload to Cloudinary
-                $result = CloudinaryFacade::uploadApi()->upload($this->newProfilePicture->getRealPath(), [
+                $result = CloudinaryFacade::uploadApi()->upload($filePath, [
                     'folder' => 'plv-cloud-profile-pictures',
+                    'resource_type' => 'image',
                     'transformation' => [
                         'width' => 400,
                         'height' => 400,
@@ -210,6 +231,7 @@ class User extends Component
             } catch (\Exception $e) {
                 \Log::error('Profile picture upload failed', [
                     'message' => $e->getMessage(),
+                    'pathname' => $this->newProfilePicture->getPathname(),
                     'trace' => $e->getTraceAsString()
                 ]);
                 $this->dispatch('error_flash', message: 'Failed to upload profile picture. Please try again.');
