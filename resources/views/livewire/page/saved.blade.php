@@ -38,7 +38,24 @@
                 @click="activeCategory = 2; $wire.changeCategory(2);">Files ({{ $filesCount }})</button>
         </div>
 
-        @if ($foldersCount <= 0 && $filesCount <= 0 && $chosenCategory == 0)
+        @if ($search && $foldersCount <= 0 && $filesCount <= 0)
+            <div class="flex flex-col items-center justify-center flex-1 -mt-6 sm:-mt-10 z-10 px-4">
+                <!-- Empty result of search -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-search-icon lucide-search w-16 h-16 sm:w-20 sm:h-20">
+                    <path d="m21 21-4.34-4.34" />
+                    <circle cx="11" cy="11" r="8" />
+                </svg>
+                <p class="text-lg sm:text-xl font-medium my-3 sm:my-4 text-center">No saved items found</p>
+                <p class="text-sm sm:text-base text-gray-700 text-center break-all max-w-[90%] sm:max-w-[80%]">No saved items found for
+                    "<strong>{{ $search }}</strong>".</p>
+                <p class="text-sm sm:text-base text-gray-700 text-center mt-2 sm:mt-3">Try searching with different keywords.</p>
+                <button wire:click="clearSearch"
+                    class="py-2 sm:py-3 px-4 sm:px-5 mt-3 sm:mt-4 rounded-lg hover:bg-gray-200 border border-gray-400 transition-colors duration-150 ease-in-out cursor-pointer text-sm sm:text-base">Clear
+                    Search</button>
+            </div>
+        @elseif(!$search && $foldersCount <= 0 && $filesCount <= 0 && $chosenCategory == 0)
             <div class="flex flex-col items-center justify-center flex-1 -mt-6 sm:-mt-10 z-10 px-4">
                 <!-- No folders or files saved. -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
